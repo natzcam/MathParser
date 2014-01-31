@@ -29,7 +29,7 @@ public enum TokenType {
   MINUS("-"),
   STAR("\\*"),
   COMMENTS("//.*"),
-  COMMENTS2("/#[\\s\\S]*#/"),
+  COMMENTS2("/*[\\s\\S]*\\*/"),
   SLASH("/"),
   LTE("<="),
   LT("<"),
