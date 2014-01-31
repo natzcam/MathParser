@@ -511,7 +511,7 @@ public class MathParser {
     MathParser mp = new MathParser();
     mp.getTokenizer().setDumpTokens(false);
     try {
-      mp.eval(readFile("test.mp", Charset.forName("UTF-8")));
+      mp.eval(readFile("README.md", Charset.forName("UTF-8")));
     } catch (IOException | EvalException | ParseException ex) {
       Log.error(ex);
     }

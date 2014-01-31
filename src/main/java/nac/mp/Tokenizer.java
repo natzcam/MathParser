@@ -75,7 +75,7 @@ public class Tokenizer {
     } else {
       result = new Token(TokenType.EOF, null, "", 0, 0);
     }
-    if (result.type == TokenType.COMMENTS) {
+    if (result.type == TokenType.COMMENTS || result.type == TokenType.COMMENTS2) {
       if (dumpTokens) {
         System.out.println(result);
       }
