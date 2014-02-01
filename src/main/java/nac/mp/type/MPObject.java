@@ -7,6 +7,7 @@ package nac.mp.type;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.Type;
 import nac.mp.Scope;
@@ -73,7 +74,7 @@ public class MPObject extends Type implements Scope {
 
   @Override
   public Type getVar(String name) throws EvalException {
-   // System.out.println(this + ".getVar " + name);
+    // System.out.println(this + ".getVar " + name);
     Type result = vars.get(name);
     if (result == null && prototype != null) {
       result = prototype.getVar(name);
@@ -102,4 +103,10 @@ public class MPObject extends Type implements Scope {
     }
     return new MPBoolean(true);
   }
+
+  @Override
+  public Set<String> getVarKeys() {
+    return vars.keySet();
+  }
+
 }

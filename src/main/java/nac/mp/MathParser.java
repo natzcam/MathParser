@@ -6,10 +6,6 @@
 package nac.mp;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +44,7 @@ import nac.mp.ast.statement.Return;
 import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
+import nac.mp.ast.statement.EntityStmt;
 import nac.mp.ast.statement.FunctionOptsStatement;
 import nac.mp.ast.statement.FunctionStmt;
 import nac.mp.ast.statement.ObjectDecl;
@@ -119,11 +116,6 @@ public class MathParser {
   private ObjectDecl object() throws ParseException {
     consume(TokenType.IDENTIFIER);
     ObjectDecl od = new ObjectDecl(current.text);
-    next();
-    if (next.type == TokenType.PROTOTYPE) {
-      consume();
-      od.setProtoExp(expression());
-    }
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
@@ -131,7 +123,12 @@ public class MathParser {
       next();
     }
     consume();
-
+    next();
+    if (next.type == TokenType.PROTOTYPE) {
+      consume();
+      od.setProtoExp(expression());
+      consume(TokenType.SEMICOLON);
+    }
     return od;
   }
 
@@ -180,6 +177,14 @@ public class MathParser {
   private Statement statement() throws ParseException {
     next();
     switch (next.type) {
+      case ENTITY:
+        consume();
+        consume(TokenType.IDENTIFIER);
+        String en = current.text;
+        consume(TokenType.PROTOTYPE);
+        Expression p = expression();
+        consume(TokenType.SEMICOLON);
+        return new EntityStmt(en, p);
       case PRINT:
         consume();
         Expression ex1 = expression();
@@ -489,11 +494,6 @@ public class MathParser {
       case OBJECT:
         consume();
         ObjectDeclExpr od = new ObjectDeclExpr();
-        next();
-        if (next.type == TokenType.PROTOTYPE) {
-          consume();
-          od.setProtoExp(expression());
-        }
         consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {
@@ -501,6 +501,11 @@ public class MathParser {
           next();
         }
         consume();
+        next();
+        if (next.type == TokenType.PROTOTYPE) {
+          consume();
+          od.setProtoExp(expression());
+        }
         return od;
       default:
         throw new ParseException("Unexpected token '" + next + "'. Factor expected.");
@@ -511,15 +516,10 @@ public class MathParser {
     MathParser mp = new MathParser();
     mp.getTokenizer().setDumpTokens(false);
     try {
-      mp.eval(readFile("test.mp", Charset.forName("UTF-8")));
+      mp.eval(Util.readFile("src/main/resources/nac/scripts/test.mp"));
     } catch (IOException | EvalException | ParseException ex) {
       Log.error(ex);
     }
   }
 
-  private static String readFile(String path, Charset encoding)
-          throws IOException {
-    byte[] encoded = Files.readAllBytes(Paths.get(path));
-    return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-  }
 }

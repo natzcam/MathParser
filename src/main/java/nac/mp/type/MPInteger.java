@@ -12,14 +12,14 @@ import nac.mp.Type;
  */
 public class MPInteger extends Type {
 
-  private final int value;
+  private final long value;
 
-  public MPInteger(int value) {
+  public MPInteger(long value) {
     this.value = value;
   }
 
   @Override
-  public int getInt() {
+  public long getInt() {
     return value;
   }
 
@@ -30,7 +30,7 @@ public class MPInteger extends Type {
 
   @Override
   public String toString() {
-    return Integer.toString(value);
+    return Long.toString(value);
   }
 
   @Override

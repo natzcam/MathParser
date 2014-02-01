@@ -7,18 +7,18 @@ var what = object{
 };
 
 
-object what2 prototype object{
+object what2 {
+  
+} prototype object{
   var x = 10;
   func test(){
     print "hello world";
   }
-}{
-  
-}
+};
 
-object what3 prototype what{
+var what3 = object{
   
-}
+} prototype what;
 
 what2.test();
 what.x = 30;

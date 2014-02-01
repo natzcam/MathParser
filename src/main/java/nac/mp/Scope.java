@@ -5,6 +5,8 @@
  */
 package nac.mp;
 
+import java.util.Set;
+
 /**
  *
  * @author user
@@ -20,6 +22,8 @@ public interface Scope {
   public boolean containsVar(String name);
 
   public Type getVar(String name) throws EvalException;
+  
+  public Set<String> getVarKeys();
 
   public void setVar(String name, Type value) throws EvalException;
 }

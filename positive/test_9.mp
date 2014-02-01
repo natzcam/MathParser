@@ -9,10 +9,10 @@ var what = object{
 
 
 func What(param1, param2){
-  object zzz prototype what{
+  object zzz {
     var x = param1;
     var y = param2;
-  }
+  } prototype what;
   return zzz;
 }
 

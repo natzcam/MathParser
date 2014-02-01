@@ -7,6 +7,7 @@ package nac.mp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -63,9 +64,15 @@ public class BasicScope implements Scope {
   @Override
   public Type getVar(String name) throws EvalException {
     Type result = vars.get(name);
-    if(result == null && parent != null){
+    if (result == null && parent != null) {
       result = parent.getVar(name);
     }
     return result;
   }
+
+  @Override
+  public Set<String> getVarKeys() {
+    return vars.keySet();
+  }
+
 }

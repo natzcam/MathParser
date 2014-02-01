@@ -25,7 +25,7 @@ public abstract class Type {
     throw new UnsupportedOperationException("No boolean representation: " + getHint());
   }
 
-  public int getInt() {
+  public long getInt() {
     throw new UnsupportedOperationException("No int representation: " + getHint());
   }
 

@@ -25,6 +25,7 @@ public enum TokenType {
   FALSE("false"),
   ASSERT("assert"),
   PROTOTYPE("prototype"),
+  ENTITY("entity"),
   PLUS("\\+"),
   MINUS("-"),
   STAR("\\*"),
