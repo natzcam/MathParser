@@ -1,11 +1,12 @@
+/*
+entity
 
-var what = object{
-  var x = 10;
-  var y = 20;
-  var z = "hello";
-  func test(){
-    print this.y + this.x;
-  }
-};
+persist "HelloWorld" what;
+print what.id;
+*/
 
-entity Test prototype what;
+var what;
+restore what "HelloWorld" 2;
+print what.x;
+print what.y;
+print what.z;

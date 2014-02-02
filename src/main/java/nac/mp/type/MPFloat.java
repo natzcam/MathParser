@@ -4,13 +4,14 @@
  */
 package nac.mp.type;
 
+import java.io.Serializable;
 import nac.mp.Type;
 
 /**
  *
  * @author user
  */
-public class MPFloat extends Type {
+public class MPFloat extends Type implements Serializable{
 
   private final float value;
 

@@ -5,6 +5,7 @@
  */
 package nac.mp.type;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,8 +17,8 @@ import nac.mp.Scope;
  *
  * @author user
  */
-public class MPObject extends Type implements Scope {
-
+public class MPObject extends Type implements Scope, Serializable{
+  
   private final Scope parent;
   private final Map<String, Type> vars = new HashMap<>();
   private final MPObject prototype;
@@ -68,12 +69,12 @@ public class MPObject extends Type implements Scope {
   }
 
   @Override
-  public void setVar(String name, Type value) throws EvalException {
+  public void setVar(String name, Type value) {
     setVarLocal(name, value);
   }
 
   @Override
-  public Type getVar(String name) throws EvalException {
+  public Type getVar(String name) {
     // System.out.println(this + ".getVar " + name);
     Type result = vars.get(name);
     if (result == null && prototype != null) {

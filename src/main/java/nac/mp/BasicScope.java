@@ -5,6 +5,7 @@
  */
 package nac.mp;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +14,7 @@ import java.util.Set;
  *
  * @author user
  */
-public class BasicScope implements Scope {
+public class BasicScope implements Scope, Serializable {
 
   private final Scope parent;
   private final Map<String, Type> vars = new HashMap<>();
@@ -62,7 +63,7 @@ public class BasicScope implements Scope {
   }
 
   @Override
-  public Type getVar(String name) throws EvalException {
+  public Type getVar(String name) {
     Type result = vars.get(name);
     if (result == null && parent != null) {
       result = parent.getVar(name);

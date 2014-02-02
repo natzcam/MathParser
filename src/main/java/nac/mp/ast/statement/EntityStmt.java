@@ -5,12 +5,16 @@
  */
 package nac.mp.ast.statement;
 
+import java.util.ArrayList;
+import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.Type;
+import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Statement;
 import nac.mp.type.MPObject;
+import nac.store.mapdb.ObjectStorage;
 import nac.store.mysql.MySQLColumn;
 import nac.store.mysql.MySQLColumn.ColumnType;
 import nac.store.mysql.MySQLTable;
@@ -21,12 +25,19 @@ import nac.store.mysql.MySQLTable;
  */
 public class EntityStmt implements Statement {
 
-  private String name;
-  private Expression prototype;
+  private final String name;
+  private final Expression prototype;
+  private final List<Declaration> declarations = new ArrayList<>();
+  private final ObjectStorage objectStore;
 
-  public EntityStmt(String name, Expression prototype) {
+  public EntityStmt(ObjectStorage objectStore, String name, Expression prototype) {
+    this.objectStore = objectStore;
     this.name = name;
     this.prototype = prototype;
+  }
+
+  public List<Declaration> getDeclarations() {
+    return declarations;
   }
 
   @Override

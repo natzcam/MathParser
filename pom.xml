@@ -25,7 +25,12 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
+  <repositories>
+    <repository>
+      <id>sonatype-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -53,5 +58,11 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.27</version>
     </dependency>
+    <dependency>
+      <groupId>org.mapdb</groupId>
+      <artifactId>mapdb</artifactId>
+      <version>0.9.10-SNAPSHOT</version>
+    </dependency>
   </dependencies>
+
 </project>

@@ -4,13 +4,14 @@
  */
 package nac.mp.type;
 
+import java.io.Serializable;
 import nac.mp.Type;
 
 /**
  *
  * @author user
  */
-public class MPInteger extends Type {
+public class MPInteger extends Type implements Serializable{
 
   private final long value;
 

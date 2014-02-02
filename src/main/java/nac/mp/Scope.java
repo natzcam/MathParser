@@ -21,8 +21,8 @@ public interface Scope {
 
   public boolean containsVar(String name);
 
-  public Type getVar(String name) throws EvalException;
-  
+  public Type getVar(String name);
+
   public Set<String> getVarKeys();
 
   public void setVar(String name, Type value) throws EvalException;

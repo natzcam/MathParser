@@ -4,13 +4,14 @@
  */
 package nac.mp.type;
 
+import java.io.Serializable;
 import nac.mp.Type;
 
 /**
  *
  * @author user
  */
-public class MPString extends Type {
+public class MPString extends Type implements Serializable{
 
   private final String value;
 

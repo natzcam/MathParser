@@ -48,8 +48,11 @@ import nac.mp.ast.statement.EntityStmt;
 import nac.mp.ast.statement.FunctionOptsStatement;
 import nac.mp.ast.statement.FunctionStmt;
 import nac.mp.ast.statement.ObjectDecl;
+import nac.mp.ast.statement.PersistStmt;
+import nac.mp.ast.statement.RestoreStmt;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
+import nac.store.mapdb.ObjectStorage;
 
 /**
  *
@@ -63,6 +66,7 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
+  private final ObjectStorage objectStore = new ObjectStorage();
 
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);
@@ -72,6 +76,7 @@ public class MathParser {
       next();
     }
     fileBlock.eval(global);
+    objectStore.close();
   }
 
   public Tokenizer getTokenizer() {
@@ -123,12 +128,6 @@ public class MathParser {
       next();
     }
     consume();
-    next();
-    if (next.type == TokenType.PROTOTYPE) {
-      consume();
-      od.setProtoExp(expression());
-      consume(TokenType.SEMICOLON);
-    }
     return od;
   }
 
@@ -174,6 +173,28 @@ public class MathParser {
     throw new ParseException("Unexpected token " + next + ". Declaration expected.");
   }
 
+  private Declaration entdeclaration() throws ParseException {
+    next();
+    switch (next.type) {
+      case VAR:
+        consume();
+        consume(TokenType.IDENTIFIER);
+        VarDecl varDecl = new VarDecl(current.text);
+        next();
+        if (next.type == TokenType.ASSIGN) {
+          consume();
+          varDecl.setDefaultValue(expression());
+        }
+        consume(TokenType.SEMICOLON);
+        return varDecl;
+      case OBJECT:
+        consume();
+        ObjectDecl od = object();
+        return od;
+    }
+    throw new ParseException("Unexpected token " + next + ". Entity declaration expected.");
+  }
+
   private Statement statement() throws ParseException {
     next();
     switch (next.type) {
@@ -183,8 +204,29 @@ public class MathParser {
         String en = current.text;
         consume(TokenType.PROTOTYPE);
         Expression p = expression();
+        consume(TokenType.LBRACE);
+        EntityStmt es = new EntityStmt(objectStore, en, p);
+        next();
+        while (next.type != TokenType.RBRACE) {
+          es.getDeclarations().add(entdeclaration());
+          next();
+        }
+        consume();
+        return es;
+      case PERSIST:
+        consume();
+        Expression col = expression();
+        Expression obj = expression();
         consume(TokenType.SEMICOLON);
-        return new EntityStmt(en, p);
+        return new PersistStmt(objectStore, col, obj);
+      case RESTORE:
+        consume();
+        consume(TokenType.IDENTIFIER);
+        String identi = current.text;
+        Expression col2 = expression();
+        Expression idexp = expression();
+        consume(TokenType.SEMICOLON);
+        return new RestoreStmt(objectStore, col2, idexp, identi);
       case PRINT:
         consume();
         Expression ex1 = expression();
@@ -491,21 +533,15 @@ public class MathParser {
         Block b = block();
         fdx.setBody(b);
         return fdx;
-      case OBJECT:
+      case LBRACE:
         consume();
         ObjectDeclExpr od = new ObjectDeclExpr();
-        consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {
           od.getDeclarations().add(declaration());
           next();
         }
         consume();
-        next();
-        if (next.type == TokenType.PROTOTYPE) {
-          consume();
-          od.setProtoExp(expression());
-        }
         return od;
       default:
         throw new ParseException("Unexpected token '" + next + "'. Factor expected.");

@@ -25,6 +25,8 @@ public enum TokenType {
   FALSE("false"),
   ASSERT("assert"),
   PROTOTYPE("prototype"),
+  RESTORE("restore"),
+  PERSIST("persist"),
   ENTITY("entity"),
   PLUS("\\+"),
   MINUS("-"),
@@ -49,6 +51,7 @@ public enum TokenType {
   FLOAT("\\d+\\.\\d+"),
   INT("\\d+"),
   STRING("\"[^\"]*\""),
+  //TODO underscore not allowed?
   IDENTIFIER("[a-zA-Z]+\\d*[\\.[a-zA-Z]+\\d*]*"),
   EOF(null);
   private final String regex;

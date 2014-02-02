@@ -1,5 +1,5 @@
 
-var what = object{
+var what = {
   var x = 10;
 };
 

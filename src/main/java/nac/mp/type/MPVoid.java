@@ -4,6 +4,7 @@
  */
 package nac.mp.type;
 
+import java.io.Serializable;
 import nac.mp.Type;
 
 /**
@@ -11,7 +12,7 @@ import nac.mp.Type;
  *
  * @author user
  */
-public class MPVoid extends Type {
+public class MPVoid extends Type implements Serializable{
 
   @Override
   public boolean isVoid() {

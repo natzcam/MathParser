@@ -10,7 +10,6 @@ import nac.mp.EvalException;
 import nac.mp.Type;
 import nac.mp.ast.Declaration;
 import nac.mp.Scope;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
 import nac.mp.type.MPObject;
 
@@ -21,11 +20,6 @@ import nac.mp.type.MPObject;
 public class ObjectDeclExpr implements Factor {
 
   private final List<Declaration> declarations = new ArrayList<>();
-  private Expression protoExp;
-
-  public void setProtoExp(Expression protoExp) {
-    this.protoExp = protoExp;
-  }
 
   public List<Declaration> getDeclarations() {
     return declarations;
@@ -33,15 +27,8 @@ public class ObjectDeclExpr implements Factor {
 
   @Override
   public Type eval(Scope scope) throws EvalException {
-    MPObject proto = null;
-    if (protoExp != null) {
-      try {
-        proto = (MPObject) protoExp.eval(scope);
-      } catch (ClassCastException cce) {
-        throw new EvalException("Prototype must be object");
-      }
-    }
-    MPObject obj = new MPObject(scope, proto);
+
+    MPObject obj = new MPObject(scope, null);
     for (Declaration d : declarations) {
       d.eval(obj);
     }

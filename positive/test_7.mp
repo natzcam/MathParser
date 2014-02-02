@@ -1,5 +1,5 @@
 
-var what = object{
+var what = {
   var x = 10;
   func test(){
     print "hello world";
@@ -7,21 +7,6 @@ var what = object{
 };
 
 
-object what2 {
-  
-} prototype object{
-  var x = 10;
-  func test(){
-    print "hello world";
-  }
-};
-
-var what3 = object{
-  
-} prototype what;
-
-what2.test();
+what.test();
 what.x = 30;
-print what2.x;
- 
-what3.test();
+print what.x;
