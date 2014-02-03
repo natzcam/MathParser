@@ -552,7 +552,7 @@ public class MathParser {
     MathParser mp = new MathParser();
     mp.getTokenizer().setDumpTokens(false);
     try {
-      mp.eval(Util.readFile("src/main/resources/nac/scripts/test.mp"));
+      mp.eval(Util.readFile("src/test/mp/test.mp"));
     } catch (IOException | EvalException | ParseException ex) {
       Log.error(ex);
     }

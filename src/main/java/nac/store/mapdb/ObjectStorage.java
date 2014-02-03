@@ -23,7 +23,7 @@ public class ObjectStorage {
   private final DB db;
 
   public ObjectStorage() {
-    dataFile = new File("src/main/resources/nac/data/obj.data");
+    dataFile = new File("src/main/resources/data/obj.data");
     db = DBMaker.newFileDB(dataFile).make();
   }
 

@@ -19,8 +19,8 @@ import java.nio.file.Path;
  */
 public class MathParserTest {
 
-  private static final String positiveDir = "positive";
-  private static final String negativeDir = "negative";
+  private static final String positiveDir = "src/test/mp/positive";
+  private static final String negativeDir = "src/test/mp/negative";
 
   /**
    * @param args the command line arguments
