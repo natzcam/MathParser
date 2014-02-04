@@ -121,6 +121,11 @@ public class MathParser {
   private ObjectDecl object() throws ParseException {
     consume(TokenType.IDENTIFIER);
     ObjectDecl od = new ObjectDecl(current.text);
+    next();
+    if (next.type == TokenType.PROTOTYPE) {
+      consume();
+      od.setProtoExp(expression());
+    }
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
@@ -533,9 +538,15 @@ public class MathParser {
         Block b = block();
         fdx.setBody(b);
         return fdx;
-      case LBRACE:
+      case OBJECT:
         consume();
         ObjectDeclExpr od = new ObjectDeclExpr();
+        next();
+        if (next.type == TokenType.PROTOTYPE) {
+          consume();
+          od.setProtoExp(expression());
+        }
+        consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {
           od.getDeclarations().add(declaration());
