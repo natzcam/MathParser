@@ -18,14 +18,17 @@ import nac.mp.ast.Statement;
  *
  * @author camomon
  */
-public class ClassStmt implements Statement{
+public class ClassStmt implements Statement {
 
   private final String name;
-  private final Expression prototype;
+  private Expression prototype;
   private final List<Declaration> declarations = new ArrayList<>();
 
-  public ClassStmt(String name, Expression prototype) {
+  public ClassStmt(String name) {
     this.name = name;
+  }
+
+  public void setPrototype(Expression prototype) {
     this.prototype = prototype;
   }
 
@@ -35,7 +38,6 @@ public class ClassStmt implements Statement{
 
   @Override
   public Type eval(Scope scope) throws EvalException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return null;
   }
-
 }

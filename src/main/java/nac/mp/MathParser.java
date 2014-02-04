@@ -56,7 +56,8 @@ import nac.mp.ast.statement.WhileStatement;
 import nac.store.mapdb.ObjectStorage;
 
 /**
- *  concat strings
+ * concat strings
+ *
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
@@ -231,10 +232,13 @@ public class MathParser {
         consume();
         consume(TokenType.IDENTIFIER);
         String cl = current.text;
-        consume(TokenType.PROTOTYPE);
-        Expression prcl = expression();
+        ClassStmt cs = new ClassStmt(cl);
+        next();
+        if (next.type == TokenType.PROTOTYPE) {
+          consume();
+          cs.setPrototype(expression());
+        }
         consume(TokenType.LBRACE);
-        ClassStmt cs = new ClassStmt(cl, prcl);
         next();
         while (next.type != TokenType.RBRACE) {
           cs.getDeclarations().add(declaration());
