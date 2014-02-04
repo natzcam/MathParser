@@ -1,3 +1,10 @@
+/*
+entity
+
+persist "HelloWorld" what;
+print what.id;
+*/
+
 var what;
 restore what "HelloWorld" 2;
 print what.x;

@@ -44,6 +44,7 @@ import nac.mp.ast.statement.Return;
 import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
+import nac.mp.ast.statement.ClassStmt;
 import nac.mp.ast.statement.EntityStmt;
 import nac.mp.ast.statement.FunctionOptsStatement;
 import nac.mp.ast.statement.FunctionStmt;
@@ -55,7 +56,7 @@ import nac.mp.ast.statement.WhileStatement;
 import nac.store.mapdb.ObjectStorage;
 
 /**
- *
+ *  concat strings
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
@@ -118,24 +119,6 @@ public class MathParser {
     return bl;
   }
 
-  private ObjectDecl object() throws ParseException {
-    consume(TokenType.IDENTIFIER);
-    ObjectDecl od = new ObjectDecl(current.text);
-    next();
-    if (next.type == TokenType.PROTOTYPE) {
-      consume();
-      od.setProtoExp(expression());
-    }
-    consume(TokenType.LBRACE);
-    next();
-    while (next.type != TokenType.RBRACE) {
-      od.getDeclarations().add(declaration());
-      next();
-    }
-    consume();
-    return od;
-  }
-
   private Declaration declaration() throws ParseException {
     next();
     switch (next.type) {
@@ -172,7 +155,20 @@ public class MathParser {
         return fd;
       case OBJECT:
         consume();
-        ObjectDecl od = object();
+        consume(TokenType.IDENTIFIER);
+        ObjectDecl od = new ObjectDecl(current.text);
+        next();
+        if (next.type == TokenType.PROTOTYPE) {
+          consume();
+          od.setProtoExp(expression());
+        }
+        consume(TokenType.LBRACE);
+        next();
+        while (next.type != TokenType.RBRACE) {
+          od.getDeclarations().add(declaration());
+          next();
+        }
+        consume();
         return od;
     }
     throw new ParseException("Unexpected token " + next + ". Declaration expected.");
@@ -194,7 +190,20 @@ public class MathParser {
         return varDecl;
       case OBJECT:
         consume();
-        ObjectDecl od = object();
+        consume(TokenType.IDENTIFIER);
+        ObjectDecl od = new ObjectDecl(current.text);
+        next();
+        if (next.type == TokenType.PROTOTYPE) {
+          consume();
+          od.setProtoExp(expression());
+        }
+        consume(TokenType.LBRACE);
+        next();
+        while (next.type != TokenType.RBRACE) {
+          od.getDeclarations().add(declaration());
+          next();
+        }
+        consume();
         return od;
     }
     throw new ParseException("Unexpected token " + next + ". Entity declaration expected.");
@@ -218,6 +227,21 @@ public class MathParser {
         }
         consume();
         return es;
+      case CLAZZ:
+        consume();
+        consume(TokenType.IDENTIFIER);
+        String cl = current.text;
+        consume(TokenType.PROTOTYPE);
+        Expression prcl = expression();
+        consume(TokenType.LBRACE);
+        ClassStmt cs = new ClassStmt(cl, prcl);
+        next();
+        while (next.type != TokenType.RBRACE) {
+          cs.getDeclarations().add(declaration());
+          next();
+        }
+        consume();
+        return cs;
       case PERSIST:
         consume();
         Expression col = expression();
