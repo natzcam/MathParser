@@ -1,21 +1,22 @@
-var obj = object{
+
+
+class Test(xparam) prototype object{
   func testf(){
     print "tesf";
   }
-};
-
-
-class Test() prototype obj{
-  var x = 10;
-  func y(param){
+}{
+  this.x = xparam;
+  this.y = func(param){
     print param;
-  }
+  };
 
-  object z{
+  this.z = object{
     var zx = 20;
-  }
+  };
 }
 
-var z = Test();
+var z = Test(10);
 print z.x;
-z.testf();
+
+var z2 = Test(11);
+print z2.x;

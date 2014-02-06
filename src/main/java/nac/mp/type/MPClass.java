@@ -5,9 +5,9 @@
  */
 package nac.mp.type;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import nac.mp.BasicScope;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.Type;
@@ -60,10 +60,12 @@ public class MPClass extends MPFunc {
     if (formalArgs.size() != argsValues.size()) {
       throw new EvalException("Argument mismatch: " + this);
     }
+    Scope newScope = new BasicScope(scope);
     for (int i = 0; i < formalArgs.size(); i++) {
-      thisRef.setVarLocal(formalArgs.get(i), argsValues.get(i));
+      newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
     }
-    body.eval(thisRef);
+    newScope.setVarLocal("this", thisRef);
+    body.eval(newScope);
     return thisRef;
   }
 
@@ -74,8 +76,9 @@ public class MPClass extends MPFunc {
       throw new EvalException("Argument mismatch: " + this);
     }
 
+    Scope newScope = new BasicScope(scope);
     for (int i = 0; i < formalArgs.size(); i++) {
-      thisRef.setVarLocal(formalArgs.get(i), argsValues.get(i));
+      newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
     }
 
     MPObject opts = new MPObject(scope, null);
@@ -83,8 +86,9 @@ public class MPClass extends MPFunc {
       opts.setVarLocal(key, optsValues.get(key));
     }
 
-    thisRef.setVarLocal("opts", opts);
-    body.eval(thisRef);
+    newScope.setVarLocal("opts", opts);
+    newScope.setVarLocal("this", thisRef);
+    body.eval(newScope);
     return thisRef;
   }
 }
