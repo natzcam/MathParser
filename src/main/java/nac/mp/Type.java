@@ -18,7 +18,8 @@ public abstract class Type {
     STRING,
     VOID,
     FUNCTION,
-    OBJECT
+    OBJECT,
+    CLASS,
   }
 
   public boolean getBoolean() {

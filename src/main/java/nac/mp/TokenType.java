@@ -28,7 +28,7 @@ public enum TokenType {
   RESTORE("restore"),
   PERSIST("persist"),
   ENTITY("entity"),
-  CLAZZ("class"),
+  CLASS("class"),
   PLUS("\\+"),
   MINUS("-"),
   STAR("\\*"),

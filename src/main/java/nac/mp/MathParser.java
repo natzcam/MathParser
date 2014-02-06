@@ -44,7 +44,7 @@ import nac.mp.ast.statement.Return;
 import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
-import nac.mp.ast.statement.ClassStmt;
+import nac.mp.ast.statement.ClassDecl;
 import nac.mp.ast.statement.EntityStmt;
 import nac.mp.ast.statement.FunctionOptsStatement;
 import nac.mp.ast.statement.FunctionStmt;
@@ -228,23 +228,31 @@ public class MathParser {
         }
         consume();
         return es;
-      case CLAZZ:
+      case CLASS:
         consume();
         consume(TokenType.IDENTIFIER);
         String cl = current.text;
-        ClassStmt cs = new ClassStmt(cl);
+        ClassDecl cs = new ClassDecl(cl);
+        consume(TokenType.LPAREN);
+        next();
+        while (next.type != TokenType.RPAREN) {
+          consume(TokenType.IDENTIFIER);
+          cs.getArgNames().add(current.text);
+          next();
+          if (next.type == TokenType.RPAREN) {
+            break;
+          } else {
+            consume(TokenType.COMMA);
+          }
+        }
+        consume(TokenType.RPAREN);
         next();
         if (next.type == TokenType.PROTOTYPE) {
           consume();
           cs.setPrototype(expression());
         }
-        consume(TokenType.LBRACE);
-        next();
-        while (next.type != TokenType.RBRACE) {
-          cs.getDeclarations().add(declaration());
-          next();
-        }
-        consume();
+        Block b = block();
+        cs.setBody(b);
         return cs;
       case PERSIST:
         consume();

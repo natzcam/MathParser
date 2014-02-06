@@ -19,9 +19,9 @@ import nac.mp.ast.Block;
  */
 public class MPFunc extends Type {
 
-  private final Scope scope;
-  private final Block body;
-  private final List<String> formalArgs = new ArrayList<>();
+  protected final Scope scope;
+  protected final Block body;
+  protected final List<String> formalArgs = new ArrayList<>();
 
   public MPFunc(Scope scope, Block body) {
     this.scope = scope;
