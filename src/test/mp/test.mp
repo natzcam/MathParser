@@ -16,6 +16,7 @@ class Test(xparam) prototype object{
 }
 
 var z = Test(10);
+z.testf();
 print z.x;
 
 var z2 = Test(11);
