@@ -62,11 +62,11 @@ public class NewOptsExpr implements Factor {
     for (String key : opts.keySet()) {
       optsValues.put(key, opts.get(key).eval(scope));
     }
-    Type result = clazz.call(c, argValues, optsValues);
-    if (result == null) {
-      throw new EvalException("Function does not return: " + path);
-    } else {
-      return result;
+    c = clazz.create();
+    MPFunc ctor = (MPFunc)c.getVar("__new__");
+    if(ctor != null){
+      ctor.call(c, argValues, optsValues);
     }
+    return c;
   }
 }
