@@ -14,6 +14,7 @@ import nac.mp.Scope;
 import nac.mp.Type;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
+import nac.mp.type.MPClass;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
 
@@ -41,16 +42,16 @@ public class NewOptsExpr implements Factor {
 
   @Override
   public Type eval(Scope scope) throws EvalException {
-    MPFunc func;
+    MPClass clazz;
     MPObject c = null;
     if (path.length == 1) {
-      func = (MPFunc) scope.getVar(path[0]);
+      clazz = (MPClass) scope.getVar(path[0]);
     } else {
       c = (MPObject) scope.getVar(path[0]);
       for (int i = 1; i < path.length - 1; i++) {
         c = (MPObject) c.getVar(path[i]);
       }
-      func = (MPFunc) c.getVar(path[path.length - 1]);
+      clazz = (MPClass) c.getVar(path[path.length - 1]);
     }
 
     List<Type> argValues = new ArrayList<>();
@@ -61,7 +62,7 @@ public class NewOptsExpr implements Factor {
     for (String key : opts.keySet()) {
       optsValues.put(key, opts.get(key).eval(scope));
     }
-    Type result = func.call(c, argValues, optsValues);
+    Type result = clazz.call(c, argValues, optsValues);
     if (result == null) {
       throw new EvalException("Function does not return: " + path);
     } else {
