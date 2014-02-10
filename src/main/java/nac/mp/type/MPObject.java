@@ -17,15 +17,13 @@ import nac.mp.Scope;
  *
  * @author user
  */
-public class MPObject extends Type implements Scope, Serializable{
-  
+public class MPObject extends Type implements Scope, Serializable {
+
   private final Scope parent;
   private final Map<String, Type> vars = new HashMap<>();
-  private final MPObject prototype;
 
-  public MPObject(Scope parent, MPObject prototype) {
+  public MPObject(Scope parent) {
     this.parent = parent;
-    this.prototype = prototype;
   }
 
   @Override
@@ -61,8 +59,6 @@ public class MPObject extends Type implements Scope, Serializable{
   public boolean containsVar(String name) {
     if (vars.containsKey(name)) {
       return true;
-    } else if (prototype != null && prototype.containsVar(name)) {
-      return true;
     } else {
       return parent != null && parent.containsVar(name);
     }
@@ -77,9 +73,6 @@ public class MPObject extends Type implements Scope, Serializable{
   public Type getVar(String name) {
     // System.out.println(this + ".getVar " + name);
     Type result = vars.get(name);
-    if (result == null && prototype != null) {
-      result = prototype.getVar(name);
-    }
     if (result == null && parent != null) {
       result = parent.getVar(name);
     }

@@ -158,11 +158,6 @@ public class MathParser {
         consume();
         consume(TokenType.IDENTIFIER);
         ObjectDecl od = new ObjectDecl(current.text);
-        next();
-        if (next.type == TokenType.PROTOTYPE) {
-          consume();
-          od.setProtoExp(expression());
-        }
         consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {
@@ -193,11 +188,6 @@ public class MathParser {
         consume();
         consume(TokenType.IDENTIFIER);
         ObjectDecl od = new ObjectDecl(current.text);
-        next();
-        if (next.type == TokenType.PROTOTYPE) {
-          consume();
-          od.setProtoExp(expression());
-        }
         consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {
@@ -213,21 +203,6 @@ public class MathParser {
   private Statement statement() throws ParseException {
     next();
     switch (next.type) {
-      case ENTITY:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        String en = current.text;
-        consume(TokenType.PROTOTYPE);
-        Expression p = expression();
-        consume(TokenType.LBRACE);
-        EntityStmt es = new EntityStmt(objectStore, en, p);
-        next();
-        while (next.type != TokenType.RBRACE) {
-          es.getDeclarations().add(entdeclaration());
-          next();
-        }
-        consume();
-        return es;
       case CLASS:
         consume();
         consume(TokenType.IDENTIFIER);
@@ -246,11 +221,6 @@ public class MathParser {
           }
         }
         consume(TokenType.RPAREN);
-        next();
-        if (next.type == TokenType.PROTOTYPE) {
-          consume();
-          cs.setPrototype(expression());
-        }
         Block b = block();
         cs.setBody(b);
         return cs;
@@ -577,11 +547,6 @@ public class MathParser {
       case OBJECT:
         consume();
         ObjectDeclExpr od = new ObjectDeclExpr();
-        next();
-        if (next.type == TokenType.PROTOTYPE) {
-          consume();
-          od.setProtoExp(expression());
-        }
         consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {

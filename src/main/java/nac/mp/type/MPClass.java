@@ -5,26 +5,13 @@
  */
 package nac.mp.type;
 
-import java.util.List;
-import java.util.Map;
-import nac.mp.BasicScope;
-import nac.mp.EvalException;
-import nac.mp.Scope;
 import nac.mp.Type;
-import nac.mp.ast.Block;
 
 /**
  *
  * @author camomon
  */
-public class MPClass extends MPFunc {
-
-  private final MPObject prototype;
-
-  public MPClass(MPObject prototype, Scope scope, Block body) {
-    super(scope, body);
-    this.prototype = prototype;
-  }
+public class MPClass extends Type {
 
   @Override
   public Type.Hint getHint() {
@@ -54,41 +41,4 @@ public class MPClass extends MPFunc {
     return new MPBoolean(true);
   }
 
-  @Override
-  public Type call(MPObject thisRef, List<Type> argsValues) throws EvalException {
-    thisRef = new MPObject(scope, prototype);
-    if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this);
-    }
-    Scope newScope = new BasicScope(scope);
-    for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
-    }
-    newScope.setVarLocal("this", thisRef);
-    body.eval(newScope);
-    return thisRef;
-  }
-
-  @Override
-  public Type call(MPObject thisRef, List<Type> argsValues, Map<String, Type> optsValues) throws EvalException {
-    thisRef = new MPObject(scope, prototype);
-    if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this);
-    }
-
-    Scope newScope = new BasicScope(scope);
-    for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
-    }
-
-    MPObject opts = new MPObject(scope, null);
-    for (String key : optsValues.keySet()) {
-      opts.setVarLocal(key, optsValues.get(key));
-    }
-
-    newScope.setVarLocal("opts", opts);
-    newScope.setVarLocal("this", thisRef);
-    body.eval(newScope);
-    return thisRef;
-  }
 }

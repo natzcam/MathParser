@@ -21,11 +21,6 @@ public class ObjectDecl implements Declaration {
 
   private final String name;
   private final List<Declaration> declarations = new ArrayList<>();
-  private Expression protoExp;
-
-  public void setProtoExp(Expression protoExp) {
-    this.protoExp = protoExp;
-  }
 
   public ObjectDecl(String name) {
     this.name = name;
@@ -37,13 +32,8 @@ public class ObjectDecl implements Declaration {
 
   @Override
   public Type eval(Scope scope) throws EvalException {
-    MPObject proto = null;
 
-    if (protoExp != null) {
-      proto = (MPObject) protoExp.eval(scope);
-    }
-
-    MPObject obj = new MPObject(scope, proto);
+    MPObject obj = new MPObject(scope);
     scope.declareVarLocal(name, obj);
     for (Declaration d : declarations) {
       d.eval(obj);
