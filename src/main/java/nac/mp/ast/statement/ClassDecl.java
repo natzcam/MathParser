@@ -10,18 +10,14 @@ import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.Type;
-import nac.mp.ast.Block;
 import nac.mp.ast.Declaration;
-import nac.mp.ast.Expression;
-import nac.mp.ast.Statement;
 import nac.mp.type.MPClass;
-import nac.mp.type.MPObject;
 
 /**
  *
  * @author camomon
  */
-public class ClassDecl implements Statement {
+public class ClassDecl implements Declaration {
 
   private final String name;
   private final List<Declaration> declarations = new ArrayList<>();
@@ -37,13 +33,9 @@ public class ClassDecl implements Statement {
   @Override
   public Type eval(Scope scope) throws EvalException {
 
-    MPObject proto = null;
-    if (prototype != null) {
-      proto = (MPObject) prototype.eval(scope);
-    }
-    MPClass func = new MPClass(scope, body);
-    func.getFormalArgs().addAll(argNames);
-    scope.declareVarLocal(name, func);
+    MPClass clazz = new MPClass(scope, declarations);
+    scope.declareVarLocal(name, clazz);
+    
     return null;
   }
 }

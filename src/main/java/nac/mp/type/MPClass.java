@@ -5,13 +5,25 @@
  */
 package nac.mp.type;
 
+import java.util.List;
+import nac.mp.EvalException;
+import nac.mp.Scope;
 import nac.mp.Type;
+import nac.mp.ast.Declaration;
 
 /**
  *
  * @author camomon
  */
 public class MPClass extends Type {
+
+  private final Scope parent;
+  private final List<Declaration> declarations;
+
+  public MPClass(Scope parent, List<Declaration> declarations) {
+    this.parent = parent;
+    this.declarations = declarations;
+  }
 
   @Override
   public Type.Hint getHint() {
@@ -41,4 +53,11 @@ public class MPClass extends Type {
     return new MPBoolean(true);
   }
 
+  public MPObject create() throws EvalException {
+    MPObject obj = new MPObject(parent);
+    for (Declaration d : declarations) {
+      d.eval(obj);
+    }
+    return obj;
+  }
 }

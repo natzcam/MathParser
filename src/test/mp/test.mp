@@ -1,23 +1,14 @@
 
 
-class Test(xparam) prototype object{
+class Test(xparam) {
   func testf(){
     print "tesf";
   }
-}{
-  this.x = xparam;
-  this.y = func(param){
-    print param;
-  };
-
-  this.z = object{
-    var zx = 20;
-  };
 }
 
-var z = Test(10);
+var z = new Test;
 z.testf();
 print z.x;
 
-var z2 = Test(11);
+var z2 = new Test;
 print z2.x;

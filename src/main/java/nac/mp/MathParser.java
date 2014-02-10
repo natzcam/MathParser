@@ -35,6 +35,8 @@ import nac.mp.ast.expression.LessThan;
 import nac.mp.ast.expression.LessThanEqual;
 import nac.mp.ast.expression.MoreThan;
 import nac.mp.ast.expression.MoreThanEqual;
+import nac.mp.ast.expression.NewExpr;
+import nac.mp.ast.expression.NewOptsExpr;
 import nac.mp.ast.expression.NotEqual;
 import nac.mp.ast.expression.ObjectDeclExpr;
 import nac.mp.ast.expression.PlusExpression;
@@ -45,7 +47,6 @@ import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
 import nac.mp.ast.statement.ClassDecl;
-import nac.mp.ast.statement.EntityStmt;
 import nac.mp.ast.statement.FunctionOptsStatement;
 import nac.mp.ast.statement.FunctionStmt;
 import nac.mp.ast.statement.ObjectDecl;
@@ -166,64 +167,26 @@ public class MathParser {
         }
         consume();
         return od;
-    }
-    throw new ParseException("Unexpected token " + next + ". Declaration expected.");
-  }
-
-  private Declaration entdeclaration() throws ParseException {
-    next();
-    switch (next.type) {
-      case VAR:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        VarDecl varDecl = new VarDecl(current.text);
-        next();
-        if (next.type == TokenType.ASSIGN) {
-          consume();
-          varDecl.setDefaultValue(expression());
-        }
-        consume(TokenType.SEMICOLON);
-        return varDecl;
-      case OBJECT:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        ObjectDecl od = new ObjectDecl(current.text);
-        consume(TokenType.LBRACE);
-        next();
-        while (next.type != TokenType.RBRACE) {
-          od.getDeclarations().add(declaration());
-          next();
-        }
-        consume();
-        return od;
-    }
-    throw new ParseException("Unexpected token " + next + ". Entity declaration expected.");
-  }
-
-  private Statement statement() throws ParseException {
-    next();
-    switch (next.type) {
       case CLASS:
         consume();
         consume(TokenType.IDENTIFIER);
         String cl = current.text;
         ClassDecl cs = new ClassDecl(cl);
-        consume(TokenType.LPAREN);
+        consume(TokenType.LBRACE);
         next();
-        while (next.type != TokenType.RPAREN) {
-          consume(TokenType.IDENTIFIER);
-          cs.getArgNames().add(current.text);
+        while (next.type != TokenType.RBRACE) {
+          cs.getDeclarations().add(declaration());
           next();
-          if (next.type == TokenType.RPAREN) {
-            break;
-          } else {
-            consume(TokenType.COMMA);
-          }
         }
-        consume(TokenType.RPAREN);
-        Block b = block();
-        cs.setBody(b);
+        consume();
         return cs;
+    }
+    throw new ParseException("Unexpected token " + next + ". Declaration expected.");
+  }
+
+  private Statement statement() throws ParseException {
+    next();
+    switch (next.type) {
       case PERSIST:
         consume();
         Expression col = expression();
@@ -474,6 +437,51 @@ public class MathParser {
         Expression exp = expression();
         consume(TokenType.RPAREN);
         return new Parenthesis(exp);
+      case NEW:
+        consume();
+        String[] p = current.text.split("\\.");
+
+        List<Expression> expList1 = new ArrayList<>();
+        Map<String, Expression> optsMap1 = new HashMap<>();
+
+        next();
+        while (next.type != TokenType.RPAREN) {
+          expList1.add(expression());
+          next();
+          if (next.type == TokenType.RPAREN) {
+            break;
+          } else if (next.type == TokenType.SEMICOLON) {
+            consume(TokenType.SEMICOLON);
+            break;
+          } else {
+            consume(TokenType.COMMA);
+          }
+        }
+
+        while (next.type != TokenType.RPAREN) {
+          consume(TokenType.IDENTIFIER);
+          String optName = current.text;
+          consume(TokenType.COLON);
+          optsMap1.put(optName, expression());
+          next();
+          if (next.type == TokenType.RPAREN) {
+            break;
+          } else {
+            consume(TokenType.COMMA);
+          }
+        }
+        consume(TokenType.RPAREN);
+
+        if (optsMap1.size() > 0) {
+          NewOptsExpr nex1 = new NewOptsExpr(p);
+          nex1.getArgs().addAll(expList1);
+          nex1.getOpts().putAll(optsMap1);
+          return nex1;
+        } else {
+          NewExpr nex2 = new NewExpr(p);
+          nex2.getArgs().addAll(expList1);
+          return nex2;
+        }
       case IDENTIFIER:
         consume();
         String[] path = current.text.split("\\.");
