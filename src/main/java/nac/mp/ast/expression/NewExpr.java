@@ -55,7 +55,7 @@ public class NewExpr implements Factor {
     }
 
     c = clazz.create();
-    MPFunc ctor = (MPFunc) c.getVar("__new__");
+    MPFunc ctor = (MPFunc) c.getVar("__init__");
     
     if (ctor != null) {
       ctor.call(c, argValues);

@@ -439,11 +439,13 @@ public class MathParser {
         return new Parenthesis(exp);
       case NEW:
         consume();
+        consume(TokenType.IDENTIFIER);
         String[] p = current.text.split("\\.");
 
         List<Expression> expList1 = new ArrayList<>();
         Map<String, Expression> optsMap1 = new HashMap<>();
-
+        
+        consume(TokenType.LPAREN);
         next();
         while (next.type != TokenType.RPAREN) {
           expList1.add(expression());

@@ -63,7 +63,7 @@ public class NewOptsExpr implements Factor {
       optsValues.put(key, opts.get(key).eval(scope));
     }
     c = clazz.create();
-    MPFunc ctor = (MPFunc)c.getVar("__new__");
+    MPFunc ctor = (MPFunc)c.getVar("__init__");
     if(ctor != null){
       ctor.call(c, argValues, optsValues);
     }
