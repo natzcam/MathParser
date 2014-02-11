@@ -1,5 +1,5 @@
 
-
+object hello{
 class Test{
   var prop;
  
@@ -15,10 +15,13 @@ class Test{
   }
 }
 
-var z = new Test(22);
+}
+
+
+var z = new hello.Test(22);
 z.testf();
 print z.getprop();
 
-var z2 = new Test(21);
+var z2 = new hello.Test(21);
 z2.testf();
 print z2.getprop();
