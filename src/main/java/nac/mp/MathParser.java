@@ -171,7 +171,13 @@ public class MathParser {
         consume();
         consume(TokenType.IDENTIFIER);
         String cl = current.text;
-        ClassDecl cs = new ClassDecl(cl);
+        next();
+        Expression extExp = null;
+        if(next.type == TokenType.EXTENDS){
+          consume();
+          extExp = expression();
+        }
+        ClassDecl cs = new ClassDecl(extExp, cl);
         consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {

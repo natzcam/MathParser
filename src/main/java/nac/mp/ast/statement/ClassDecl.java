@@ -11,6 +11,7 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.Type;
 import nac.mp.ast.Declaration;
+import nac.mp.ast.Expression;
 import nac.mp.type.MPClass;
 
 /**
@@ -19,10 +20,12 @@ import nac.mp.type.MPClass;
  */
 public class ClassDecl implements Declaration {
 
+  private final Expression extnds;
   private final String name;
   private final List<Declaration> declarations = new ArrayList<>();
 
-  public ClassDecl(String name) {
+  public ClassDecl(Expression extnds, String name) {
+    this.extnds = extnds;
     this.name = name;
   }
 
@@ -32,10 +35,13 @@ public class ClassDecl implements Declaration {
 
   @Override
   public Type eval(Scope scope) throws EvalException {
-
-    MPClass clazz = new MPClass(scope, declarations);
+    MPClass eclas = null;
+    if (extnds != null) {
+      eclas = (MPClass) extnds.eval(scope);
+    }
+    MPClass clazz = new MPClass(scope, eclas, declarations);
     scope.declareVarLocal(name, clazz);
-    
+
     return null;
   }
 }

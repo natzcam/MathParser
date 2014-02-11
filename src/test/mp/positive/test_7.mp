@@ -6,15 +6,6 @@ var what = object{
   }
 };
 
-var what2 = object prototype what{
-  
-  var y = 20;
-};
-
-
 what.test();
 what.x = 30;
 print what.x;
-print what2.y;
-print what2.x;
-what2.test();
