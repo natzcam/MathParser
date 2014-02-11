@@ -18,10 +18,12 @@ import nac.mp.ast.Declaration;
 public class MPClass extends Type {
 
   private final MPClass extParent;
+  private final String name;
   private final Scope parent;
   private final List<Declaration> declarations;
 
-  public MPClass(Scope parent, MPClass extParent, List<Declaration> declarations) {
+  public MPClass(Scope parent, String name, MPClass extParent, List<Declaration> declarations) {
+    this.name = name;
     this.extParent = extParent;
     this.parent = parent;
     this.declarations = declarations;
@@ -34,7 +36,7 @@ public class MPClass extends Type {
 
   @Override
   public String toString() {
-    return "class:" + this.hashCode();
+    return "class:" + name;
   }
 
   @Override
@@ -56,7 +58,7 @@ public class MPClass extends Type {
   }
 
   public MPObject create() throws EvalException {
-    MPObject obj = new MPObject(parent);
+    MPObject obj = new MPObject(parent, this);
     for (Declaration d : extParent.declarations) {
       d.eval(obj);
     }

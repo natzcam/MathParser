@@ -26,4 +26,5 @@ public interface Scope {
   public Set<String> getVarKeys();
 
   public void setVar(String name, Type value) throws EvalException;
+  
 }

@@ -195,10 +195,9 @@ public class MathParser {
     switch (next.type) {
       case PERSIST:
         consume();
-        Expression col = expression();
         Expression obj = expression();
         consume(TokenType.SEMICOLON);
-        return new PersistStmt(objectStore, col, obj);
+        return new PersistStmt(objectStore, obj);
       case RESTORE:
         consume();
         consume(TokenType.IDENTIFIER);

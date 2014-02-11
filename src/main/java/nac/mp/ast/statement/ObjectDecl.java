@@ -33,7 +33,7 @@ public class ObjectDecl implements Declaration {
   @Override
   public Type eval(Scope scope) throws EvalException {
 
-    MPObject obj = new MPObject(scope);
+    MPObject obj = new MPObject(scope, null);
     scope.declareVarLocal(name, obj);
     for (Declaration d : declarations) {
       d.eval(obj);

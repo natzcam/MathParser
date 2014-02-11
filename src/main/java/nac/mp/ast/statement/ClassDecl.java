@@ -39,7 +39,7 @@ public class ClassDecl implements Declaration {
     if (extnds != null) {
       eclas = (MPClass) extnds.eval(scope);
     }
-    MPClass clazz = new MPClass(scope, eclas, declarations);
+    MPClass clazz = new MPClass(scope, name, eclas, declarations);
     scope.declareVarLocal(name, clazz);
 
     return null;

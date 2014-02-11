@@ -22,19 +22,17 @@ import nac.store.mapdb.ObjectStorage;
  */
 public class PersistStmt implements Statement {
 
-  private final Expression collectionName;
   private final Expression object;
   private final ObjectStorage storage;
 
-  public PersistStmt(ObjectStorage storage, Expression collectionName, Expression object) {
+  public PersistStmt(ObjectStorage storage, Expression object) {
     this.storage = storage;
-    this.collectionName = collectionName;
     this.object = object;
   }
 
   @Override
   public Type eval(Scope scope) throws EvalException {
-    MPString colName = (MPString) collectionName.eval(scope);
+    
     MPObject obj = (MPObject) object.eval(scope);
     for (String key : obj.getVarKeys()) {
       Type t = obj.getVar(key);
@@ -42,7 +40,7 @@ public class PersistStmt implements Statement {
         obj.setVar(key, new MPVoid());
       }
     }
-    storage.put(colName.getString(), obj);
+    storage.put(obj.getClazz().toString(), obj);
     return null;
   }
 }

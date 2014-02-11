@@ -18,14 +18,19 @@ import nac.mp.Scope;
  * @author user
  */
 public class MPObject extends Type implements Scope, Serializable {
-
+  private final MPClass clazz;
   private final Scope parent;
   private final Map<String, Type> vars = new HashMap<>();
 
-  public MPObject(Scope parent) {
+  public MPObject(Scope parent, MPClass clazz) {
+    this.clazz = clazz;
     this.parent = parent;
   }
-
+  
+  public MPClass getClazz(){
+    return clazz;
+  }
+  
   @Override
   public Type.Hint getHint() {
     return Type.Hint.OBJECT;

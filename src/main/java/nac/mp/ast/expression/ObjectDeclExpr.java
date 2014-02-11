@@ -29,7 +29,7 @@ public class ObjectDeclExpr implements Factor {
   @Override
   public Type eval(Scope scope) throws EvalException {
 
-    MPObject obj = new MPObject(scope);
+    MPObject obj = new MPObject(scope, null);
     for (Declaration d : declarations) {
       d.eval(obj);
     }

@@ -68,7 +68,7 @@ public class MPFunc extends Type {
       newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
     }
 
-    MPObject opts = new MPObject(scope);
+    MPObject opts = new MPObject(scope, null);
     for (String key : optsValues.keySet()) {
       opts.setVarLocal(key, optsValues.get(key));
     }
