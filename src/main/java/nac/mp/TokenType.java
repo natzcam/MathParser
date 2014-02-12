@@ -46,6 +46,8 @@ public enum TokenType {
   RBRACE("\\}"),
   LPAREN("\\("),
   RPAREN("\\)"),
+  LBRACKET("\\["),
+  RBRACKET("\\]"),
   COLON(":"),
   COMMA(","),
   SEMICOLON(";"),

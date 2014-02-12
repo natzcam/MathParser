@@ -20,6 +20,7 @@ public abstract class Type {
     FUNCTION,
     OBJECT,
     CLASS,
+    LIST,
   }
 
   public boolean getBoolean() {

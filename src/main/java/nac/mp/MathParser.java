@@ -33,6 +33,7 @@ import nac.mp.ast.statement.Input;
 import nac.mp.ast.expression.IntLiteral;
 import nac.mp.ast.expression.LessThan;
 import nac.mp.ast.expression.LessThanEqual;
+import nac.mp.ast.expression.ListExpr;
 import nac.mp.ast.expression.MoreThan;
 import nac.mp.ast.expression.MoreThanEqual;
 import nac.mp.ast.expression.NewExpr;
@@ -173,7 +174,7 @@ public class MathParser {
         String cl = current.text;
         next();
         Expression extExp = null;
-        if(next.type == TokenType.EXTENDS){
+        if (next.type == TokenType.EXTENDS) {
           consume();
           extExp = expression();
         }
@@ -449,7 +450,7 @@ public class MathParser {
 
         List<Expression> expList1 = new ArrayList<>();
         Map<String, Expression> optsMap1 = new HashMap<>();
-        
+
         consume(TokenType.LPAREN);
         next();
         while (next.type != TokenType.RPAREN) {
@@ -570,6 +571,28 @@ public class MathParser {
         }
         consume();
         return od;
+      case LBRACKET:
+        consume();
+        ListExpr le = new ListExpr();
+        next();
+        //TODO optimize here the while
+        while (next.type != TokenType.RBRACKET) {
+          le.getElems().add(expression());
+          next();
+          if (next.type == TokenType.RBRACKET) {
+            break;
+          } else {
+            consume(TokenType.COMMA);
+          }
+        }
+        consume(TokenType.RBRACKET);
+        next();
+        if (next.type == TokenType.LPAREN) {
+          consume();
+          le.setInitSize(expression());
+          consume(TokenType.RPAREN);
+        }
+        return le;
       default:
         throw new ParseException("Unexpected token '" + next + "'. Factor expected.");
     }
