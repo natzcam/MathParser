@@ -397,6 +397,31 @@ public class MathParser {
   }
 
   private Expression multiplicative() throws ParseException {
+    Expression left = access();
+    while (true) {
+      next();
+      switch (next.type) {
+        case STAR:
+          consume();
+          StarExpression srt = new StarExpression();
+          srt.setLeft(left);
+          srt.setRight(multiplicative());
+          left = srt;
+          break;
+        case SLASH:
+          consume();
+          SlashExpression slt = new SlashExpression();
+          slt.setLeft(left);
+          slt.setRight(multiplicative());
+          left = slt;
+          break;
+        default:
+          return left;
+      }
+    }
+  }
+  
+  private Expression access() throws ParseException {
     Expression left = factor();
     while (true) {
       next();
