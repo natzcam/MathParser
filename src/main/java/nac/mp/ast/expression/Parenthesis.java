@@ -6,10 +6,10 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
-import nac.mp.Type;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
 import nac.mp.Scope;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -24,7 +24,7 @@ public class Parenthesis implements Factor {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     return expression.eval(scope);
   }
 }

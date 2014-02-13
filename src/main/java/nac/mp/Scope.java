@@ -6,6 +6,7 @@
 package nac.mp;
 
 import java.util.Set;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -13,18 +14,18 @@ import java.util.Set;
  */
 public interface Scope {
 
-  public void setVarLocal(String name, Type value);
+  public void setVarLocal(String name, MPObject value);
 
-  public void declareVarLocal(String name, Type defaultValue) throws EvalException;
+  public void declareVarLocal(String name, MPObject defaultValue) throws EvalException;
 
   public Scope getParent();
 
   public boolean containsVar(String name);
 
-  public Type getVar(String name);
+  public MPObject getVar(String name);
 
   public Set<String> getVarKeys();
 
-  public void setVar(String name, Type value) throws EvalException;
+  public void setVar(String name, MPObject value) throws EvalException;
   
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.BasicScope;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.Scope;
 import nac.mp.ast.Block;
 import nac.mp.ast.Declaration;
@@ -37,7 +37,7 @@ public class FunctionDecl implements Declaration {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPFunc func = new MPFunc(scope, body);
     func.getFormalArgs().addAll(argNames);
     scope.declareVarLocal(name, func);

@@ -7,7 +7,7 @@ package nac.mp.ast;
 
 import nac.mp.Scope;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 
 /**
  *
@@ -15,5 +15,5 @@ import nac.mp.Type;
  */
 public interface Expression {
 
-  public Type eval(Scope scope) throws EvalException;
+  public MPObject eval(Scope scope) throws EvalException;
 }

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 
 /**
  *
@@ -26,8 +26,8 @@ public class Block implements Expression {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
-    Type ret = null;
+  public MPObject eval(Scope scope) throws EvalException {
+    MPObject ret = null;
     for (Statement s : statements) {
       ret = s.eval(scope);
       if (ret != null) {

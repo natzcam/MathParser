@@ -7,12 +7,12 @@ package nac.mp.ast.statement;
 
 import nac.mp.ast.Statement;
 import nac.mp.EvalException;
-import nac.mp.Type;
-import nac.mp.Type.Hint;
+import nac.mp.type.MPObject;;
 import nac.mp.BasicScope;
 import nac.mp.Scope;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
+import nac.mp.type.MPObject.Hint;
 
 /**
  *
@@ -29,14 +29,14 @@ public class WhileStatement implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     scope = new BasicScope(scope);
-    Type condValue = cond.eval(scope);
+    MPObject condValue = cond.eval(scope);
     if (condValue.getHint() != Hint.BOOLEAN) {
       throw new EvalException("Condition not boolean");
     }
     while (condValue.getBoolean()) {
-      Type result = body.eval(scope);
+      MPObject result = body.eval(scope);
       if (result != null) {
         return result;
       }

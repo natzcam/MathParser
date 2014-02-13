@@ -5,17 +5,20 @@
 package nac.mp.type;
 
 import java.io.Serializable;
-import nac.mp.Type;
+import nac.mp.type.MPObject;
+
+;
 
 /**
  *
  * @author user
  */
-public class MPFloat extends Type implements Serializable{
+public class MPFloat extends MPObject implements Serializable {
 
   private final float value;
 
   public MPFloat(float value) {
+    super(null, null);
     this.value = value;
   }
 
@@ -35,7 +38,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type plus(Type right) {
+  public MPObject plus(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPFloat(getFloat() + right.getFloat());
@@ -46,7 +49,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type dash(Type right) {
+  public MPObject dash(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPFloat(getFloat() - right.getFloat());
@@ -57,7 +60,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type star(Type right) {
+  public MPObject star(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPFloat(getFloat() * right.getFloat());
@@ -68,7 +71,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type slash(Type right) {
+  public MPObject slash(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPFloat(getFloat() / right.getFloat());
@@ -79,7 +82,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type lt(Type right) {
+  public MPObject lt(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPBoolean(getFloat() < right.getFloat());
@@ -90,7 +93,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type lte(Type right) {
+  public MPObject lte(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPBoolean(getFloat() <= right.getFloat());
@@ -101,7 +104,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type mte(Type right) {
+  public MPObject mte(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPBoolean(getFloat() >= right.getFloat());
@@ -112,7 +115,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type mt(Type right) {
+  public MPObject mt(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPBoolean(getFloat() > right.getFloat());
@@ -123,7 +126,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type equal(Type right) {
+  public MPObject equal(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPBoolean(value == right.getFloat());
@@ -132,7 +135,7 @@ public class MPFloat extends Type implements Serializable{
   }
 
   @Override
-  public Type notEqual(Type right) {
+  public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case FLOAT:
         return new MPBoolean(value != right.getFloat());

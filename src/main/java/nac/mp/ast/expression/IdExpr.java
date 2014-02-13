@@ -3,33 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.ast.statement;
+package nac.mp.ast.expression;
 
-import nac.mp.ast.Statement;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Expression;
+import nac.mp.ast.Factor;
 import nac.mp.Scope;
-import nac.mp.type.MPVoid;
+import nac.mp.type.MPObject;
 
 /**
  *
  * @author natz
  */
-public class Return implements Statement {
+public class IdExpr implements Factor {
 
-  private final Expression expression;
+  private final String id;
 
-  public Return(Expression expression) {
-    this.expression = expression;
+  public IdExpr(String id) {
+    this.id = id;
   }
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    if (expression == null) {
-      return new MPVoid();
-    } else {
-      return expression.eval(scope);
-    }
+    return scope.getVar(id);
   }
 }

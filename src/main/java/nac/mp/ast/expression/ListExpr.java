@@ -7,7 +7,7 @@ package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
 import nac.mp.type.MPInteger;
@@ -32,7 +32,7 @@ public class ListExpr implements Factor {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPList list;
     MPObject c = null;
     if (path.length == 1) {

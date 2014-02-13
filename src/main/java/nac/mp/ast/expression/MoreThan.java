@@ -5,7 +5,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Comparison;
 import nac.mp.Scope;
 
@@ -16,9 +16,9 @@ import nac.mp.Scope;
 public class MoreThan extends Comparison {
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
-    Type leftValue = left.eval(scope);
-    Type rightValue = right.eval(scope);
+  public MPObject eval(Scope scope) throws EvalException {
+    MPObject leftValue = left.eval(scope);
+    MPObject rightValue = right.eval(scope);
     return leftValue.mt(rightValue);
   }
 

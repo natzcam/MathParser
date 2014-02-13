@@ -6,7 +6,7 @@ package nac.mp.ast.statement;
 
 import nac.mp.ast.Statement;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
 
@@ -23,7 +23,7 @@ public class Print implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     System.out.println(expression.eval(scope));
     return null;
   }

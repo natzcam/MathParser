@@ -7,7 +7,7 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.Scope;
 import nac.mp.ast.Factor;
 import nac.mp.ast.Block;
@@ -31,7 +31,7 @@ public class FunctionDeclExpr implements Factor {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPFunc func = new MPFunc(scope, body);
     func.getFormalArgs().addAll(argNames);
     return func;

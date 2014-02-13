@@ -2,7 +2,7 @@ package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Statement;
 import nac.mp.type.MPInteger;
@@ -33,7 +33,7 @@ public class RestoreStmt implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPString col = (MPString) collectionName.eval(scope);
     MPInteger key = (MPInteger) id.eval(scope);
     scope.setVar(obj, objectStore.get(col.getString(), key));

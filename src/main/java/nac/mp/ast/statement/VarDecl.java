@@ -6,7 +6,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
@@ -34,7 +34,7 @@ public class VarDecl implements Declaration {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     if (defaultValue != null) {
       scope.declareVarLocal(identifier, defaultValue.eval(scope));
     } else {

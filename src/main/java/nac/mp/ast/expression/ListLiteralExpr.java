@@ -7,7 +7,7 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
@@ -32,8 +32,8 @@ public class ListLiteralExpr implements Factor {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
-    List<Type> initValues = new ArrayList<>();
+  public MPObject eval(Scope scope) throws EvalException {
+    List<MPObject> initValues = new ArrayList<>();
 
     for (Expression elemExpr : elems) {
       initValues.add(elemExpr.eval(scope));

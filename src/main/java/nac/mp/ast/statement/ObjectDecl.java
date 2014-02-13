@@ -7,7 +7,7 @@ package nac.mp.ast.statement;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Declaration;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
@@ -31,7 +31,7 @@ public class ObjectDecl implements Declaration {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
 
     MPObject obj = new MPObject(scope, null);
     scope.declareVarLocal(name, obj);

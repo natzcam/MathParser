@@ -16,29 +16,25 @@ import nac.mp.ast.Factor;
 import nac.mp.ast.statement.FunctionDecl;
 import nac.mp.ast.expression.FloatLiteral;
 import nac.mp.ast.expression.Parenthesis;
-import nac.mp.ast.expression.VarExpr;
+import nac.mp.ast.expression.IdExpr;
 import nac.mp.ast.Block;
 import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Statement;
 import nac.mp.ast.expression.BooleanLiteral;
+import nac.mp.ast.expression.DotExpression;
 import nac.mp.ast.expression.Equal;
 import nac.mp.ast.expression.MinusExpression;
 import nac.mp.ast.expression.FunctionDeclExpr;
 import nac.mp.ast.statement.Exit;
-import nac.mp.ast.expression.FunctionExpr;
-import nac.mp.ast.expression.FunctionOptsExpr;
 import nac.mp.ast.statement.IfStatement;
 import nac.mp.ast.statement.Input;
 import nac.mp.ast.expression.IntLiteral;
 import nac.mp.ast.expression.LessThan;
 import nac.mp.ast.expression.LessThanEqual;
-import nac.mp.ast.expression.ListExpr;
 import nac.mp.ast.expression.ListLiteralExpr;
 import nac.mp.ast.expression.MoreThan;
 import nac.mp.ast.expression.MoreThanEqual;
-import nac.mp.ast.expression.NewExpr;
-import nac.mp.ast.expression.NewOptsExpr;
 import nac.mp.ast.expression.NotEqual;
 import nac.mp.ast.expression.ObjectDeclExpr;
 import nac.mp.ast.expression.PlusExpression;
@@ -260,7 +256,7 @@ public class MathParser {
         return new WhileStatement(cond, body);
       case IDENTIFIER:
         consume();
-        String[] path = current.text.split("\\.");
+//        String[] path = current.text.split("\\.");
         next();
         //TODO use switch
         if (next.type == TokenType.ASSIGN) {
@@ -420,18 +416,19 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression access() throws ParseException {
     Expression left = factor();
     while (true) {
       next();
       switch (next.type) {
-        case STAR:
+        case DOT:
           consume();
-          StarExpression srt = new StarExpression();
-          srt.setLeft(left);
-          srt.setRight(multiplicative());
-          left = srt;
+          DotExpression dex = new DotExpression();
+          dex.setLeft(left);
+          consume(TokenType.IDENTIFIER);
+          dex.setId(current.text);
+          left = dex;
           break;
         case SLASH:
           consume();
@@ -446,6 +443,8 @@ public class MathParser {
     }
   }
 
+  
+  
   private Factor factor() throws ParseException {
     next();
     switch (next.type) {
@@ -470,111 +469,9 @@ public class MathParser {
         Expression exp = expression();
         consume(TokenType.RPAREN);
         return new Parenthesis(exp);
-      case NEW:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        String[] p = current.text.split("\\.");
-
-        List<Expression> expList1 = new ArrayList<>();
-        Map<String, Expression> optsMap1 = new HashMap<>();
-
-        consume(TokenType.LPAREN);
-        next();
-        while (next.type != TokenType.RPAREN) {
-          expList1.add(expression());
-          next();
-          if (next.type == TokenType.RPAREN) {
-            break;
-          } else if (next.type == TokenType.SEMICOLON) {
-            consume(TokenType.SEMICOLON);
-            break;
-          } else {
-            consume(TokenType.COMMA);
-          }
-        }
-
-        while (next.type != TokenType.RPAREN) {
-          consume(TokenType.IDENTIFIER);
-          String optName = current.text;
-          consume(TokenType.COLON);
-          optsMap1.put(optName, expression());
-          next();
-          if (next.type == TokenType.RPAREN) {
-            break;
-          } else {
-            consume(TokenType.COMMA);
-          }
-        }
-        consume(TokenType.RPAREN);
-
-        if (optsMap1.size() > 0) {
-          NewOptsExpr nex1 = new NewOptsExpr(p);
-          nex1.getArgs().addAll(expList1);
-          nex1.getOpts().putAll(optsMap1);
-          return nex1;
-        } else {
-          NewExpr nex2 = new NewExpr(p);
-          nex2.getArgs().addAll(expList1);
-          return nex2;
-        }
       case IDENTIFIER:
         consume();
-        String[] path = current.text.split("\\.");
-
-        next();
-        switch (next.type) {
-          case LPAREN:
-            consume();
-            List<Expression> expList = new ArrayList<>();
-            Map<String, Expression> optsMap = new HashMap<>();
-            next();
-            while (next.type != TokenType.RPAREN) {
-              expList.add(expression());
-              next();
-              if (next.type == TokenType.RPAREN) {
-                break;
-              } else if (next.type == TokenType.SEMICOLON) {
-                consume(TokenType.SEMICOLON);
-                break;
-              } else {
-                consume(TokenType.COMMA);
-              }
-            }
-
-            while (next.type != TokenType.RPAREN) {
-              consume(TokenType.IDENTIFIER);
-              String optName = current.text;
-              consume(TokenType.COLON);
-              optsMap.put(optName, expression());
-              next();
-              if (next.type == TokenType.RPAREN) {
-                break;
-              } else {
-                consume(TokenType.COMMA);
-              }
-            }
-            consume(TokenType.RPAREN);
-
-            if (optsMap.size() > 0) {
-              FunctionOptsExpr fex1 = new FunctionOptsExpr(path);
-              fex1.getArgs().addAll(expList);
-              fex1.getOpts().putAll(optsMap);
-              return fex1;
-            } else {
-              FunctionExpr fex2 = new FunctionExpr(path);
-              fex2.getArgs().addAll(expList);
-              return fex2;
-            }
-          case LBRACKET:
-            consume();
-            ListExpr lstexp = new ListExpr(path);
-            lstexp.setIndex(expression());
-            consume(TokenType.RBRACKET);
-            return lstexp;
-          default:
-            return new VarExpr(path);
-        }
-
+        return new IdExpr(current.text);
       case FUNC:
         consume();
         FunctionDeclExpr fdx = new FunctionDeclExpr();

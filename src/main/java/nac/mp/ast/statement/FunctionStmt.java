@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPFunc;
@@ -34,7 +34,7 @@ public class FunctionStmt implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPFunc func;
     MPObject c = null;
     //System.out.println("path: " + Arrays.toString(path));
@@ -48,7 +48,7 @@ public class FunctionStmt implements Statement {
       func = (MPFunc) c.getVar(path[path.length - 1]);
     }
 
-    List<Type> argValues = new ArrayList<>();
+    List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
       argValues.add(exp.eval(scope));
     }

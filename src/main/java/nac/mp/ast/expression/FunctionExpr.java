@@ -7,7 +7,7 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
 import nac.mp.Scope;
@@ -32,7 +32,7 @@ public class FunctionExpr implements Factor {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPFunc func;
     MPObject c = null;
     if (path.length == 1) {
@@ -45,11 +45,11 @@ public class FunctionExpr implements Factor {
       func = (MPFunc) c.getVar(path[path.length - 1]);
     }
 
-    List<Type> argValues = new ArrayList<>();
+    List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
       argValues.add(exp.eval(scope));
     }
-    Type result = func.call(c, argValues);
+    MPObject result = func.call(c, argValues);
     if (result == null) {
       throw new EvalException("Function does not return: " + path);
     } else {

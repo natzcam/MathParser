@@ -5,17 +5,17 @@
 package nac.mp.type;
 
 import java.io.Serializable;
-import nac.mp.Type;
 
 /**
  *
  * @author user
  */
-public class MPString extends Type implements Serializable{
+public class MPString extends MPObject implements Serializable{
 
   private final String value;
 
   public MPString(String value) {
+    super(null, null);
     this.value = value;
   }
 
@@ -35,7 +35,7 @@ public class MPString extends Type implements Serializable{
   }
 
   @Override
-  public Type equal(Type right) {
+  public MPObject equal(MPObject right) {
     switch (right.getHint()) {
       case STRING:
         return new MPBoolean(value.equals(right.getString()));
@@ -44,7 +44,7 @@ public class MPString extends Type implements Serializable{
   }
 
   @Override
-  public Type notEqual(Type right) {
+  public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case STRING:
         return new MPBoolean(!value.equals(right.getString()));

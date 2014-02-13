@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -17,7 +18,7 @@ import java.util.Set;
 public class BasicScope implements Scope, Serializable {
 
   private final Scope parent;
-  private final Map<String, Type> vars = new HashMap<>();
+  private final Map<String, MPObject> vars = new HashMap<>();
 
   public BasicScope(Scope parent) {
     this.parent = parent;
@@ -29,12 +30,12 @@ public class BasicScope implements Scope, Serializable {
   }
 
   @Override
-  public void setVarLocal(String name, Type value) {
+  public void setVarLocal(String name, MPObject value) {
     vars.put(name, value);
   }
 
   @Override
-  public void declareVarLocal(String name, Type defaultValue) throws EvalException {
+  public void declareVarLocal(String name, MPObject defaultValue) throws EvalException {
     if (vars.containsKey(name)) {
       throw new EvalException("Duplicate var: " + name);
     } else {
@@ -52,7 +53,7 @@ public class BasicScope implements Scope, Serializable {
   }
 
   @Override
-  public void setVar(String name, Type value) throws EvalException {
+  public void setVar(String name, MPObject value) throws EvalException {
     if (vars.containsKey(name)) {
       vars.put(name, value);
     } else if (parent != null) {
@@ -63,8 +64,8 @@ public class BasicScope implements Scope, Serializable {
   }
 
   @Override
-  public Type getVar(String name) {
-    Type result = vars.get(name);
+  public MPObject getVar(String name) {
+    MPObject result = vars.get(name);
     if (result == null && parent != null) {
       result = parent.getVar(name);
     }

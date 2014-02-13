@@ -6,7 +6,7 @@ package nac.mp.ast.statement;
 
 import nac.mp.ast.Statement;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;
@@ -34,7 +34,7 @@ public class Assignment implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
 
     if (path.length == 1) {
       scope.setVar(path[0], rightValue.eval(scope));

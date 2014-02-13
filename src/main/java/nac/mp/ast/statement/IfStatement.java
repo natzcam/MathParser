@@ -7,8 +7,8 @@ package nac.mp.ast.statement;
 
 import nac.mp.ast.Statement;
 import nac.mp.EvalException;
-import nac.mp.Type;
-import nac.mp.Type.Hint;
+import nac.mp.type.MPObject;;
+import nac.mp.type.MPObject.Hint;
 import nac.mp.BasicScope;
 import nac.mp.Scope;
 import nac.mp.ast.Block;
@@ -34,8 +34,8 @@ public class IfStatement implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
-    Type result = cond.eval(scope);
+  public MPObject eval(Scope scope) throws EvalException {
+    MPObject result = cond.eval(scope);
     if (result.getHint() == Hint.BOOLEAN) {
       if (result.getBoolean()) {
         scope = new BasicScope(scope);

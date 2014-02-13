@@ -7,12 +7,10 @@ package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.Type;
-import nac.mp.Type.Hint;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Statement;
 import nac.mp.type.MPObject;
-import nac.mp.type.MPString;
+import nac.mp.type.MPObject.Hint;
 import nac.mp.type.MPVoid;
 import nac.store.mapdb.ObjectStorage;
 
@@ -31,11 +29,11 @@ public class PersistStmt implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     
     MPObject obj = (MPObject) object.eval(scope);
     for (String key : obj.getVarKeys()) {
-      Type t = obj.getVar(key);
+      MPObject t = obj.getVar(key);
       if (t.getHint() == Hint.FUNCTION) {
         obj.setVar(key, new MPVoid());
       }

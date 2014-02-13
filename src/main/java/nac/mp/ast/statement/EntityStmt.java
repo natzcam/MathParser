@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Statement;
@@ -41,12 +41,12 @@ public class EntityStmt implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MySQLTable table = new MySQLTable(name);
     MPObject object = (MPObject) prototype.eval(scope);
     for (String key : object.getVarKeys()) {
       MySQLColumn col = null;
-      Type type = object.getVar(key);
+      MPObject type = object.getVar(key);
       switch (type.getHint()) {
         case BOOLEAN:
           col = new MySQLColumn(key, ColumnType.BOOLEAN);

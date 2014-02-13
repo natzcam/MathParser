@@ -6,7 +6,7 @@ package nac.mp.ast.statement;
 
 import nac.mp.ast.Statement;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
 
@@ -23,9 +23,9 @@ public class Assert implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
-    Type result = cond.eval(scope);
-    if (result.getHint() == Type.Hint.BOOLEAN) {
+  public MPObject eval(Scope scope) throws EvalException {
+    MPObject result = cond.eval(scope);
+    if (result.getHint() == MPObject.Hint.BOOLEAN) {
       if (!result.getBoolean()) {
         throw new EvalException("Assertion failed.");
       }

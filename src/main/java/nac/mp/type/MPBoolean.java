@@ -5,17 +5,19 @@
 package nac.mp.type;
 
 import java.io.Serializable;
-import nac.mp.Type;
+import nac.mp.Scope;
+import nac.mp.type.MPObject;;
 
 /**
  *
  * @author user
  */
-public class MPBoolean extends Type implements Serializable{
+public class MPBoolean extends MPObject implements Serializable{
 
   private final boolean value;
 
   public MPBoolean(boolean value) {
+    super(null, null);
     this.value = value;
   }
 
@@ -35,7 +37,7 @@ public class MPBoolean extends Type implements Serializable{
   }
 
   @Override
-  public Type equal(Type right) {
+  public MPObject equal(MPObject right) {
     switch (right.getHint()) {
       case BOOLEAN:
         return new MPBoolean(value == right.getBoolean());
@@ -44,7 +46,7 @@ public class MPBoolean extends Type implements Serializable{
   }
 
   @Override
-  public Type notEqual(Type right) {
+  public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case BOOLEAN:
         return new MPBoolean(value != right.getBoolean());

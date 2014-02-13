@@ -5,7 +5,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.ast.Statement;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.Scope;
 
 /**
@@ -15,7 +15,7 @@ import nac.mp.Scope;
 public class Exit implements Statement {
 
   @Override
-  public Type eval(Scope scope) {
+  public MPObject eval(Scope scope) {
     System.exit(0);
     return null;
   }

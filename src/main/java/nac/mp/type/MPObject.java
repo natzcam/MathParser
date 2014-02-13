@@ -10,30 +10,29 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
-import nac.mp.Type;
 import nac.mp.Scope;
 
 /**
  *
  * @author user
  */
-public class MPObject extends Type implements Scope, Serializable {
-  private final MPClass clazz;
-  private final Scope parent;
-  private final Map<String, Type> vars = new HashMap<>();
+public class MPObject implements Scope, Serializable {
+
+  protected final MPClass clazz;
+  protected final Scope parent;
+  protected final Map<String, MPObject> vars = new HashMap<>();
 
   public MPObject(Scope parent, MPClass clazz) {
     this.clazz = clazz;
     this.parent = parent;
   }
-  
-  public MPClass getClazz(){
+
+  public MPClass getClazz() {
     return clazz;
   }
-  
-  @Override
-  public Type.Hint getHint() {
-    return Type.Hint.OBJECT;
+
+  public MPObject.Hint getHint() {
+    return MPObject.Hint.OBJECT;
   }
 
   @Override
@@ -47,12 +46,12 @@ public class MPObject extends Type implements Scope, Serializable {
   }
 
   @Override
-  public void setVarLocal(String name, Type value) {
+  public void setVarLocal(String name, MPObject value) {
     vars.put(name, value);
   }
 
   @Override
-  public void declareVarLocal(String name, Type defaultValue) throws EvalException {
+  public void declareVarLocal(String name, MPObject defaultValue) throws EvalException {
     if (vars.containsKey(name)) {
       throw new EvalException("Duplicate var: " + name);
     } else {
@@ -70,14 +69,14 @@ public class MPObject extends Type implements Scope, Serializable {
   }
 
   @Override
-  public void setVar(String name, Type value) {
+  public void setVar(String name, MPObject value) {
     setVarLocal(name, value);
   }
 
   @Override
-  public Type getVar(String name) {
+  public MPObject getVar(String name) {
     // System.out.println(this + ".getVar " + name);
-    Type result = vars.get(name);
+    MPObject result = vars.get(name);
     if (result == null && parent != null) {
       result = parent.getVar(name);
     }
@@ -85,8 +84,7 @@ public class MPObject extends Type implements Scope, Serializable {
     return result;
   }
 
-  @Override
-  public Type equal(Type right) {
+  public MPObject equal(MPObject right) {
     switch (right.getHint()) {
       case OBJECT:
         return new MPBoolean(this == right);
@@ -94,8 +92,7 @@ public class MPObject extends Type implements Scope, Serializable {
     return new MPBoolean(false);
   }
 
-  @Override
-  public Type notEqual(Type right) {
+  public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case OBJECT:
         return new MPBoolean(this != right);
@@ -108,4 +105,68 @@ public class MPObject extends Type implements Scope, Serializable {
     return vars.keySet();
   }
 
+  public static enum Hint {
+
+    BOOLEAN,
+    INTEGER,
+    FLOAT,
+    STRING,
+    VOID,
+    FUNCTION,
+    OBJECT,
+    CLASS,
+    LIST,
+  }
+
+  public boolean getBoolean() {
+    throw new UnsupportedOperationException("No boolean representation: " + getHint());
+  }
+
+  public long getInt() {
+    throw new UnsupportedOperationException("No int representation: " + getHint());
+  }
+
+  public float getFloat() {
+    throw new UnsupportedOperationException("No float representation: " + getHint());
+  }
+
+  public String getString() {
+    throw new UnsupportedOperationException("No string representation: " + getHint());
+  }
+
+  public boolean isVoid() {
+    return false;
+  }
+
+  public MPObject plus(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " + " + right.getHint() + " not supported");
+  }
+
+  public MPObject dash(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " - " + right.getHint() + " not supported");
+  }
+
+  public MPObject star(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " * " + right.getHint() + " not supported");
+  }
+
+  public MPObject slash(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " / " + right.getHint() + " not supported");
+  }
+
+  public MPObject lte(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " <= " + right.getHint() + " not supported");
+  }
+
+  public MPObject lt(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " < " + right.getHint() + " not supported");
+  }
+
+  public MPObject mte(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " >= " + right.getHint() + " not supported");
+  }
+
+  public MPObject mt(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
+  }
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPClass;
@@ -34,7 +34,7 @@ public class ClassDecl implements Declaration {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPClass eclas = null;
     if (extnds != null) {
       eclas = (MPClass) extnds.eval(scope);

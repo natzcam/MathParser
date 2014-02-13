@@ -8,17 +8,20 @@ package nac.mp.type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import nac.mp.Type;
+import nac.mp.type.MPObject;
+
+;
 
 /**
  *
  * @author camomon
  */
-public class MPList extends Type {
+public class MPList extends MPObject {
 
-  private final List<Type> list;
+  private final List<MPObject> list;
 
-  public MPList(int capacity, List<Type> initialValues) {
+  public MPList(int capacity, List<MPObject> initialValues) {
+    super(null, null);
     list = new ArrayList<>(capacity);
     list.addAll(initialValues);
   }
@@ -27,21 +30,21 @@ public class MPList extends Type {
     return list.size();
   }
 
-  public Type get(int index) {
+  public MPObject get(int index) {
     return list.get(index);
   }
 
-  public Type get(MPInteger index) {
+  public MPObject get(MPInteger index) {
     return list.get((int) index.getInt());
   }
 
   @Override
   public Hint getHint() {
-    return Type.Hint.LIST;
+    return MPObject.Hint.LIST;
   }
 
   @Override
-  public Type equal(Type right) {
+  public MPObject equal(MPObject right) {
     switch (right.getHint()) {
       case LIST:
         return new MPBoolean(this == right);
@@ -50,7 +53,7 @@ public class MPList extends Type {
   }
 
   @Override
-  public Type notEqual(Type right) {
+  public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case LIST:
         return new MPBoolean(this != right);

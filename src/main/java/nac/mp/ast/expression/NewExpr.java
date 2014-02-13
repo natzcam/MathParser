@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
 import nac.mp.type.MPClass;
@@ -36,7 +36,7 @@ public class NewExpr implements Factor {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     MPClass clazz;
     MPObject c = null;
     if (path.length == 1) {
@@ -49,7 +49,7 @@ public class NewExpr implements Factor {
       clazz = (MPClass) c.getVar(path[path.length - 1]);
     }
 
-    List<Type> argValues = new ArrayList<>();
+    List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
       argValues.add(exp.eval(scope));
     }

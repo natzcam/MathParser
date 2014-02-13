@@ -50,11 +50,12 @@ public enum TokenType {
   RBRACKET("\\]"),
   COLON(":"),
   COMMA(","),
+  DOT("\\."),
   SEMICOLON(";"),
   FLOAT("\\d+\\.\\d+"),
   INT("\\d+"),
   STRING("\"[^\"]*\""),
-  IDENTIFIER("[a-zA-Z_]+\\d*[\\.[a-zA-Z_]+\\d*]*"),
+  IDENTIFIER("[a-zA-Z_]+\\d*"),
   EOF(null);
   private final String regex;
 

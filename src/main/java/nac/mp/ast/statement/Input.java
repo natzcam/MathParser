@@ -6,7 +6,7 @@ package nac.mp.ast.statement;
 
 import java.util.Scanner;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.Scope;
 import nac.mp.ast.Statement;
 import nac.mp.type.MPString;
@@ -26,7 +26,7 @@ public class Input implements Statement {
   }
 
   @Override
-  public Type eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope) throws EvalException {
     if (scope.containsVar(identifier)) {
       scope.setVar(identifier, new MPString(scanner.nextLine()));
     } else {

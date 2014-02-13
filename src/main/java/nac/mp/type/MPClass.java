@@ -8,30 +8,28 @@ package nac.mp.type;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.Type;
 import nac.mp.ast.Declaration;
 
 /**
  *
  * @author camomon
  */
-public class MPClass extends Type {
+public class MPClass extends MPObject {
 
   private final MPClass extParent;
   private final String name;
-  private final Scope parent;
   private final List<Declaration> declarations;
 
   public MPClass(Scope parent, String name, MPClass extParent, List<Declaration> declarations) {
+    super(parent, null);
     this.name = name;
     this.extParent = extParent;
-    this.parent = parent;
     this.declarations = declarations;
   }
 
   @Override
-  public Type.Hint getHint() {
-    return Type.Hint.CLASS;
+  public MPObject.Hint getHint() {
+    return MPObject.Hint.CLASS;
   }
 
   @Override
@@ -40,7 +38,7 @@ public class MPClass extends Type {
   }
 
   @Override
-  public Type equal(Type right) {
+  public MPObject equal(MPObject right) {
     switch (right.getHint()) {
       case CLASS:
         return new MPBoolean(this == right);
@@ -49,7 +47,7 @@ public class MPClass extends Type {
   }
 
   @Override
-  public Type notEqual(Type right) {
+  public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case CLASS:
         return new MPBoolean(this != right);

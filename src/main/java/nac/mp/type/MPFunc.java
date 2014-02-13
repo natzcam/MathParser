@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import nac.mp.EvalException;
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.BasicScope;
 import nac.mp.Scope;
 import nac.mp.ast.Block;
@@ -17,14 +17,13 @@ import nac.mp.ast.Block;
  *
  * @author nathaniel
  */
-public class MPFunc extends Type {
+public class MPFunc extends MPObject {
 
-  protected final Scope scope;
   protected final Block body;
   protected final List<String> formalArgs = new ArrayList<>();
 
-  public MPFunc(Scope scope, Block body) {
-    this.scope = scope;
+  public MPFunc(Scope parent, Block body) {
+    super(parent, null);
     this.body = body;
   }
 
@@ -37,8 +36,8 @@ public class MPFunc extends Type {
   }
 
   @Override
-  public Type.Hint getHint() {
-    return Type.Hint.FUNCTION;
+  public MPObject.Hint getHint() {
+    return MPObject.Hint.FUNCTION;
   }
 
   @Override
@@ -46,11 +45,11 @@ public class MPFunc extends Type {
     return "func:" + this.hashCode();
   }
 
-  public Type call(MPObject thisRef, List<Type> argsValues) throws EvalException {
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
       throw new EvalException("Argument mismatch: " + this);
     }
-    Scope newScope = new BasicScope(scope);
+    Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
       newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
     }
@@ -58,17 +57,17 @@ public class MPFunc extends Type {
     return body.eval(newScope);
   }
 
-  public Type call(MPObject thisRef, List<Type> argsValues, Map<String, Type> optsValues) throws EvalException {
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
       throw new EvalException("Argument mismatch: " + this);
     }
 
-    Scope newScope = new BasicScope(scope);
+    Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
       newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
     }
 
-    MPObject opts = new MPObject(scope, null);
+    MPObject opts = new MPObject(parent, null);
     for (String key : optsValues.keySet()) {
       opts.setVarLocal(key, optsValues.get(key));
     }
@@ -79,7 +78,7 @@ public class MPFunc extends Type {
   }
 
   @Override
-  public Type equal(Type right) {
+  public MPObject equal(MPObject right) {
     switch (right.getHint()) {
       case FUNCTION:
         return new MPBoolean(this == right);
@@ -88,7 +87,7 @@ public class MPFunc extends Type {
   }
 
   @Override
-  public Type notEqual(Type right) {
+  public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case FUNCTION:
         return new MPBoolean(this != right);

@@ -4,7 +4,7 @@
  */
 package nac.mp.ast.expression;
 
-import nac.mp.Type;
+import nac.mp.type.MPObject;;
 import nac.mp.ast.Factor;
 import nac.mp.Scope;
 import nac.mp.type.MPString;
@@ -22,7 +22,7 @@ public class StringLiteral  implements Factor {
   }
 
   @Override
-  public Type eval(Scope scope) {
+  public MPObject eval(Scope scope) {
     return value;
   }
 }
