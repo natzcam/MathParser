@@ -34,6 +34,7 @@ import nac.mp.ast.expression.IntLiteral;
 import nac.mp.ast.expression.LessThan;
 import nac.mp.ast.expression.LessThanEqual;
 import nac.mp.ast.expression.ListExpr;
+import nac.mp.ast.expression.ListLiteralExpr;
 import nac.mp.ast.expression.MoreThan;
 import nac.mp.ast.expression.MoreThanEqual;
 import nac.mp.ast.expression.NewExpr;
@@ -261,6 +262,7 @@ public class MathParser {
         consume();
         String[] path = current.text.split("\\.");
         next();
+        //TODO use switch
         if (next.type == TokenType.ASSIGN) {
           consume();
           Expression exp = expression();
@@ -493,54 +495,61 @@ public class MathParser {
       case IDENTIFIER:
         consume();
         String[] path = current.text.split("\\.");
+
         next();
-
-        if (next.type == TokenType.LPAREN) {
-          consume();
-          List<Expression> expList = new ArrayList<>();
-          Map<String, Expression> optsMap = new HashMap<>();
-          next();
-          while (next.type != TokenType.RPAREN) {
-            expList.add(expression());
+        switch (next.type) {
+          case LPAREN:
+            consume();
+            List<Expression> expList = new ArrayList<>();
+            Map<String, Expression> optsMap = new HashMap<>();
             next();
-            if (next.type == TokenType.RPAREN) {
-              break;
-            } else if (next.type == TokenType.SEMICOLON) {
-              consume(TokenType.SEMICOLON);
-              break;
-            } else {
-              consume(TokenType.COMMA);
+            while (next.type != TokenType.RPAREN) {
+              expList.add(expression());
+              next();
+              if (next.type == TokenType.RPAREN) {
+                break;
+              } else if (next.type == TokenType.SEMICOLON) {
+                consume(TokenType.SEMICOLON);
+                break;
+              } else {
+                consume(TokenType.COMMA);
+              }
             }
-          }
 
-          while (next.type != TokenType.RPAREN) {
-            consume(TokenType.IDENTIFIER);
-            String optName = current.text;
-            consume(TokenType.COLON);
-            optsMap.put(optName, expression());
-            next();
-            if (next.type == TokenType.RPAREN) {
-              break;
-            } else {
-              consume(TokenType.COMMA);
+            while (next.type != TokenType.RPAREN) {
+              consume(TokenType.IDENTIFIER);
+              String optName = current.text;
+              consume(TokenType.COLON);
+              optsMap.put(optName, expression());
+              next();
+              if (next.type == TokenType.RPAREN) {
+                break;
+              } else {
+                consume(TokenType.COMMA);
+              }
             }
-          }
-          consume(TokenType.RPAREN);
+            consume(TokenType.RPAREN);
 
-          if (optsMap.size() > 0) {
-            FunctionOptsExpr fex1 = new FunctionOptsExpr(path);
-            fex1.getArgs().addAll(expList);
-            fex1.getOpts().putAll(optsMap);
-            return fex1;
-          } else {
-            FunctionExpr fex2 = new FunctionExpr(path);
-            fex2.getArgs().addAll(expList);
-            return fex2;
-          }
-
-        } else {
-          return new VarExpr(path);
+            if (optsMap.size() > 0) {
+              FunctionOptsExpr fex1 = new FunctionOptsExpr(path);
+              fex1.getArgs().addAll(expList);
+              fex1.getOpts().putAll(optsMap);
+              return fex1;
+            } else {
+              FunctionExpr fex2 = new FunctionExpr(path);
+              fex2.getArgs().addAll(expList);
+              return fex2;
+            }
+          case LBRACKET:
+            consume();
+            ListExpr lstexp = new ListExpr(path);
+            lstexp.setIndex(expression());
+            consume(TokenType.RBRACKET);
+            return lstexp;
+          default:
+            return new VarExpr(path);
         }
+
       case FUNC:
         consume();
         FunctionDeclExpr fdx = new FunctionDeclExpr();
@@ -573,7 +582,7 @@ public class MathParser {
         return od;
       case LBRACKET:
         consume();
-        ListExpr le = new ListExpr();
+        ListLiteralExpr le = new ListLiteralExpr();
         next();
         //TODO optimize here the while
         while (next.type != TokenType.RBRACKET) {

@@ -6,6 +6,7 @@
 package nac.mp.type;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import nac.mp.Type;
 
@@ -24,6 +25,14 @@ public class MPList extends Type {
 
   public int getLength() {
     return list.size();
+  }
+
+  public Type get(int index) {
+    return list.get(index);
+  }
+
+  public Type get(MPInteger index) {
+    return list.get((int) index.getInt());
   }
 
   @Override

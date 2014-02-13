@@ -1,46 +1,50 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package nac.mp.ast.expression;
 
-import java.util.ArrayList;
-import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Type;
 import nac.mp.Scope;
+import nac.mp.Type;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Factor;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPList;
+import nac.mp.type.MPObject;
 
 /**
  *
- * @author ladilads
+ * @author user
  */
 public class ListExpr implements Factor {
 
-  private Expression initSize;
-  private final List<Expression> elems = new ArrayList<>();
+  private final String[] path;
+  private Expression index;
 
-  public void setInitSize(Expression initSize) {
-    this.initSize = initSize;
+  public ListExpr(String[] path) {
+    this.path = path;
   }
 
-  public List<Expression> getElems() {
-    return elems;
+  public void setIndex(Expression index) {
+    this.index = index;
   }
 
   @Override
   public Type eval(Scope scope) throws EvalException {
-
-    List<Type> initValues = new ArrayList<>();
-
-    for (Expression elemExpr : elems) {
-      initValues.add(elemExpr.eval(scope));
+    MPList list;
+    MPObject c = null;
+    if (path.length == 1) {
+      list = (MPList) scope.getVar(path[0]);
+    } else {
+      c = (MPObject) scope.getVar(path[0]);
+      for (int i = 1; i < path.length - 1; i++) {
+        c = (MPObject) c.getVar(path[i]);
+      }
+      list = (MPList) c.getVar(path[path.length - 1]);
     }
-    MPInteger initS = (MPInteger) initSize.eval(scope);
-    return new MPList((int) initS.getInt(), initValues);
+    return list.get((MPInteger)index.eval(scope));
   }
 
 }
