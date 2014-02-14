@@ -21,6 +21,7 @@ public enum TokenType {
   ELSE("else"),
   WHILE("while"),
   RETURN("return"),
+  SET("set"),
   TRUE("true"),
   FALSE("false"),
   ASSERT("assert"),

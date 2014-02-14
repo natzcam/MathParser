@@ -17,20 +17,16 @@ import nac.mp.type.MPObject;
  */
 public class Assignment implements Statement {
 
-  private final String[] path;
+  private final Expression leftValue;
   private final Expression rightValue;
 
-  public Assignment(String[] path, Expression rightValue) {
-    this.path = path;
+  public Assignment(Expression leftValue, Expression rightValue) {
+    this.leftValue = leftValue;
     this.rightValue = rightValue;
   }
 
   public Expression getRightValue() {
     return rightValue;
-  }
-
-  public String[] getPath() {
-    return path;
   }
 
   @Override

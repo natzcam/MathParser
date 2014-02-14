@@ -119,6 +119,92 @@ public class MathParser {
     return bl;
   }
 
+  private Statement statement() throws ParseException {
+    next();
+    switch (next.type) {
+      case PERSIST:
+        consume();
+        Expression obj = expression();
+        consume(TokenType.SEMICOLON);
+        return new PersistStmt(objectStore, obj);
+      case RESTORE:
+        consume();
+        consume(TokenType.IDENTIFIER);
+        String identi = current.text;
+        Expression col2 = expression();
+        Expression idexp = expression();
+        consume(TokenType.SEMICOLON);
+        return new RestoreStmt(objectStore, col2, idexp, identi);
+      case PRINT:
+        consume();
+        Expression ex1 = expression();
+        consume(TokenType.SEMICOLON);
+        return new Print(ex1);
+      case INPUT:
+        consume();
+        consume(TokenType.IDENTIFIER);
+        Input input = new Input(scanner, current.text);
+        consume(TokenType.SEMICOLON);
+        return input;
+      case EXIT:
+        consume();
+        consume(TokenType.SEMICOLON);
+        return new Exit();
+      case ASSERT:
+        consume();
+        Expression ex2 = expression();
+        consume(TokenType.SEMICOLON);
+        return new Assert(ex2);
+      case RETURN:
+        consume();
+        Expression ex = null;
+        next();
+        if (next.type != TokenType.SEMICOLON) {
+          ex = expression();
+        }
+        consume(TokenType.SEMICOLON);
+        return new Return(ex);
+      case IF:
+        consume();
+        consume(TokenType.LPAREN);
+        Expression ifCond = expression();
+        consume(TokenType.RPAREN);
+        Block ifBody = block();
+        IfStatement ifs = new IfStatement(ifCond, ifBody);
+        next();
+        if (next.type == TokenType.ELSE) {
+          consume();
+          Block elseBody = block();
+          ifs.setElseBody(elseBody);
+        }
+        return ifs;
+      case WHILE:
+        consume();
+        consume(TokenType.LPAREN);
+        Expression cond = expression();
+        consume(TokenType.RPAREN);
+        Block body = block();
+        return new WhileStatement(cond, body);
+      case SET:
+        Statement st = null;
+        consume();
+        Expression leftValue = expression();
+
+        next();
+        if (next.type == TokenType.EQUAL) {
+          consume();
+          Expression rightValue = expression();
+          st = new Assignment(leftValue, rightValue);
+        }
+
+        consume(TokenType.SEMICOLON);
+        return st;
+
+      default:
+        return declaration();
+    }
+  }
+
   private Declaration declaration() throws ParseException {
     next();
     switch (next.type) {
@@ -186,132 +272,6 @@ public class MathParser {
         return cs;
     }
     throw new ParseException("Unexpected token " + next + ". Declaration expected.");
-  }
-
-  private Statement statement() throws ParseException {
-    next();
-    switch (next.type) {
-      case PERSIST:
-        consume();
-        Expression obj = expression();
-        consume(TokenType.SEMICOLON);
-        return new PersistStmt(objectStore, obj);
-      case RESTORE:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        String identi = current.text;
-        Expression col2 = expression();
-        Expression idexp = expression();
-        consume(TokenType.SEMICOLON);
-        return new RestoreStmt(objectStore, col2, idexp, identi);
-      case PRINT:
-        consume();
-        Expression ex1 = expression();
-        consume(TokenType.SEMICOLON);
-        return new Print(ex1);
-      case INPUT:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        Input input = new Input(scanner, current.text);
-        consume(TokenType.SEMICOLON);
-        return input;
-      case EXIT:
-        consume();
-        consume(TokenType.SEMICOLON);
-        return new Exit();
-      case ASSERT:
-        consume();
-        Expression ex2 = expression();
-        consume(TokenType.SEMICOLON);
-        return new Assert(ex2);
-      case RETURN:
-        consume();
-        Expression ex = null;
-        next();
-        if (next.type != TokenType.SEMICOLON) {
-          ex = expression();
-        }
-        consume(TokenType.SEMICOLON);
-        return new Return(ex);
-      case IF:
-        consume();
-        consume(TokenType.LPAREN);
-        Expression ifCond = expression();
-        consume(TokenType.RPAREN);
-        Block ifBody = block();
-        IfStatement ifs = new IfStatement(ifCond, ifBody);
-        next();
-        if (next.type == TokenType.ELSE) {
-          consume();
-          Block elseBody = block();
-          ifs.setElseBody(elseBody);
-        }
-        return ifs;
-      case WHILE:
-        consume();
-        consume(TokenType.LPAREN);
-        Expression cond = expression();
-        consume(TokenType.RPAREN);
-        Block body = block();
-        return new WhileStatement(cond, body);
-      case IDENTIFIER:
-        consume();
-//        String[] path = current.text.split("\\.");
-        next();
-        //TODO use switch
-        if (next.type == TokenType.ASSIGN) {
-          consume();
-          Expression exp = expression();
-          consume(TokenType.SEMICOLON);
-          return new Assignment(path, exp);
-        } else if (next.type == TokenType.LPAREN) {
-          consume();
-          List<Expression> expList = new ArrayList<>();
-          Map<String, Expression> optsMap = new HashMap<>();
-          next();
-          while (next.type != TokenType.RPAREN) {
-            expList.add(expression());
-            next();
-            if (next.type == TokenType.RPAREN) {
-              break;
-            } else if (next.type == TokenType.SEMICOLON) {
-              consume(TokenType.SEMICOLON);
-              break;
-            } else {
-              consume(TokenType.COMMA);
-            }
-          }
-          while (next.type != TokenType.RPAREN) {
-            consume(TokenType.IDENTIFIER);
-            String optName = current.text;
-            consume(TokenType.COLON);
-            optsMap.put(optName, expression());
-            next();
-            if (next.type == TokenType.RPAREN) {
-              break;
-            } else {
-              consume(TokenType.COMMA);
-            }
-          }
-          consume(TokenType.RPAREN);
-          consume(TokenType.SEMICOLON);
-
-          if (optsMap.size() > 0) {
-            FunctionOptsStatement fex1 = new FunctionOptsStatement(path);
-            fex1.getArgs().addAll(expList);
-            fex1.getOpts().putAll(optsMap);
-            return fex1;
-          } else {
-            FunctionStmt fex2 = new FunctionStmt(path);
-            fex2.getArgs().addAll(expList);
-            return fex2;
-          }
-        } else {
-          throw new ParseException("Unexpected token " + next + ". Assignment expected.");
-        }
-      default:
-        return declaration();
-    }
   }
 
   private Expression expression() throws ParseException {
@@ -443,8 +403,6 @@ public class MathParser {
     }
   }
 
-  
-  
   private Factor factor() throws ParseException {
     next();
     switch (next.type) {
