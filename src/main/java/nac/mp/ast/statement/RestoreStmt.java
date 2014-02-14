@@ -4,7 +4,6 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Statement;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPString;
 import nac.store.mapdb.ObjectStorage;
@@ -18,7 +17,7 @@ import nac.store.mapdb.ObjectStorage;
  *
  * @author user
  */
-public class RestoreStmt implements Statement {
+public class RestoreStmt implements Expression {
 
   private final ObjectStorage objectStore;
   private final Expression collectionName;

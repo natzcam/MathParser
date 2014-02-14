@@ -9,7 +9,7 @@ import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.Scope;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.ast.Block;
 import nac.mp.type.MPFunc;
 
@@ -17,7 +17,7 @@ import nac.mp.type.MPFunc;
  *
  * @author ladilads
  */
-public class FunctionDeclExpr implements Factor {
+public class FunctionDeclExpr implements Expression {
 
   private final List<String> argNames = new ArrayList<>();
   private Block body;

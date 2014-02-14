@@ -6,14 +6,14 @@ package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Comparison;
 import nac.mp.Scope;
+import nac.mp.ast.BinaryExpression;
 
 /**
  *
  * @author user
  */
-public class NotEqual extends Comparison {
+public class NotEqual extends BinaryExpression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {

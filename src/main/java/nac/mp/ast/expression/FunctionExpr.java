@@ -9,7 +9,7 @@ import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
@@ -18,7 +18,7 @@ import nac.mp.type.MPObject;
  *
  * @author ladilads
  */
-public class FunctionExpr implements Factor {
+public class FunctionExpr implements Expression {
 
   private final String[] path;
   private final List<Expression> args = new ArrayList<>();

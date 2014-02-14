@@ -6,7 +6,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPFloat;
 
@@ -14,7 +14,7 @@ import nac.mp.type.MPFloat;
  *
  * @author natz
  */
-public class FloatLiteral implements Factor {
+public class FloatLiteral implements Expression {
 
   private final MPFloat value;
 

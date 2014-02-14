@@ -8,14 +8,14 @@ import java.util.Scanner;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.Scope;
-import nac.mp.ast.Statement;
+import nac.mp.ast.Expression;
 import nac.mp.type.MPString;
 
 /**
  *
  * @author nathaniel
  */
-public class Input implements Statement {
+public class Input implements Expression {
 
   private final String identifier;
   private final Scanner scanner;

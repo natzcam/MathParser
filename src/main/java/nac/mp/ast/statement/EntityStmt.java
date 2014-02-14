@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.type.MPObject;;
-import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Statement;
 import nac.mp.type.MPObject;
 import nac.store.mapdb.ObjectStorage;
 import nac.store.mysql.MySQLColumn;
@@ -23,11 +20,11 @@ import nac.store.mysql.MySQLTable;
  *
  * @author user
  */
-public class EntityStmt implements Statement {
+public class EntityStmt implements Expression {
 
   private final String name;
   private final Expression prototype;
-  private final List<Declaration> declarations = new ArrayList<>();
+  private final List<Expression> declarations = new ArrayList<>();
   private final ObjectStorage objectStore;
 
   public EntityStmt(ObjectStorage objectStore, String name, Expression prototype) {
@@ -36,7 +33,7 @@ public class EntityStmt implements Statement {
     this.prototype = prototype;
   }
 
-  public List<Declaration> getDeclarations() {
+  public List<Expression> getExpressions() {
     return declarations;
   }
 

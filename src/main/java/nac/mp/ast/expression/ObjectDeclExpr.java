@@ -8,21 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Declaration;
+import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.type.MPObject;
 
 /**
  *
  * @author ladilads
  */
-public class ObjectDeclExpr implements Factor {
+public class ObjectDeclExpr implements Expression {
 
-  private final List<Declaration> declarations = new ArrayList<>();
+  private final List<Expression> declarations = new ArrayList<>();
 
-  public List<Declaration> getDeclarations() {
+  public List<Expression> getExpressions() {
     return declarations;
   }
 
@@ -30,7 +30,7 @@ public class ObjectDeclExpr implements Factor {
   public MPObject eval(Scope scope) throws EvalException {
 
     MPObject obj = new MPObject(scope, null);
-    for (Declaration d : declarations) {
+    for (Expression d : declarations) {
       d.eval(obj);
     }
     return obj;

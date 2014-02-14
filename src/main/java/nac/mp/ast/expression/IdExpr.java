@@ -7,7 +7,7 @@ package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;
 
@@ -15,7 +15,7 @@ import nac.mp.type.MPObject;
  *
  * @author natz
  */
-public class IdExpr implements Factor {
+public class IdExpr implements Expression {
 
   private final String id;
 

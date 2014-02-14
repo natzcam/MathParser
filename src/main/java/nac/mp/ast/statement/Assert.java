@@ -4,7 +4,6 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.ast.Statement;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
@@ -14,7 +13,7 @@ import nac.mp.Scope;
  *
  * @author nathaniel
  */
-public class Assert implements Statement {
+public class Assert implements Expression {
 
   private final Expression cond;
 

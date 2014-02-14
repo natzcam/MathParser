@@ -10,7 +10,7 @@ import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Declaration;
+import nac.mp.ast.Expression;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPClass;
 
@@ -18,18 +18,18 @@ import nac.mp.type.MPClass;
  *
  * @author camomon
  */
-public class ClassDecl implements Declaration {
+public class ClassDecl implements Expression {
 
   private final Expression extnds;
   private final String name;
-  private final List<Declaration> declarations = new ArrayList<>();
+  private final List<Expression> declarations = new ArrayList<>();
 
   public ClassDecl(Expression extnds, String name) {
     this.extnds = extnds;
     this.name = name;
   }
 
-  public List<Declaration> getDeclarations() {
+  public List<Expression> getExpressions() {
     return declarations;
   }
 

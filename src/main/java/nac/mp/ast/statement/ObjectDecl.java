@@ -7,8 +7,6 @@ package nac.mp.ast.statement;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;;
-import nac.mp.ast.Declaration;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPObject;
@@ -17,16 +15,16 @@ import nac.mp.type.MPObject;
  *
  * @author ladilads
  */
-public class ObjectDecl implements Declaration {
+public class ObjectDecl implements Expression {
 
   private final String name;
-  private final List<Declaration> declarations = new ArrayList<>();
+  private final List<Expression> declarations = new ArrayList<>();
 
   public ObjectDecl(String name) {
     this.name = name;
   }
 
-  public List<Declaration> getDeclarations() {
+  public List<Expression> getExpressions() {
     return declarations;
   }
 
@@ -35,7 +33,7 @@ public class ObjectDecl implements Declaration {
 
     MPObject obj = new MPObject(scope, null);
     scope.declareVarLocal(name, obj);
-    for (Declaration d : declarations) {
+    for (Expression d : declarations) {
       d.eval(obj);
     }
     return null;

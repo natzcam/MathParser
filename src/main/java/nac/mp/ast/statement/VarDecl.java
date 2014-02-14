@@ -7,7 +7,6 @@ package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPVoid;
@@ -16,7 +15,7 @@ import nac.mp.type.MPVoid;
  *
  * @author natz
  */
-public class VarDecl implements Declaration {
+public class VarDecl implements Expression {
 
   private final String identifier;
   private Expression defaultValue = null;

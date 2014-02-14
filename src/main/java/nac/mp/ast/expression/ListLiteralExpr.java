@@ -10,7 +10,7 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPList;
 
@@ -18,7 +18,7 @@ import nac.mp.type.MPList;
  *
  * @author ladilads
  */
-public class ListLiteralExpr implements Factor {
+public class ListLiteralExpr implements Expression {
 
   private Expression initSize;
   private final List<Expression> elems = new ArrayList<>();

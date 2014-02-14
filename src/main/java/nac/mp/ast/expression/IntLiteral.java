@@ -5,7 +5,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPInteger;
 
@@ -13,7 +13,7 @@ import nac.mp.type.MPInteger;
  *
  * @author user
  */
-public class IntLiteral implements Factor {
+public class IntLiteral implements Expression {
 
   private final MPInteger value;
 

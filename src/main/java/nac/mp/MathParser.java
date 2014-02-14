@@ -6,21 +6,13 @@
 package nac.mp;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import nac.mp.ast.statement.Assignment;
-import nac.mp.ast.Factor;
 import nac.mp.ast.statement.FunctionDecl;
 import nac.mp.ast.expression.FloatLiteral;
 import nac.mp.ast.expression.Parenthesis;
 import nac.mp.ast.expression.IdExpr;
 import nac.mp.ast.Block;
-import nac.mp.ast.Declaration;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Statement;
 import nac.mp.ast.expression.BooleanLiteral;
 import nac.mp.ast.expression.DotExpression;
 import nac.mp.ast.expression.Equal;
@@ -45,8 +37,6 @@ import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
 import nac.mp.ast.statement.ClassDecl;
-import nac.mp.ast.statement.FunctionOptsStatement;
-import nac.mp.ast.statement.FunctionStmt;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.PersistStmt;
 import nac.mp.ast.statement.RestoreStmt;
@@ -119,7 +109,7 @@ public class MathParser {
     return bl;
   }
 
-  private Statement statement() throws ParseException {
+  private Expression statement() throws ParseException {
     next();
     switch (next.type) {
       case PERSIST:
@@ -185,93 +175,103 @@ public class MathParser {
         consume(TokenType.RPAREN);
         Block body = block();
         return new WhileStatement(cond, body);
-      case SET:
-        Statement st = null;
-        consume();
-        Expression leftValue = expression();
-
-        next();
-        if (next.type == TokenType.EQUAL) {
-          consume();
-          Expression rightValue = expression();
-          st = new Assignment(leftValue, rightValue);
-        }
-
-        consume(TokenType.SEMICOLON);
-        return st;
-
+      case VAR:
+        return vardecl();
+      case FUNC:
+        return funcdecl();
+      case OBJECT:
+        return objectdecl();
+      case CLASS:
+        return classdecl();
       default:
-        return declaration();
+        return expression();
     }
   }
 
-  private Declaration declaration() throws ParseException {
+  private Expression declaration() throws ParseException {
     next();
     switch (next.type) {
       case VAR:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        VarDecl varDecl = new VarDecl(current.text);
-        next();
-        if (next.type == TokenType.ASSIGN) {
-          consume();
-          varDecl.setDefaultValue(expression());
-        }
-        consume(TokenType.SEMICOLON);
-        return varDecl;
+        return vardecl();
       case FUNC:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        FunctionDecl fd = new FunctionDecl(current.text);
-        consume(TokenType.LPAREN);
-        next();
-        while (next.type != TokenType.RPAREN) {
-          consume(TokenType.IDENTIFIER);
-          fd.getArgNames().add(current.text);
-          next();
-          if (next.type == TokenType.RPAREN) {
-            break;
-          } else {
-            consume(TokenType.COMMA);
-          }
-        }
-        consume(TokenType.RPAREN);
-        Block b = block();
-        fd.setBody(b);
-        return fd;
+        return funcdecl();
       case OBJECT:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        ObjectDecl od = new ObjectDecl(current.text);
-        consume(TokenType.LBRACE);
-        next();
-        while (next.type != TokenType.RBRACE) {
-          od.getDeclarations().add(declaration());
-          next();
-        }
-        consume();
-        return od;
+        return objectdecl();
       case CLASS:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        String cl = current.text;
-        next();
-        Expression extExp = null;
-        if (next.type == TokenType.EXTENDS) {
-          consume();
-          extExp = expression();
-        }
-        ClassDecl cs = new ClassDecl(extExp, cl);
-        consume(TokenType.LBRACE);
-        next();
-        while (next.type != TokenType.RBRACE) {
-          cs.getDeclarations().add(declaration());
-          next();
-        }
-        consume();
-        return cs;
+        return classdecl();
+      default:
+        throw new ParseException("Unexpected token " + next + ". Declaration expected.");
     }
-    throw new ParseException("Unexpected token " + next + ". Declaration expected.");
+  }
+
+  private Expression vardecl() throws ParseException {
+    consume(TokenType.VAR);
+    consume(TokenType.IDENTIFIER);
+    VarDecl varDecl = new VarDecl(current.text);
+    next();
+    if (next.type == TokenType.ASSIGN) {
+      consume();
+      varDecl.setDefaultValue(expression());
+    }
+    consume(TokenType.SEMICOLON);
+    return varDecl;
+  }
+
+  private Expression funcdecl() throws ParseException {
+    consume(TokenType.FUNC);
+    consume(TokenType.IDENTIFIER);
+    FunctionDecl fd = new FunctionDecl(current.text);
+    consume(TokenType.LPAREN);
+    next();
+    while (next.type != TokenType.RPAREN) {
+      consume(TokenType.IDENTIFIER);
+      fd.getArgNames().add(current.text);
+      next();
+      if (next.type == TokenType.RPAREN) {
+        break;
+      } else {
+        consume(TokenType.COMMA);
+      }
+    }
+    consume(TokenType.RPAREN);
+    Block b = block();
+    fd.setBody(b);
+    return fd;
+  }
+
+  private Expression objectdecl() throws ParseException {
+    consume(TokenType.OBJECT);
+    consume(TokenType.IDENTIFIER);
+    ObjectDecl od = new ObjectDecl(current.text);
+    consume(TokenType.LBRACE);
+    next();
+    while (next.type != TokenType.RBRACE) {
+      od.getExpressions().add(declaration());
+      next();
+    }
+    consume();
+    return od;
+  }
+
+  private Expression classdecl() throws ParseException {
+    consume(TokenType.CLASS);
+    consume(TokenType.IDENTIFIER);
+    String cl = current.text;
+    next();
+    Expression extExp = null;
+    if (next.type == TokenType.EXTENDS) {
+      consume();
+      extExp = expression();
+    }
+    ClassDecl cs = new ClassDecl(extExp, cl);
+    consume(TokenType.LBRACE);
+    next();
+    while (next.type != TokenType.RBRACE) {
+      cs.getExpressions().add(declaration());
+      next();
+    }
+    consume();
+    return cs;
   }
 
   private Expression expression() throws ParseException {
@@ -403,7 +403,7 @@ public class MathParser {
     }
   }
 
-  private Factor factor() throws ParseException {
+  private Expression factor() throws ParseException {
     next();
     switch (next.type) {
       case FLOAT:
@@ -455,7 +455,7 @@ public class MathParser {
         consume(TokenType.LBRACE);
         next();
         while (next.type != TokenType.RBRACE) {
-          od.getDeclarations().add(declaration());
+          od.getExpressions().add(declaration());
           next();
         }
         consume();
@@ -483,7 +483,7 @@ public class MathParser {
         }
         return le;
       default:
-        throw new ParseException("Unexpected token '" + next + "'. Factor expected.");
+        throw new ParseException("Unexpected token '" + next + "'. Expression expected.");
     }
   }
 

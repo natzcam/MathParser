@@ -11,14 +11,14 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.Scope;
 import nac.mp.ast.Block;
-import nac.mp.ast.Declaration;
+import nac.mp.ast.Expression;
 import nac.mp.type.MPFunc;
 
 /**
  *
  * @author ladilads
  */
-public class FunctionDecl implements Declaration {
+public class FunctionDecl implements Expression {
 
   private final String name;
   private final List<String> argNames = new ArrayList<>();

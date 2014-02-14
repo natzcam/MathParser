@@ -5,7 +5,6 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.ast.Statement;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
@@ -16,7 +15,7 @@ import nac.mp.type.MPVoid;
  *
  * @author natz
  */
-public class Return implements Statement {
+public class Return implements Expression {
 
   private final Expression expression;
 

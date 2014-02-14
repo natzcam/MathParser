@@ -8,7 +8,7 @@ package nac.mp.type;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.ast.Declaration;
+import nac.mp.ast.Expression;
 
 /**
  *
@@ -18,9 +18,9 @@ public class MPClass extends MPObject {
 
   private final MPClass extParent;
   private final String name;
-  private final List<Declaration> declarations;
+  private final List<Expression> declarations;
 
-  public MPClass(Scope parent, String name, MPClass extParent, List<Declaration> declarations) {
+  public MPClass(Scope parent, String name, MPClass extParent, List<Expression> declarations) {
     super(parent, null);
     this.name = name;
     this.extParent = extParent;
@@ -57,10 +57,10 @@ public class MPClass extends MPObject {
 
   public MPObject create() throws EvalException {
     MPObject obj = new MPObject(parent, this);
-    for (Declaration d : extParent.declarations) {
+    for (Expression d : extParent.declarations) {
       d.eval(obj);
     }
-    for (Declaration d : declarations) {
+    for (Expression d : declarations) {
       d.eval(obj);
     }
     return obj;

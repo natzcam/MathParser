@@ -9,7 +9,7 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPList;
 import nac.mp.type.MPObject;
@@ -18,7 +18,7 @@ import nac.mp.type.MPObject;
  *
  * @author user
  */
-public class ListExpr implements Factor {
+public class ListExpr implements Expression {
 
   private final String[] path;
   private Expression index;

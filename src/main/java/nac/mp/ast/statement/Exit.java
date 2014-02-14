@@ -4,15 +4,15 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.ast.Statement;
 import nac.mp.type.MPObject;;
 import nac.mp.Scope;
+import nac.mp.ast.Expression;
 
 /**
  *
  * @author nathaniel
  */
-public class Exit implements Statement {
+public class Exit implements Expression {
 
   @Override
   public MPObject eval(Scope scope) {

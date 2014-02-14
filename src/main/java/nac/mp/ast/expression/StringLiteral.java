@@ -5,7 +5,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.type.MPObject;;
-import nac.mp.ast.Factor;
+import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPString;
 
@@ -13,7 +13,7 @@ import nac.mp.type.MPString;
  *
  * @author nathaniel
  */
-public class StringLiteral  implements Factor {
+public class StringLiteral  implements Expression {
 
   private final MPString value;
 

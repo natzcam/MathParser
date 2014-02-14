@@ -5,7 +5,6 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.ast.Statement;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;;
 import nac.mp.type.MPObject.Hint;
@@ -18,7 +17,7 @@ import nac.mp.ast.Expression;
  *
  * @author natz
  */
-public class IfStatement implements Statement {
+public class IfStatement implements Expression {
 
   private final Expression cond;
   private final Block ifBody;

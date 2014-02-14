@@ -8,7 +8,6 @@ package nac.mp.ast.statement;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Statement;
 import nac.mp.type.MPObject;
 import nac.mp.type.MPObject.Hint;
 import nac.mp.type.MPVoid;
@@ -18,7 +17,7 @@ import nac.store.mapdb.ObjectStorage;
  *
  * @author user
  */
-public class PersistStmt implements Statement {
+public class PersistStmt implements Expression {
 
   private final Expression object;
   private final ObjectStorage storage;
