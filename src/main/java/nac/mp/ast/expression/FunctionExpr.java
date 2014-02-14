@@ -7,9 +7,6 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;
-;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPFunc;
@@ -19,8 +16,6 @@ import nac.mp.type.MPObject;
  *
  * @author ladilads
  */
-
-
 public class FunctionExpr implements Expression {
 
   private final Expression expression;
@@ -42,6 +37,6 @@ public class FunctionExpr implements Expression {
     for (Expression exp : args) {
       argValues.add(exp.eval(scope));
     }
-    return func.call(argValues);
+    return func.call(null, argValues);
   }
 }

@@ -5,9 +5,6 @@
 package nac.mp.type;
 
 import java.io.Serializable;
-import nac.mp.type.MPObject;
-
-;
 
 /**
  * TODO:use 1 instance of void

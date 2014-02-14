@@ -4,7 +4,7 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.type.MPObject;;
+import nac.mp.type.MPObject;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
 

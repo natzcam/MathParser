@@ -5,7 +5,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;;
+import nac.mp.type.MPObject;
 import nac.mp.ast.BinaryExpression;
 import nac.mp.Scope;
 

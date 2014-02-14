@@ -7,6 +7,7 @@ package nac.mp.type;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
@@ -37,6 +38,16 @@ public class MPObject implements Scope, Serializable {
 
   public MPObject.Hint getHint() {
     return MPObject.Hint.OBJECT;
+  }
+
+  public MPObject methodCall(String name, List<MPObject> argsValues) throws EvalException {
+    MPFunc func = (MPFunc) vars.get(name);
+    return func.call(this, argsValues);
+  }
+
+  public MPObject methodCall(String name, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
+    MPFunc func = (MPFunc) vars.get(name);
+    return func.call(this, argsValues, optsValues);
   }
 
   @Override

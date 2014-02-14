@@ -18,7 +18,7 @@ import nac.mp.ast.expression.VarExpr;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
 import nac.mp.ast.expression.BooleanLiteral;
-import nac.mp.ast.expression.DotExpression;
+import nac.mp.ast.expression.MemberAccess;
 import nac.mp.ast.expression.Equal;
 import nac.mp.ast.expression.MinusExpression;
 import nac.mp.ast.expression.FunctionDeclExpr;
@@ -404,6 +404,36 @@ public class MathParser {
     }
   }
 
+  private void argsProc(List<Expression> expList, Map<String, Expression> optsMap) throws ParseException {
+    next();
+    while (next.type != TokenType.RPAREN) {
+      expList.add(expression());
+      next();
+      if (next.type == TokenType.RPAREN) {
+        break;
+      } else if (next.type == TokenType.SEMICOLON) {
+        consume(TokenType.SEMICOLON);
+        break;
+      } else {
+        consume(TokenType.COMMA);
+      }
+    }
+
+    while (next.type != TokenType.RPAREN) {
+      consume(TokenType.IDENTIFIER);
+      String optName = current.text;
+      consume(TokenType.COLON);
+      optsMap.put(optName, expression());
+      next();
+      if (next.type == TokenType.RPAREN) {
+        break;
+      } else {
+        consume(TokenType.COMMA);
+      }
+    }
+    consume(TokenType.RPAREN);
+  }
+
   private Expression access() throws ParseException {
     Expression left = factor();
     while (true) {
@@ -411,44 +441,22 @@ public class MathParser {
       switch (next.type) {
         case DOT:
           consume();
-          DotExpression dex = new DotExpression();
+          MemberAccess dex = new MemberAccess();
           dex.setLeft(left);
           consume(TokenType.IDENTIFIER);
           dex.setId(current.text);
           left = dex;
+          next();
+          if (next.type != TokenType.LPAREN) {
+
+          }
           break;
         case LPAREN:
           consume();
           List<Expression> expList = new ArrayList<>();
           Map<String, Expression> optsMap = new HashMap<>();
 
-          next();
-          while (next.type != TokenType.RPAREN) {
-            expList.add(expression());
-            next();
-            if (next.type == TokenType.RPAREN) {
-              break;
-            } else if (next.type == TokenType.SEMICOLON) {
-              consume(TokenType.SEMICOLON);
-              break;
-            } else {
-              consume(TokenType.COMMA);
-            }
-          }
-
-          while (next.type != TokenType.RPAREN) {
-            consume(TokenType.IDENTIFIER);
-            String optName = current.text;
-            consume(TokenType.COLON);
-            optsMap.put(optName, expression());
-            next();
-            if (next.type == TokenType.RPAREN) {
-              break;
-            } else {
-              consume(TokenType.COMMA);
-            }
-          }
-          consume(TokenType.RPAREN);
+          argsProc(expList, optsMap);
 
           if (optsMap.size() > 0) {
             FunctionOptsExpr fex1 = new FunctionOptsExpr(left);

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
-;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
@@ -53,6 +52,6 @@ public class FunctionOptsExpr implements Expression {
     for (String key : opts.keySet()) {
       optsValues.put(key, opts.get(key).eval(scope));
     }
-    return func.call(argValues, optsValues);
+    return func.call(null, argValues, optsValues);
   }
 }

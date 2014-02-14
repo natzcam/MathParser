@@ -7,7 +7,6 @@ package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
 import nac.mp.ast.Expression;
-import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;
 

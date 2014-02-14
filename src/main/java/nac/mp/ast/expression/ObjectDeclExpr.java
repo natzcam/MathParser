@@ -7,10 +7,7 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;;
-import nac.mp.ast.Expression;
 import nac.mp.Scope;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPObject;
 

@@ -6,11 +6,8 @@
 package nac.mp.type;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import nac.mp.type.MPObject;
 
-;
 
 /**
  *

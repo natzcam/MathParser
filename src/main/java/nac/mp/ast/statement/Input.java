@@ -6,7 +6,7 @@ package nac.mp.ast.statement;
 
 import java.util.Scanner;
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;;
+import nac.mp.type.MPObject;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPString;

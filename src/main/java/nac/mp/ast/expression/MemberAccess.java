@@ -14,7 +14,7 @@ import nac.mp.ast.LValue;
  *
  * @author user
  */
-public class DotExpression extends LValue {
+public class MemberAccess extends LValue {
   
   private Expression left;
   private String id;

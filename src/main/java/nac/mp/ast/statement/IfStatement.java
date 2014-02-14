@@ -6,7 +6,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;;
+import nac.mp.type.MPObject;
 import nac.mp.type.MPObject.Hint;
 import nac.mp.BasicScope;
 import nac.mp.Scope;

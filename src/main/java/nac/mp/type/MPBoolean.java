@@ -5,7 +5,6 @@
 package nac.mp.type;
 
 import java.io.Serializable;
-;
 
 /**
  *
