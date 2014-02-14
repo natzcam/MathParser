@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.ast.statement;
+package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
 import nac.mp.ParseException;

@@ -90,12 +90,10 @@ public class MPObject implements Scope, Serializable {
 
   @Override
   public MPObject getVar(String name) {
-    // System.out.println(this + ".getVar " + name);
     MPObject result = vars.get(name);
     if (result == null && parent != null) {
       result = parent.getVar(name);
     }
-    //System.out.println("result " + result);
     return result;
   }
 

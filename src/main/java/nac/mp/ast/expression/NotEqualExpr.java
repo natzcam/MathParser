@@ -13,13 +13,13 @@ import nac.mp.ast.BinaryExpression;
  *
  * @author user
  */
-public class Equal extends BinaryExpression {
+public class NotEqualExpr extends BinaryExpression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     MPObject leftValue = left.eval(scope);
     MPObject rightValue = right.eval(scope);
-    return leftValue.equal(rightValue);
+    return leftValue.notEqual(rightValue);
   }
 
 }

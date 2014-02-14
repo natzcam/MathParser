@@ -21,7 +21,6 @@ public enum TokenType {
   ELSE("else"),
   WHILE("while"),
   RETURN("return"),
-  SET("set"),
   TRUE("true"),
   FALSE("false"),
   ASSERT("assert"),
@@ -56,7 +55,7 @@ public enum TokenType {
   FLOAT("\\d+\\.\\d+"),
   INT("\\d+"),
   STRING("\"[^\"]*\""),
-  IDENTIFIER("[a-zA-Z_]+\\d*"),
+  IDENTIFIER("[a-zA-Z_][a-zA-Z_\\d]*"),
   EOF(null);
   private final String regex;
 

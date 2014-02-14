@@ -38,6 +38,7 @@ public class MathParserTest {
 
         try {
           MathParser mp = new MathParser();
+          mp.getTokenizer().setDumpTokens(false);
           mp.eval(readFile(p, Charset.forName("UTF-8")));
         } catch (IOException | EvalException | ParseException ex) {
           Log.error(ex);

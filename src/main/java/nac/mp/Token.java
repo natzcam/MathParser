@@ -27,8 +27,8 @@ public class Token {
 
   @Override
   public String toString() {
-    String pre = parent.substring(start - 5 < 0 ? 0 : start - 5, start);
-    String post = parent.substring(end, end + 5 > parent.length() ? parent.length() : end + 5);
+    String pre = parent.substring(start - 10 < 0 ? 0 : start - 10, start);
+    String post = parent.substring(end, end + 10 > parent.length() ? parent.length() : end + 10);
     String vicinity = pre + "=> " + text + " <=" + post;
     vicinity = vicinity.replaceAll("\\r", " ").replaceAll("\\n", " ");
 

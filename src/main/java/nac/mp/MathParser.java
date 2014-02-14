@@ -18,8 +18,8 @@ import nac.mp.ast.expression.VarExpr;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
 import nac.mp.ast.expression.BooleanLiteral;
-import nac.mp.ast.expression.MemberAccess;
-import nac.mp.ast.expression.Equal;
+import nac.mp.ast.expression.MemberExpr;
+import nac.mp.ast.expression.EqualExpr;
 import nac.mp.ast.expression.MinusExpression;
 import nac.mp.ast.expression.FunctionDeclExpr;
 import nac.mp.ast.expression.FunctionExpr;
@@ -33,7 +33,7 @@ import nac.mp.ast.expression.LessThanEqual;
 import nac.mp.ast.expression.ListLiteralExpr;
 import nac.mp.ast.expression.MoreThan;
 import nac.mp.ast.expression.MoreThanEqual;
-import nac.mp.ast.expression.NotEqual;
+import nac.mp.ast.expression.NotEqualExpr;
 import nac.mp.ast.expression.ObjectDeclExpr;
 import nac.mp.ast.expression.PlusExpression;
 import nac.mp.ast.expression.SlashExpression;
@@ -42,7 +42,10 @@ import nac.mp.ast.statement.Return;
 import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
-import nac.mp.ast.statement.Assignment;
+import nac.mp.ast.expression.Assignment;
+import nac.mp.ast.expression.ListExpr;
+import nac.mp.ast.expression.MethodExpr;
+import nac.mp.ast.expression.MethodOptsExpr;
 import nac.mp.ast.statement.ClassDecl;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.PersistStmt;
@@ -336,14 +339,14 @@ public class MathParser {
           break;
         case EQUAL:
           consume();
-          Equal eq = new Equal();
+          EqualExpr eq = new EqualExpr();
           eq.setLeft(left);
           eq.setRight(comparison());
           left = eq;
           break;
         case NOT_EQUAL:
           consume();
-          NotEqual neq = new NotEqual();
+          NotEqualExpr neq = new NotEqualExpr();
           neq.setLeft(left);
           neq.setRight(comparison());
           left = neq;
@@ -441,14 +444,34 @@ public class MathParser {
       switch (next.type) {
         case DOT:
           consume();
-          MemberAccess dex = new MemberAccess();
-          dex.setLeft(left);
           consume(TokenType.IDENTIFIER);
-          dex.setId(current.text);
-          left = dex;
-          next();
-          if (next.type != TokenType.LPAREN) {
+          String name = current.text;
 
+          next();
+          if (next.type == TokenType.LPAREN) {
+            consume();
+            List<Expression> expList = new ArrayList<>();
+            Map<String, Expression> optsMap = new HashMap<>();
+
+            argsProc(expList, optsMap);
+
+            if (optsMap.size() > 0) {
+              MethodOptsExpr mex1 = new MethodOptsExpr(left);
+              mex1.setName(name);
+              mex1.getArgs().addAll(expList);
+              mex1.getOpts().putAll(optsMap);
+              left = mex1;
+            } else {
+              MethodExpr mex2 = new MethodExpr(left);
+              mex2.setName(name);
+              mex2.getArgs().addAll(expList);
+              left = mex2;
+            }
+          } else {
+            MemberExpr mex = new MemberExpr();
+            mex.setLeft(left);
+            mex.setId(name);
+            left = mex;
           }
           break;
         case LPAREN:
@@ -468,6 +491,14 @@ public class MathParser {
             fex2.getArgs().addAll(expList);
             left = fex2;
           }
+          break;
+        case LBRACKET:
+          consume();
+          Expression indExp = expression();
+          consume(TokenType.RBRACKET);
+          ListExpr lst = new ListExpr(left);
+          lst.setIndex(indExp);
+          left = lst;
           break;
         default:
           return left;

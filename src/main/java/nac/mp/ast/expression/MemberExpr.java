@@ -14,7 +14,7 @@ import nac.mp.ast.LValue;
  *
  * @author user
  */
-public class MemberAccess extends LValue {
+public class MemberExpr extends LValue {
   
   private Expression left;
   private String id;
