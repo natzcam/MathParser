@@ -19,11 +19,15 @@ import nac.mp.Scope;
 public class MPObject implements Scope, Serializable {
 
   protected final MPClass clazz;
-  protected final Scope parent;
+  protected Scope parent;
   protected final Map<String, MPObject> vars = new HashMap<>();
 
   public MPObject(Scope parent, MPClass clazz) {
     this.clazz = clazz;
+    this.parent = parent;
+  }
+
+  public void setParent(Scope parent) {
     this.parent = parent;
   }
 

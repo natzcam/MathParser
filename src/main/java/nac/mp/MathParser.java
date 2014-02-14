@@ -6,11 +6,15 @@
 package nac.mp;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import nac.mp.ast.statement.FunctionDecl;
 import nac.mp.ast.expression.FloatLiteral;
 import nac.mp.ast.expression.Parenthesis;
-import nac.mp.ast.expression.IdExpr;
+import nac.mp.ast.expression.VarExpr;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
 import nac.mp.ast.expression.BooleanLiteral;
@@ -18,6 +22,8 @@ import nac.mp.ast.expression.DotExpression;
 import nac.mp.ast.expression.Equal;
 import nac.mp.ast.expression.MinusExpression;
 import nac.mp.ast.expression.FunctionDeclExpr;
+import nac.mp.ast.expression.FunctionExpr;
+import nac.mp.ast.expression.FunctionOptsExpr;
 import nac.mp.ast.statement.Exit;
 import nac.mp.ast.statement.IfStatement;
 import nac.mp.ast.statement.Input;
@@ -36,6 +42,7 @@ import nac.mp.ast.statement.Return;
 import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
+import nac.mp.ast.statement.Assignment;
 import nac.mp.ast.statement.ClassDecl;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.PersistStmt;
@@ -184,7 +191,9 @@ public class MathParser {
       case CLASS:
         return classdecl();
       default:
-        return expression();
+        Expression se = expression();
+        consume(TokenType.SEMICOLON);
+        return se;
     }
   }
 
@@ -275,6 +284,24 @@ public class MathParser {
   }
 
   private Expression expression() throws ParseException {
+    Expression left = comparison();
+    while (true) {
+      next();
+      switch (next.type) {
+        case ASSIGN:
+          consume();
+          Assignment as = new Assignment();
+          as.setLeftValue(left);
+          as.setRightValue(comparison());
+          left = as;
+          break;
+        default:
+          return left;
+      }
+    }
+  }
+
+  private Expression comparison() throws ParseException {
     Expression left = additive();
     while (true) {
       next();
@@ -283,42 +310,42 @@ public class MathParser {
           consume();
           LessThan lt = new LessThan();
           lt.setLeft(left);
-          lt.setRight(expression());
+          lt.setRight(comparison());
           left = lt;
           break;
         case LTE:
           consume();
           LessThanEqual lte = new LessThanEqual();
           lte.setLeft(left);
-          lte.setRight(expression());
+          lte.setRight(comparison());
           left = lte;
           break;
         case MT:
           consume();
           MoreThan mt = new MoreThan();
           mt.setLeft(left);
-          mt.setRight(expression());
+          mt.setRight(comparison());
           left = mt;
           break;
         case MTE:
           consume();
           MoreThanEqual mte = new MoreThanEqual();
           mte.setLeft(left);
-          mte.setRight(expression());
+          mte.setRight(comparison());
           left = mte;
           break;
         case EQUAL:
           consume();
           Equal eq = new Equal();
           eq.setLeft(left);
-          eq.setRight(expression());
+          eq.setRight(comparison());
           left = eq;
           break;
         case NOT_EQUAL:
           consume();
           NotEqual neq = new NotEqual();
           neq.setLeft(left);
-          neq.setRight(expression());
+          neq.setRight(comparison());
           left = neq;
           break;
         default:
@@ -390,12 +417,49 @@ public class MathParser {
           dex.setId(current.text);
           left = dex;
           break;
-        case SLASH:
+        case LPAREN:
           consume();
-          SlashExpression slt = new SlashExpression();
-          slt.setLeft(left);
-          slt.setRight(multiplicative());
-          left = slt;
+          List<Expression> expList = new ArrayList<>();
+          Map<String, Expression> optsMap = new HashMap<>();
+
+          next();
+          while (next.type != TokenType.RPAREN) {
+            expList.add(expression());
+            next();
+            if (next.type == TokenType.RPAREN) {
+              break;
+            } else if (next.type == TokenType.SEMICOLON) {
+              consume(TokenType.SEMICOLON);
+              break;
+            } else {
+              consume(TokenType.COMMA);
+            }
+          }
+
+          while (next.type != TokenType.RPAREN) {
+            consume(TokenType.IDENTIFIER);
+            String optName = current.text;
+            consume(TokenType.COLON);
+            optsMap.put(optName, expression());
+            next();
+            if (next.type == TokenType.RPAREN) {
+              break;
+            } else {
+              consume(TokenType.COMMA);
+            }
+          }
+          consume(TokenType.RPAREN);
+
+          if (optsMap.size() > 0) {
+            FunctionOptsExpr fex1 = new FunctionOptsExpr(left);
+            fex1.getArgs().addAll(expList);
+            fex1.getOpts().putAll(optsMap);
+            left = fex1;
+          } else {
+            FunctionExpr fex2 = new FunctionExpr(left);
+            fex2.getArgs().addAll(expList);
+            left = fex2;
+          }
           break;
         default:
           return left;
@@ -429,7 +493,7 @@ public class MathParser {
         return new Parenthesis(exp);
       case IDENTIFIER:
         consume();
-        return new IdExpr(current.text);
+        return new VarExpr(current.text);
       case FUNC:
         consume();
         FunctionDeclExpr fdx = new FunctionDeclExpr();

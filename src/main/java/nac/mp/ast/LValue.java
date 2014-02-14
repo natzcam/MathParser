@@ -5,17 +5,15 @@
  */
 package nac.mp.ast;
 
-import nac.mp.Scope;
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;;
+import nac.mp.Scope;
+import nac.mp.type.MPObject;
 
 /**
  *
  * @author camomon
  */
-public interface Expression {
+public abstract class LValue implements Expression {
 
-  public MPObject eval(Scope scope) throws EvalException;
-  
-  
+  public abstract void setValue(Scope scope, MPObject value) throws EvalException;
 }

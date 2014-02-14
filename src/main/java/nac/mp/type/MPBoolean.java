@@ -5,8 +5,7 @@
 package nac.mp.type;
 
 import java.io.Serializable;
-import nac.mp.Scope;
-import nac.mp.type.MPObject;;
+;
 
 /**
  *

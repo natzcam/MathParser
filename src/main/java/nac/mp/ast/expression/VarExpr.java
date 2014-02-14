@@ -6,25 +6,29 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;;
-import nac.mp.ast.Expression;
 import nac.mp.Scope;
+import nac.mp.ast.LValue;
 import nac.mp.type.MPObject;
 
 /**
  *
  * @author natz
  */
-public class IdExpr implements Expression {
-
+public class VarExpr extends LValue {
+  
   private final String id;
-
-  public IdExpr(String id) {
+  
+  public VarExpr(String id) {
     this.id = id;
   }
-
+  
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     return scope.getVar(id);
+  }
+  
+  @Override
+  public void setValue(Scope scope, MPObject value) throws EvalException {
+    scope.setVar(id, value);
   }
 }
