@@ -28,3 +28,4 @@ console.log(what.z == test.test.z);
 var zzz = test.test.z;
 zzz.y = 1;
 console.log(zzz(30));
+

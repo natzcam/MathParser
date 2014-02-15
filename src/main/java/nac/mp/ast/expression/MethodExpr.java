@@ -18,16 +18,11 @@ import nac.mp.type.MPObject;
  */
 public class MethodExpr implements Expression {
 
-  private final Expression expression;
-  private String name;
+  private final MemberExpr expression;
   private final List<Expression> args = new ArrayList<>();
 
-  public MethodExpr(Expression expression) {
+  public MethodExpr(MemberExpr expression) {
     this.expression = expression;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public List<Expression> getArgs() {
@@ -36,12 +31,11 @@ public class MethodExpr implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPObject obj = (MPObject) expression.eval(scope);
 
     List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
       argValues.add(exp.eval(scope));
     }
-    return obj.methodCall(name, argValues);
+    return expression.methodCall(scope, argValues);
   }
 }

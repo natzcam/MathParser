@@ -40,16 +40,6 @@ public class MPObject implements Scope, Serializable {
     return MPObject.Hint.OBJECT;
   }
 
-  public MPObject methodCall(String name, List<MPObject> argsValues) throws EvalException {
-    MPFunc func = (MPFunc) vars.get(name);
-    return func.call(this, argsValues);
-  }
-
-  public MPObject methodCall(String name, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
-    MPFunc func = (MPFunc) vars.get(name);
-    return func.call(this, argsValues, optsValues);
-  }
-
   @Override
   public String toString() {
     return vars.toString();

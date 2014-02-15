@@ -46,6 +46,8 @@ import nac.mp.ast.expression.Assignment;
 import nac.mp.ast.expression.ListExpr;
 import nac.mp.ast.expression.MethodExpr;
 import nac.mp.ast.expression.MethodOptsExpr;
+import nac.mp.ast.expression.NewExpr;
+import nac.mp.ast.expression.NewOptsExpr;
 import nac.mp.ast.statement.ClassDecl;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.PersistStmt;
@@ -313,42 +315,42 @@ public class MathParser {
           consume();
           LessThan lt = new LessThan();
           lt.setLeft(left);
-          lt.setRight(comparison());
+          lt.setRight(additive());
           left = lt;
           break;
         case LTE:
           consume();
           LessThanEqual lte = new LessThanEqual();
           lte.setLeft(left);
-          lte.setRight(comparison());
+          lte.setRight(additive());
           left = lte;
           break;
         case MT:
           consume();
           MoreThan mt = new MoreThan();
           mt.setLeft(left);
-          mt.setRight(comparison());
+          mt.setRight(additive());
           left = mt;
           break;
         case MTE:
           consume();
           MoreThanEqual mte = new MoreThanEqual();
           mte.setLeft(left);
-          mte.setRight(comparison());
+          mte.setRight(additive());
           left = mte;
           break;
         case EQUAL:
           consume();
           EqualExpr eq = new EqualExpr();
           eq.setLeft(left);
-          eq.setRight(comparison());
+          eq.setRight(additive());
           left = eq;
           break;
         case NOT_EQUAL:
           consume();
           NotEqualExpr neq = new NotEqualExpr();
           neq.setLeft(left);
-          neq.setRight(comparison());
+          neq.setRight(additive());
           left = neq;
           break;
         default:
@@ -366,14 +368,14 @@ public class MathParser {
           consume();
           PlusExpression pl = new PlusExpression();
           pl.setLeft(left);
-          pl.setRight(additive());
+          pl.setRight(multiplicative());
           left = pl;
           break;
         case MINUS:
           consume();
           MinusExpression dsh = new MinusExpression();
           dsh.setLeft(left);
-          dsh.setRight(additive());
+          dsh.setRight(multiplicative());
           left = dsh;
           break;
         default:
@@ -383,7 +385,7 @@ public class MathParser {
   }
 
   private Expression multiplicative() throws ParseException {
-    Expression left = access();
+    Expression left = creation();
     while (true) {
       next();
       switch (next.type) {
@@ -391,18 +393,83 @@ public class MathParser {
           consume();
           StarExpression srt = new StarExpression();
           srt.setLeft(left);
-          srt.setRight(multiplicative());
+          srt.setRight(creation());
           left = srt;
           break;
         case SLASH:
           consume();
           SlashExpression slt = new SlashExpression();
           slt.setLeft(left);
-          slt.setRight(multiplicative());
+          slt.setRight(creation());
           left = slt;
           break;
         default:
           return left;
+      }
+    }
+  }
+
+  private Expression creation() throws ParseException {
+    next();
+    if (next.type == TokenType.NEW) {
+      consume();
+      Expression ex = access();
+
+      consume(TokenType.LPAREN);
+      List<Expression> expList = new ArrayList<>();
+      Map<String, Expression> optsMap = new HashMap<>();
+
+      argsProc(expList, optsMap);
+
+      if (optsMap.size() > 0) {
+        NewOptsExpr nex1 = new NewOptsExpr(ex);
+        nex1.getArgs().addAll(expList);
+        nex1.getOpts().putAll(optsMap);
+        return nex1;
+      } else {
+        NewExpr nex2 = new NewExpr(ex);
+        nex2.getArgs().addAll(expList);
+        return nex2;
+      }
+    } else {
+      Expression left = access();
+      while (true) {
+        next();
+        switch (next.type) {
+          case LPAREN:
+            consume();
+            List<Expression> expList = new ArrayList<>();
+            Map<String, Expression> optsMap = new HashMap<>();
+
+            argsProc(expList, optsMap);
+
+            if (optsMap.size() > 0) {
+              if (left instanceof MemberExpr) {
+                MethodOptsExpr mex1 = new MethodOptsExpr((MemberExpr) left);
+                mex1.getArgs().addAll(expList);
+                mex1.getOpts().putAll(optsMap);
+                left = mex1;
+              } else {
+                FunctionOptsExpr fex1 = new FunctionOptsExpr(left);
+                fex1.getArgs().addAll(expList);
+                fex1.getOpts().putAll(optsMap);
+                left = fex1;
+              }
+            } else {
+              if (left instanceof MemberExpr) {
+                MethodExpr mex2 = new MethodExpr((MemberExpr) left);
+                mex2.getArgs().addAll(expList);
+                left = mex2;
+              } else {
+                FunctionExpr fex2 = new FunctionExpr(left);
+                fex2.getArgs().addAll(expList);
+                left = fex2;
+              }
+            }
+            break;
+          default:
+            return left;
+        }
       }
     }
   }
@@ -446,51 +513,10 @@ public class MathParser {
           consume();
           consume(TokenType.IDENTIFIER);
           String name = current.text;
-
-          next();
-          if (next.type == TokenType.LPAREN) {
-            consume();
-            List<Expression> expList = new ArrayList<>();
-            Map<String, Expression> optsMap = new HashMap<>();
-
-            argsProc(expList, optsMap);
-
-            if (optsMap.size() > 0) {
-              MethodOptsExpr mex1 = new MethodOptsExpr(left);
-              mex1.setName(name);
-              mex1.getArgs().addAll(expList);
-              mex1.getOpts().putAll(optsMap);
-              left = mex1;
-            } else {
-              MethodExpr mex2 = new MethodExpr(left);
-              mex2.setName(name);
-              mex2.getArgs().addAll(expList);
-              left = mex2;
-            }
-          } else {
-            MemberExpr mex = new MemberExpr();
-            mex.setLeft(left);
-            mex.setId(name);
-            left = mex;
-          }
-          break;
-        case LPAREN:
-          consume();
-          List<Expression> expList = new ArrayList<>();
-          Map<String, Expression> optsMap = new HashMap<>();
-
-          argsProc(expList, optsMap);
-
-          if (optsMap.size() > 0) {
-            FunctionOptsExpr fex1 = new FunctionOptsExpr(left);
-            fex1.getArgs().addAll(expList);
-            fex1.getOpts().putAll(optsMap);
-            left = fex1;
-          } else {
-            FunctionExpr fex2 = new FunctionExpr(left);
-            fex2.getArgs().addAll(expList);
-            left = fex2;
-          }
+          MemberExpr mex = new MemberExpr();
+          mex.setLeft(left);
+          mex.setId(name);
+          left = mex;
           break;
         case LBRACKET:
           consume();
