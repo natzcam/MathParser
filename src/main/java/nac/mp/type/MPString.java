@@ -10,13 +10,14 @@ import java.io.Serializable;
  *
  * @author user
  */
-public class MPString extends MPObject implements Serializable{
+public class MPString extends MPObject implements Serializable {
 
   private final String value;
 
   public MPString(String value) {
     super(null, null);
     this.value = value;
+    vars.put("to_int", new MPJavaFunc());
   }
 
   @Override
