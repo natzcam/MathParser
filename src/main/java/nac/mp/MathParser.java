@@ -281,7 +281,7 @@ public class MathParser {
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
-      cs.getExpressions().add(declaration());
+      cs.getDeclarations().add(declaration());
       next();
     }
     consume();

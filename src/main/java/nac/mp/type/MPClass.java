@@ -57,8 +57,10 @@ public class MPClass extends MPObject {
 
   public MPObject create() throws EvalException {
     MPObject obj = new MPObject(parent, this);
-    for (Expression d : extParent.declarations) {
-      d.eval(obj);
+    if (extParent != null) {
+      for (Expression d : extParent.declarations) {
+        d.eval(obj);
+      }
     }
     for (Expression d : declarations) {
       d.eval(obj);
