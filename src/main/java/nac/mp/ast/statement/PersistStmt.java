@@ -11,7 +11,7 @@ import nac.mp.ast.Expression;
 import nac.mp.type.MPObject;
 import nac.mp.type.MPObject.Hint;
 import nac.mp.type.MPVoid;
-import nac.store.mapdb.ObjectStorage;
+import nac.mp.store.mapdb.ObjectStorage;
 
 /**
  *

@@ -7,10 +7,10 @@ package nac.mp.type;
 import java.io.Serializable;
 
 /**
- *
+ * TODO use 1 instance of True and False
  * @author user
  */
-public class MPBoolean extends MPObject implements Serializable{
+public class MPBoolean extends MPObject implements Serializable {
 
   private final boolean value;
 
@@ -35,12 +35,18 @@ public class MPBoolean extends MPObject implements Serializable{
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
-        return new MPBoolean(value == right.getBoolean());
+  public boolean equals(Object right) {
+    if (right instanceof MPBoolean) {
+      return value == ((MPBoolean) right).getBoolean();
     }
-    return new MPBoolean(false);
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 11 * hash + (this.value ? 1 : 0);
+    return hash;
   }
 
   @Override

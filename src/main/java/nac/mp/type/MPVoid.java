@@ -33,12 +33,14 @@ public class MPVoid extends MPObject implements Serializable {
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case VOID:
-        return new MPBoolean(true);
-    }
-    return new MPBoolean(false);
+  public boolean equals(Object right) {
+    return right instanceof MPVoid;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    return hash;
   }
 
   @Override
@@ -49,4 +51,5 @@ public class MPVoid extends MPObject implements Serializable {
     }
     return new MPBoolean(true);
   }
+
 }

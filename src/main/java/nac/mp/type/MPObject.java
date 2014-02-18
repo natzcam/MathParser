@@ -7,8 +7,8 @@ package nac.mp.type;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.Scope;
@@ -85,14 +85,6 @@ public class MPObject implements Scope, Serializable {
       result = parent.getVar(name);
     }
     return result;
-  }
-
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case OBJECT:
-        return new MPBoolean(this == right);
-    }
-    return new MPBoolean(false);
   }
 
   public MPObject notEqual(MPObject right) {

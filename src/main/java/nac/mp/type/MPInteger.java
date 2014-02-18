@@ -6,12 +6,11 @@ package nac.mp.type;
 
 import java.io.Serializable;
 
-
 /**
  *
  * @author user
  */
-public class MPInteger extends MPObject implements Serializable{
+public class MPInteger extends MPObject implements Serializable {
 
   private final long value;
 
@@ -124,14 +123,20 @@ public class MPInteger extends MPObject implements Serializable{
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case INTEGER:
-        return new MPBoolean(value == right.getInt());
+  public boolean equals(Object right) {
+    if (right instanceof MPInteger) {
+      return value == ((MPInteger) right).getInt();
     }
-    return new MPBoolean(false);
+    return false;
   }
-  
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 59 * hash + (int) (this.value ^ (this.value >>> 32));
+    return hash;
+  }
+
   @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {

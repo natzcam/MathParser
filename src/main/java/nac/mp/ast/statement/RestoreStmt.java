@@ -6,7 +6,7 @@ import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPString;
-import nac.store.mapdb.ObjectStorage;
+import nac.mp.store.mapdb.ObjectStorage;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

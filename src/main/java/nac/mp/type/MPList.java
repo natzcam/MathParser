@@ -7,7 +7,7 @@ package nac.mp.type;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
 
 /**
  *
@@ -21,10 +21,6 @@ public class MPList extends MPObject {
     super(null, null);
     list = new ArrayList<>(capacity);
     list.addAll(initialValues);
-  }
-
-  public int getLength() {
-    return list.size();
   }
 
   public MPObject get(int index) {
@@ -41,12 +37,18 @@ public class MPList extends MPObject {
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case LIST:
-        return new MPBoolean(this == right);
+  public boolean equals(Object right) {
+    if (right instanceof MPList) {
+      return list.equals(((MPList) right).list);
     }
-    return new MPBoolean(false);
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 31 * hash + Objects.hashCode(this.list);
+    return hash;
   }
 
   @Override

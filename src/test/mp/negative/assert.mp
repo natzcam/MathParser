@@ -1,1 +1,1 @@
-assert false
+assert false;

@@ -6,8 +6,6 @@ package nac.mp.type;
 
 import java.io.Serializable;
 
-
-
 /**
  *
  * @author user
@@ -125,12 +123,18 @@ public class MPFloat extends MPObject implements Serializable {
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case FLOAT:
-        return new MPBoolean(value == right.getFloat());
+  public boolean equals(Object right) {
+    if (right instanceof MPFloat) {
+      return value == ((MPFloat) right).getFloat();
     }
-    return new MPBoolean(false);
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 97 * hash + Float.floatToIntBits(this.value);
+    return hash;
   }
 
   @Override

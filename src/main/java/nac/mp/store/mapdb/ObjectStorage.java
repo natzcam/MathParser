@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.store.mapdb;
+package nac.mp.store.mapdb;
 
 import java.io.File;
 import nac.mp.type.MPInteger;

@@ -1,4 +1,4 @@
-package nac.store.mysql;
+package nac.mp.store.mysql;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;

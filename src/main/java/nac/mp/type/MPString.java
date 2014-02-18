@@ -7,6 +7,7 @@ package nac.mp.type;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import nac.mp.EvalException;
 
 /**
@@ -66,12 +67,18 @@ public class MPString extends MPObject implements Serializable {
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case STRING:
-        return new MPBoolean(value.equals(right.getString()));
+  public boolean equals(Object right) {
+    if (right instanceof MPString) {
+      return value.equals(((MPString) right).getString());
     }
-    return new MPBoolean(false);
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 83 * hash + Objects.hashCode(this.value);
+    return hash;
   }
 
   @Override

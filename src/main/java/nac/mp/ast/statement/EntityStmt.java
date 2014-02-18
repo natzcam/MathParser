@@ -11,10 +11,10 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPObject;
-import nac.store.mapdb.ObjectStorage;
-import nac.store.mysql.MySQLColumn;
-import nac.store.mysql.MySQLColumn.ColumnType;
-import nac.store.mysql.MySQLTable;
+import nac.mp.store.mapdb.ObjectStorage;
+import nac.mp.store.mysql.MySQLColumn;
+import nac.mp.store.mysql.MySQLColumn.ColumnType;
+import nac.mp.store.mysql.MySQLTable;
 
 /**
  *

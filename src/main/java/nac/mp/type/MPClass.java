@@ -38,15 +38,6 @@ public class MPClass extends MPObject {
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case CLASS:
-        return new MPBoolean(this == right);
-    }
-    return new MPBoolean(false);
-  }
-
-  @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case CLASS:

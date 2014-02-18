@@ -8,6 +8,7 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 import nac.mp.Scope;
 import nac.mp.ast.BinaryExpression;
+import nac.mp.type.MPBoolean;
 
 /**
  *
@@ -19,7 +20,7 @@ public class EqualExpr extends BinaryExpression {
   public MPObject eval(Scope scope) throws EvalException {
     MPObject leftValue = left.eval(scope);
     MPObject rightValue = right.eval(scope);
-    return leftValue.equal(rightValue);
+    return new MPBoolean(leftValue.equals(rightValue));
   }
 
 }

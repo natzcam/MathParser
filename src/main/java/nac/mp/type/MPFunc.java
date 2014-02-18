@@ -77,15 +77,6 @@ public class MPFunc extends MPObject {
   }
 
   @Override
-  public MPObject equal(MPObject right) {
-    switch (right.getHint()) {
-      case FUNCTION:
-        return new MPBoolean(this == right);
-    }
-    return new MPBoolean(false);
-  }
-
-  @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case FUNCTION:
