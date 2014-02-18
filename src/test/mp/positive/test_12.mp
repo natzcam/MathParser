@@ -12,4 +12,7 @@ func test(){
 zz.test()("hello");
 
 var x = "11000";
-print x.to_int();
+print x.toInt();
+
+var y = "122.00";
+print y.toFloat();
