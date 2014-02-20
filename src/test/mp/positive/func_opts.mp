@@ -20,7 +20,7 @@ assert 2 == retfunc(2);
 
 func optsonly(){
   assert opts.z == 11;
+  print opts.z;
 }
 
 optsonly(;z:11);
-

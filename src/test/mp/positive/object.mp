@@ -13,4 +13,4 @@ object testobj{
 }
 
 testobj.setX(24);
-print testobj.getX();
+assert testobj.getX() == 24;

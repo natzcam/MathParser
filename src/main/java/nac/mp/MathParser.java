@@ -476,28 +476,30 @@ public class MathParser {
 
   private void argsProc(List<Expression> expList, Map<String, Expression> optsMap) throws ParseException {
     next();
-
     if (next.type != TokenType.RPAREN && next.type != TokenType.SEMICOLON) {
-      do {
+      while (true) {
         expList.add(expression());
-        consume(TokenType.COMMA);
         next();
-      } while (next.type != TokenType.RPAREN && next.type != TokenType.SEMICOLON);
-    } else {
-      consume(TokenType.COMMA);
+        if (next.type == TokenType.COMMA) {
+          consume(TokenType.COMMA);
+        } else {
+          break;
+        }
+      }
     }
 
     if (next.type == TokenType.SEMICOLON) {
-      while (next.type != TokenType.RPAREN) {
+      consume();
+      while (true) {
         consume(TokenType.IDENTIFIER);
         String optName = current.text;
         consume(TokenType.COLON);
         optsMap.put(optName, expression());
         next();
-        if (next.type == TokenType.RPAREN) {
-          break;
+        if (next.type == TokenType.COMMA) {
+          consume();
         } else {
-          consume(TokenType.COMMA);
+          break;
         }
       }
     }
