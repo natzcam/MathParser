@@ -1,7 +1,7 @@
 var mami = "mami";
 
 func simplef(){
-  print mami;
+  assert mami == "mami";
 }
 
 simplef();
@@ -14,14 +14,14 @@ simplefunc();
 
 
 func hello(firstParam, secondParam){
-  print firstParam + secondParam;
+  var x = firstParam + secondParam;
+  assert x == 3;
 }
 
-hello  (1, 2);
-
+hello(1, 2);
 
 func retfunc(x){
    return x;
 }
 
-print retfunc(2);
+assert 2 == retfunc(2);

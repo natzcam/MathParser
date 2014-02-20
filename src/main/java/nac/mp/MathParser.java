@@ -57,8 +57,8 @@ import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.mapdb.ObjectStorage;
 
 /**
- * concat strings
- * TODO: assoc Token to AST nodes to improve debug
+ * concat strings TODO: assoc Token to AST nodes to improve debug
+ *
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
@@ -476,31 +476,32 @@ public class MathParser {
 
   private void argsProc(List<Expression> expList, Map<String, Expression> optsMap) throws ParseException {
     next();
-    while (next.type != TokenType.RPAREN) {
-      expList.add(expression());
-      next();
-      if (next.type == TokenType.RPAREN) {
-        break;
-      } else if (next.type == TokenType.SEMICOLON) {
-        consume(TokenType.SEMICOLON);
-        break;
-      } else {
+
+    if (next.type != TokenType.RPAREN && next.type != TokenType.SEMICOLON) {
+      do {
+        expList.add(expression());
         consume(TokenType.COMMA);
+        next();
+      } while (next.type != TokenType.RPAREN && next.type != TokenType.SEMICOLON);
+    } else {
+      consume(TokenType.COMMA);
+    }
+
+    if (next.type == TokenType.SEMICOLON) {
+      while (next.type != TokenType.RPAREN) {
+        consume(TokenType.IDENTIFIER);
+        String optName = current.text;
+        consume(TokenType.COLON);
+        optsMap.put(optName, expression());
+        next();
+        if (next.type == TokenType.RPAREN) {
+          break;
+        } else {
+          consume(TokenType.COMMA);
+        }
       }
     }
 
-    while (next.type != TokenType.RPAREN) {
-      consume(TokenType.IDENTIFIER);
-      String optName = current.text;
-      consume(TokenType.COLON);
-      optsMap.put(optName, expression());
-      next();
-      if (next.type == TokenType.RPAREN) {
-        break;
-      } else {
-        consume(TokenType.COMMA);
-      }
-    }
     consume(TokenType.RPAREN);
   }
 

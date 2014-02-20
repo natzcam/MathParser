@@ -47,9 +47,9 @@ public class MathParserTest {
 
         if (passed) {
           passedCount++;
-          System.out.println("Test passed");
+          System.out.println("Test passed: " + p.getFileName());
         } else {
-          System.out.println("Test failed");
+          System.out.println("Test failed: " + p.getFileName());
         }
         count++;
       }
