@@ -24,7 +24,7 @@ public class ObjectStorage {
 
   public ObjectStorage() {
     dataFile = new File("src/main/resources/data/obj.data");
-    db = DBMaker.newFileDB(dataFile).make();
+    db = DBMaker.newFileDB(dataFile).closeOnJvmShutdown().make();
   }
 
   public MPInteger put(String collectionName, MPObject object) {
