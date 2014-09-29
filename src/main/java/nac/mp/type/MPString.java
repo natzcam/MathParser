@@ -4,7 +4,6 @@
  */
 package nac.mp.type;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -14,7 +13,7 @@ import nac.mp.EvalException;
  *
  * @author user
  */
-public class MPString extends MPObject implements Serializable {
+public class MPString extends MPObject{
 
   private final String value;
 

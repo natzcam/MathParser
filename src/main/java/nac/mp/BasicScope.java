@@ -5,7 +5,6 @@
  */
 package nac.mp;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +14,7 @@ import nac.mp.type.MPObject;
  *
  * @author user
  */
-public class BasicScope implements Scope, Serializable {
+public class BasicScope implements Scope{
 
   private final Scope parent;
   private final Map<String, MPObject> vars = new HashMap<>();

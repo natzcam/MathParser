@@ -29,11 +29,11 @@ public class ObjectStorage {
 
   public MPInteger put(String collectionName, MPObject object) {
     BTreeMap<Long, MPObject> omap = db.getTreeMap(collectionName);
-    MPInteger key = (MPInteger) object.getVar("id");
+    MPInteger key = (MPInteger) object.getVar("__id__");
     if (key == null) {
       Atomic.Long keyinc = db.getAtomicLong(collectionName + "keyinc");
       key = new MPInteger(keyinc.incrementAndGet());
-      object.setVar("id", key);
+      object.setVar("__id__", key);
     }
     omap.put(key.getInt(), object);
     db.commit();

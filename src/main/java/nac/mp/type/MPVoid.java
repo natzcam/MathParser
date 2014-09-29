@@ -4,14 +4,12 @@
  */
 package nac.mp.type;
 
-import java.io.Serializable;
-
 /**
  * TODO:use 1 instance of void
  *
  * @author user
  */
-public class MPVoid extends MPObject implements Serializable {
+public class MPVoid extends MPObject{
 
   public MPVoid() {
     super(null, null);

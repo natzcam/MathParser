@@ -4,13 +4,11 @@
  */
 package nac.mp.type;
 
-import java.io.Serializable;
-
 /**
  *
  * @author user
  */
-public class MPInteger extends MPObject implements Serializable {
+public class MPInteger extends MPObject {
 
   private final long value;
 

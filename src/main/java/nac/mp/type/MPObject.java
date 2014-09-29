@@ -8,7 +8,6 @@ package nac.mp.type;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.Scope;
@@ -17,7 +16,7 @@ import nac.mp.Scope;
  *
  * @author user
  */
-public class MPObject implements Scope, Serializable {
+public class MPObject implements Scope {
 
   protected final MPClass clazz;
   protected Scope parent;
@@ -48,6 +47,10 @@ public class MPObject implements Scope, Serializable {
   @Override
   public Scope getParent() {
     return parent;
+  }
+  
+  public void detachParent(){
+    parent = null;
   }
 
   @Override
