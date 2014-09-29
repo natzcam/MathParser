@@ -11,8 +11,9 @@ class Teacher{
   }
 }
 
-var t = new Teacher("test");
-print t.name;
+//var t = new Teacher("test");
+//print t.name;
 
-persist t;
+var t = get Teacher 1;
 print t.__id__;
+print t.name;

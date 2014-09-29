@@ -43,6 +43,7 @@ import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
 import nac.mp.ast.expression.Assignment;
+import nac.mp.ast.expression.GetExpr;
 import nac.mp.ast.expression.ListExpr;
 import nac.mp.ast.expression.MethodExpr;
 import nac.mp.ast.expression.MethodOptsExpr;
@@ -219,19 +220,6 @@ public class MathParser {
   }
 
   private Expression vardecl() throws ParseException {
-    consume(TokenType.VAR);
-    consume(TokenType.IDENTIFIER);
-    VarDecl varDecl = new VarDecl(current.text);
-    next();
-    if (next.type == TokenType.ASSIGN) {
-      consume();
-      varDecl.setDefaultValue(expression());
-    }
-    consume(TokenType.SEMICOLON);
-    return varDecl;
-  }
-  
-  private Expression refdecl() throws ParseException {
     consume(TokenType.VAR);
     consume(TokenType.IDENTIFIER);
     VarDecl varDecl = new VarDecl(current.text);
@@ -551,6 +539,12 @@ public class MathParser {
   private Expression factor() throws ParseException {
     next();
     switch (next.type) {
+      case GET:
+        consume();
+        GetExpr getEx = new GetExpr(objectStore);
+        getEx.setClazzExp(expression());
+        getEx.setIdExp(expression());
+        return getEx;
       case FLOAT:
         consume();
         return new FloatLiteral(Float.parseFloat(current.text));
