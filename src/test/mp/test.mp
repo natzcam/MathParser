@@ -1,7 +1,7 @@
 class Subject{
   var name;
-  var:Teacher teacher;
-  var:Student students
+  var teacher;
+  var students;
 }
 
 class Teacher{

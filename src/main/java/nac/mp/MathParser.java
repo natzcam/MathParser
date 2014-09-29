@@ -230,6 +230,19 @@ public class MathParser {
     consume(TokenType.SEMICOLON);
     return varDecl;
   }
+  
+  private Expression refdecl() throws ParseException {
+    consume(TokenType.VAR);
+    consume(TokenType.IDENTIFIER);
+    VarDecl varDecl = new VarDecl(current.text);
+    next();
+    if (next.type == TokenType.ASSIGN) {
+      consume();
+      varDecl.setDefaultValue(expression());
+    }
+    consume(TokenType.SEMICOLON);
+    return varDecl;
+  }
 
   private Expression funcdecl() throws ParseException {
     consume(TokenType.FUNC);
