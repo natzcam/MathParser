@@ -6,9 +6,14 @@ class Subject{
 
 class Teacher{
   var name;
+  var(onetomany on Student.teacher) students;
   func __init__(name){
     this.name = name;
   }
+}
+
+class Student{
+  Teacher teacher
 }
 
 //var t = new Teacher("test");
