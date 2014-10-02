@@ -1,19 +1,19 @@
 class Subject{
   var name;
-  var teacher;
-  var students;
+  manytomany(Teacher.subjects) teachers;
+  manytomany(Student.subjects) students;
 }
 
 class Teacher{
   var name;
-  var(onetomany on Student.teacher) students;
+  onetomany(Student.teacher) students;
   func __init__(name){
     this.name = name;
   }
 }
 
 class Student{
-  Teacher teacher
+  manytomany(Subject.students) subjects
 }
 
 //var t = new Teacher("test");
