@@ -11,6 +11,7 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
+import nac.mp.store.mapdb.ObjectStorage;
 import nac.mp.type.MPClass;
 
 /**
@@ -22,8 +23,10 @@ public class ClassDecl implements Expression {
   private final Expression extnds;
   private final String name;
   private final List<Expression> declarations = new ArrayList<>();
+  private final ObjectStorage objectStorage;
 
-  public ClassDecl(Expression extnds, String name) {
+  public ClassDecl(ObjectStorage objectStorage, Expression extnds, String name) {
+    this.objectStorage = objectStorage;
     this.extnds = extnds;
     this.name = name;
   }
@@ -40,6 +43,7 @@ public class ClassDecl implements Expression {
     }
     MPClass clazz = new MPClass(scope, name, eclas, declarations);
     scope.declareVarLocal(name, clazz);
+    objectStorage.register(clazz);
 
     return null;
   }

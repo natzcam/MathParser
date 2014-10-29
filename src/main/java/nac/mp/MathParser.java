@@ -278,7 +278,7 @@ public class MathParser {
       consume();
       extExp = expression();
     }
-    ClassDecl cs = new ClassDecl(extExp, cl);
+    ClassDecl cs = new ClassDecl(objectStore, extExp, cl);
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {

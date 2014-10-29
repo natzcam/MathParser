@@ -38,7 +38,7 @@ public class GetExpr implements Expression {
   public MPObject eval(Scope scope) throws EvalException {
     MPInteger id = (MPInteger) idExp.eval(scope);
     MPClass claz = (MPClass) clazzExp.eval(scope);
-    return storage.get(claz.toString(), id);
+    return storage.getById(claz.toString(), id);
   }
 
 }

@@ -6,8 +6,9 @@
 package nac.mp.store.mapdb;
 
 import java.util.NavigableSet;
-import org.mapdb.BTreeKeySerializer;
-import org.mapdb.DB;
+import java.util.TreeSet;
+import org.mapdb.BTreeMap;
+import org.mapdb.Bind;
 import org.mapdb.DBMaker;
 import org.mapdb.Fun;
 
@@ -18,30 +19,34 @@ import org.mapdb.Fun;
 public class Test {
 
   public static void main(String[] args) {
+    
+        // stores string under id
+        BTreeMap<Long, String> primary = DBMaker.newTempTreeMap();
 
-    DB db = DBMaker.newMemoryDB().make();
 
-        // this is wrong, do not do it !!!
-    //  Map<String,List<Long>> map
-    //correct way is to use composite set, where 'map key' is primary key and 'map value' is secondary value
-    NavigableSet<Fun.Tuple2<String, Integer>> multiMap = db.getTreeSet("test");
+        // stores value hash from primary map
+        NavigableSet<Fun.Tuple2<Integer,Long>> valueHash =
+                new TreeSet<Fun.Tuple2<Integer,Long>>(); //any Set will do
 
-        //optionally you can use set with Delta Encoding. This may save lot of space
-    multiMap.add(new Fun.Tuple2("aa", 1));
-    multiMap.add(new Fun.Tuple2("aa", 2));
-    multiMap.add(new Fun.Tuple2("aa", 3));
-    multiMap.add(new Fun.Tuple2("bb", 1));
+        // bind secondary to primary so it contains secondary key
+        Bind.secondaryKey(primary, valueHash, new Fun.Function2<Integer, Long, String>() {
+            @Override
+            public Integer run(Long key, String value) {
+                return value.hashCode();
+            }
+        });
 
-    //find all values for a key
-    for (Integer l : Fun.filter(multiMap, "aa")) {
-      System.out.println("value for key 'aa': " + l);
-    }
 
-        //check if pair exists
-    boolean found = multiMap.contains(new Fun.Tuple2("bb", 1));
-    System.out.println("Found: " + found);
+        //insert some stuff into primary
+        primary.put(111L, "some value");
+        primary.put(112L, "some value");
 
-    db.close();
+        //shot content of secondary
+        System.out.println(valueHash);
+
+        //get all keys where value hashCode is N
+        Iterable<Long> ids = Fun.filter(valueHash, 1571230533);
+        System.out.println(ids.iterator().next());
 
   }
 }

@@ -27,6 +27,10 @@ public class MPClass extends MPObject {
     this.declarations = declarations;
   }
 
+  public List<Expression> getDeclarations() {
+    return declarations;
+  }
+
   @Override
   public MPObject.Hint getHint() {
     return MPObject.Hint.CLASS;

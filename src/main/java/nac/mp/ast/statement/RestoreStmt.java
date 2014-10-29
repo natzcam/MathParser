@@ -35,7 +35,7 @@ public class RestoreStmt implements Expression {
   public MPObject eval(Scope scope) throws EvalException {
     MPString col = (MPString) collectionName.eval(scope);
     MPInteger key = (MPInteger) id.eval(scope);
-    scope.setVar(obj, objectStore.get(col.getString(), key));
+    scope.setVar(obj, objectStore.getById(col.getString(), key));
     return null;
   }
 
