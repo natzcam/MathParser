@@ -8,7 +8,8 @@ package nac.mp.store.mapdb;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import nac.mp.type.MPClass;
+import nac.mp.ast.Expression;
+import nac.mp.ast.statement.ClassDecl;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPObject;
 import org.mapdb.Atomic;
@@ -30,10 +31,11 @@ public class ObjectStorage {
     dataFile = new File("src/main/resources/data/obj.data");
     db = DBMaker.newFileDB(dataFile).closeOnJvmShutdown().make();
   }
-  
-  public MPInteger register(MPClass clazz){
-    clazz.getDeclarations();
-    return put(META_COLL, clazz);
+
+  public MPInteger register(ClassDecl clazzDecl) {
+    List<Expression> declarations = clazzDecl.getDeclarations();
+//    return put(META_COLL, clazzDecl);
+    return null;
   }
 
   public MPInteger put(String collectionName, MPObject object) {
@@ -53,13 +55,13 @@ public class ObjectStorage {
     BTreeMap<Long, MPObject> omap = db.getTreeMap(collectionName);
     return omap.get(id.getInt());
   }
-  
-  public List<MPObject> getByProperty(){
+
+  public List<MPObject> getByProperty() {
     return new ArrayList<MPObject>();
   }
-  
-  public void close(){
-    if(!db.isClosed()){
+
+  public void close() {
+    if (!db.isClosed()) {
       db.close();
     }
   }

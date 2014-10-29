@@ -1,7 +1,7 @@
 class Subject{
   var:unique name;
   var teacher <> Teacher;
-  var students <>> Students.subjects;
+  var students <<>> Students.subjects;
 }
 
 class Teacher{

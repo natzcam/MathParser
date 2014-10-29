@@ -43,7 +43,6 @@ import nac.mp.ast.expression.StarExpression;
 import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
 import nac.mp.ast.expression.Assignment;
-import nac.mp.ast.expression.GetExpr;
 import nac.mp.ast.expression.ListExpr;
 import nac.mp.ast.expression.MethodExpr;
 import nac.mp.ast.expression.MethodOptsExpr;
@@ -285,6 +284,7 @@ public class MathParser {
       cs.getDeclarations().add(declaration());
       next();
     }
+    objectStore.register(cs);
     consume();
     return cs;
   }
@@ -539,12 +539,12 @@ public class MathParser {
   private Expression factor() throws ParseException {
     next();
     switch (next.type) {
-      case GET:
-        consume();
-        GetExpr getEx = new GetExpr(objectStore);
-        getEx.setClazzExp(expression());
-        getEx.setIdExp(expression());
-        return getEx;
+//      case GET:
+//        consume();
+//        GetExpr getEx = new GetExpr(objectStore);
+//        getEx.setClazzExp(expression());
+//        getEx.setIdExp(expression());
+//        return getEx;
       case FLOAT:
         consume();
         return new FloatLiteral(Float.parseFloat(current.text));

@@ -43,7 +43,6 @@ public class ClassDecl implements Expression {
     }
     MPClass clazz = new MPClass(scope, name, eclas, declarations);
     scope.declareVarLocal(name, clazz);
-    objectStorage.register(clazz);
 
     return null;
   }
