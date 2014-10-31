@@ -1,7 +1,7 @@
 class Subject{
-  var:unique name;
-  var teacher <> Teacher;
-  var students <<>> Students.subjects;
+  var name;
+  var teacher;
+  var students;
 }
 
 class Teacher{
@@ -15,10 +15,10 @@ class Student{
   var subjects;
 }
 
-//var t = new Teacher("test");
-//print t.name;
+var t = new Teacher("test");
+print t.name;
 //persist t;
 
-var t = get Teacher with id = 1;
-print t.__id__;
-print t.name;
+//var t = get Teacher with id = 1;
+//print t.__id__;
+//print t.name;
