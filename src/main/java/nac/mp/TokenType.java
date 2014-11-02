@@ -13,7 +13,6 @@ public enum TokenType {
 
   VAR("var"),
   FUNC("func"),
-  GET("select"),
   OBJECT("object"),
   PRINT("print"),
   INPUT("input"),
@@ -25,8 +24,6 @@ public enum TokenType {
   TRUE("true"),
   FALSE("false"),
   ASSERT("assert"),
-  RESTORE("restore"),
-  PERSIST("persist"),
   CLASS("class"),
   EXTENDS("extends"),
   NEW("new"),

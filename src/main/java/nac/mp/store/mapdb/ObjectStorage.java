@@ -28,7 +28,7 @@ public class ObjectStorage {
   public static final String META_COLL = "__meta_coll__";
 
   public ObjectStorage() {
-    dataFile = new File("obj.data");
+    dataFile = new File("data/obj.data");
     db = DBMaker.newFileDB(dataFile).closeOnJvmShutdown().make();
   }
 

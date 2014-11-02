@@ -50,8 +50,6 @@ import nac.mp.ast.expression.NewExpr;
 import nac.mp.ast.expression.NewOptsExpr;
 import nac.mp.ast.statement.ClassDecl;
 import nac.mp.ast.statement.ObjectDecl;
-import nac.mp.ast.statement.PersistStmt;
-import nac.mp.ast.statement.RestoreStmt;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.mapdb.ObjectStorage;
@@ -127,19 +125,6 @@ public class MathParser {
   private Expression statement() throws ParseException {
     next();
     switch (next.type) {
-      case PERSIST:
-        consume();
-        Expression obj = expression();
-        consume(TokenType.SEMICOLON);
-        return new PersistStmt(objectStore, obj);
-      case RESTORE:
-        consume();
-        consume(TokenType.IDENTIFIER);
-        String identi = current.text;
-        Expression col2 = expression();
-        Expression idexp = expression();
-        consume(TokenType.SEMICOLON);
-        return new RestoreStmt(objectStore, col2, idexp, identi);
       case PRINT:
         consume();
         Expression ex1 = expression();
