@@ -55,6 +55,8 @@ import nac.mp.ast.statement.RestoreStmt;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.mapdb.ObjectStorage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * concat strings TODO: assoc Token to AST nodes to improve debug
@@ -63,9 +65,10 @@ import nac.mp.store.mapdb.ObjectStorage;
  */
 public class MathParser {
 
+  private static final Logger log = LogManager.getLogger(MathParser.class);
   private final Tokenizer tokenizer = new Tokenizer();
   private final Scanner scanner = new Scanner(System.in);
-  private final Scope global = new BasicScope(null);
+  private final Scope globalScope = new BasicScope(null);
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
@@ -78,7 +81,7 @@ public class MathParser {
       fileBlock.addStatement(statement());
       next();
     }
-    fileBlock.eval(global);
+    fileBlock.eval(globalScope);
     objectStore.close();
   }
 
@@ -628,11 +631,10 @@ public class MathParser {
 
   public static void main(String[] args) {
     MathParser mp = new MathParser();
-    mp.getTokenizer().setDumpTokens(false);
     try {
-      mp.eval(Util.readFile("src/test/mp/test.mp"));
+      mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
     } catch (IOException | EvalException | ParseException ex) {
-      Log.error(ex);
+      log.error(ex);
     }
   }
 

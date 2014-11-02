@@ -8,6 +8,8 @@ package nac.mp;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -15,21 +17,17 @@ import java.util.regex.Pattern;
  */
 public class Tokenizer {
 
+  private static final Logger log = LogManager.getLogger(Tokenizer.class);
   private final Pattern p = Pattern.compile(TokenType.getAllRegex());
   private Matcher m;
   private final TokenType[] all = TokenType.values();
   private final LinkedList<Token> queue = new LinkedList<>();
   private String input;
-  private boolean dumpTokens = false;
 
   public void process(String input) {
     this.input = input;
     queue.clear();
     m = p.matcher(input);
-  }
-
-  public void setDumpTokens(boolean dumpTokens) {
-    this.dumpTokens = dumpTokens;
   }
 
   public Token lookahead(int l) throws ParseException {
@@ -53,9 +51,7 @@ public class Tokenizer {
     } else {
       t = moveRight();
     }
-    if (dumpTokens) {
-      System.out.println(t);
-    }
+    log.trace(t);
     return t;
   }
 
@@ -76,9 +72,7 @@ public class Tokenizer {
       result = new Token(TokenType.EOF, null, "", 0, 0);
     }
     if (result.type == TokenType.COMMENTS || result.type == TokenType.COMMENTS2) {
-      if (dumpTokens) {
-        System.out.println(result);
-      }
+      log.trace(result);
       result = moveRight();
     }
     return result;
