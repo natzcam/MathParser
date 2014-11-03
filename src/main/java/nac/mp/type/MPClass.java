@@ -20,7 +20,7 @@ public class MPClass extends MPObject {
   private final String name;
   private final List<Expression> declarations;
 
-  public MPClass(Scope parent, String name, MPClass extParent, List<Expression> declarations) {
+    public MPClass(Scope parent, String name, MPClass extParent, List<Expression> declarations) {
     super(parent, null);
     this.name = name;
     this.extParent = extParent;

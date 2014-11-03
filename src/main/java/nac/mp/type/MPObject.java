@@ -114,6 +114,8 @@ public class MPObject implements Scope {
     OBJECT,
     CLASS,
     LIST,
+    MODEL,
+    ATTRIBUTE;
   }
 
   public boolean getBoolean() {

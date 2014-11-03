@@ -11,6 +11,8 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
+import nac.mp.store.mysql.MySQLTable;
+import nac.mp.type.MPModel;
 
 /**
  *
@@ -19,22 +21,24 @@ import nac.mp.ast.Expression;
 public class ModelDecl implements Expression {
 
   private final String name;
-  private final List<Expression> declarations = new ArrayList<>();
+  private final List<AttributeDecl> declarations = new ArrayList<>();
 
   public ModelDecl(String name) {
     this.name = name;
   }
 
-  public List<Expression> getDeclarations() {
+  public List<AttributeDecl> getDeclarations() {
     return declarations;
   }
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-//    MPClass eclas = null;
-//    MPClass clazz = new MPClass(scope, name, eclas, declarations);
-//    scope.declareVarLocal(name, clazz);
-
+    MPModel model = new MPModel(scope, name);
+    scope.declareVarLocal(name, model);
+    for (AttributeDecl attributeDecl : declarations) {
+      attributeDecl.eval(model);
+    }
+    model.register();
     return null;
   }
 }

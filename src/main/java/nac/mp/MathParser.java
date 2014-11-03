@@ -51,7 +51,7 @@ import nac.mp.ast.expression.NewOptsExpr;
 import nac.mp.ast.statement.ClassDecl;
 import nac.mp.ast.statement.ModelDecl;
 import nac.mp.ast.statement.ObjectDecl;
-import nac.mp.ast.statement.TypedDecl;
+import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import org.apache.logging.log4j.LogManager;
@@ -207,12 +207,12 @@ public class MathParser {
     }
   }
 
-  private Expression typedDeclaration() throws ParseException {
+  private AttributeDecl attributeDecl() throws ParseException {
     consume(TokenType.IDENTIFIER);
     String t = current.text;
     consume(TokenType.IDENTIFIER);
     String i = current.text;
-    TypedDecl typedDecl = new TypedDecl(t, i);
+    AttributeDecl typedDecl = new AttributeDecl(t, i);
     next();
     if (next.type == TokenType.ASSIGN) {
       consume();
@@ -300,7 +300,7 @@ public class MathParser {
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
-      md.getDeclarations().add(typedDeclaration());
+      md.getDeclarations().add(attributeDecl());
       next();
     }
     consume();

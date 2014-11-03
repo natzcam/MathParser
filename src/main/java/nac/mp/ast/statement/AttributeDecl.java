@@ -9,19 +9,20 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
-import nac.mp.type.MPVoid;
+import nac.mp.type.MPAttribute;
+import nac.mp.type.MPModel;
 
 /**
  *
  * @author natz
  */
-public class TypedDecl implements Expression {
+public class AttributeDecl implements Expression {
 
   private final String type;
   private final String identifier;
   private Expression defaultValue = null;
 
-  public TypedDecl(String type, String identifier) {
+  public AttributeDecl(String type, String identifier) {
     this.type = type;
     this.identifier = identifier;
   }
@@ -36,11 +37,10 @@ public class TypedDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-//    if (defaultValue != null) {
-//      scope.declareVarLocal(identifier, defaultValue.eval(scope));
-//    } else {
-//      scope.declareVarLocal(identifier, new MPVoid());
-//    }
+    MPModel model = (MPModel) scope;
+    MPAttribute attr = new MPAttribute(scope, identifier);
+    scope.declareVarLocal(identifier, attr);
+    model.getAttributes().add(attr);
     return null;
   }
 }
