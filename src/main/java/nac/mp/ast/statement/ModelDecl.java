@@ -11,21 +11,17 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
-import nac.mp.store.mapdb.ObjectStorage;
-import nac.mp.type.MPClass;
 
 /**
  *
  * @author camomon
  */
-public class ClassDecl implements Expression {
+public class ModelDecl implements Expression {
 
-  private final Expression extnds;
   private final String name;
   private final List<Expression> declarations = new ArrayList<>();
 
-  public ClassDecl(Expression extnds, String name) {
-    this.extnds = extnds;
+  public ModelDecl(String name) {
     this.name = name;
   }
 
@@ -35,12 +31,9 @@ public class ClassDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPClass eclas = null;
-    if (extnds != null) {
-      eclas = (MPClass) extnds.eval(scope);
-    }
-    MPClass clazz = new MPClass(scope, name, eclas, declarations);
-    scope.declareVarLocal(name, clazz);
+//    MPClass eclas = null;
+//    MPClass clazz = new MPClass(scope, name, eclas, declarations);
+//    scope.declareVarLocal(name, clazz);
 
     return null;
   }

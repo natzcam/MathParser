@@ -1,13 +1,10 @@
 model Client{
-  identifier id;
-  identifier{
-    firstName, lastName;
-  }
-  string firstName;
-  string lastName;
-  int age;
-  int sex;
-  list:Physician doctors;
+  Id id;
+  String firstName;
+  String lastName;
+  Int age;
+  Int sex;
+  List doctors;
   Physician currentDoctor;
   Hospital hospitalConfined;
 }
@@ -15,15 +12,15 @@ model Client{
 model Physician{
   string firstName;
   string lastName;
-  list:Client clients;
+  list clients;
 }
 
 model Hospital{
   string name;
   string address;
-  list:Client clients;
+  list clients;
 }
 
-relationship Client.currentDoctor <> Doctor.id
-relationship Client.doctors <<>> Physician.clients;
-relationship Hospital.clients <<> Client.hospital;
+//relationship Client.currentDoctor <> Doctor.id
+//relationship Client.doctors <<>> Physician.clients;
+//relationship Hospital.clients <<> Client.hospital;

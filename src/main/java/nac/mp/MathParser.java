@@ -49,10 +49,11 @@ import nac.mp.ast.expression.MethodOptsExpr;
 import nac.mp.ast.expression.NewExpr;
 import nac.mp.ast.expression.NewOptsExpr;
 import nac.mp.ast.statement.ClassDecl;
+import nac.mp.ast.statement.ModelDecl;
 import nac.mp.ast.statement.ObjectDecl;
+import nac.mp.ast.statement.TypedDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
-import nac.mp.store.mapdb.ObjectStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -70,7 +71,6 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
-  private final ObjectStorage objectStore = new ObjectStorage();
 
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);
@@ -80,7 +80,6 @@ public class MathParser {
       next();
     }
     fileBlock.eval(globalScope);
-    objectStore.close();
   }
 
   public Tokenizer getTokenizer() {
@@ -176,13 +175,15 @@ public class MathParser {
         Block body = block();
         return new WhileStatement(cond, body);
       case KW_VAR:
-        return vardecl();
+        return varDecl();
       case KW_FUNC:
-        return funcdecl();
+        return funcDecl();
       case KW_OBJECT:
-        return objectdecl();
+        return objectDecl();
       case KW_CLASS:
-        return classdecl();
+        return classDecl();
+      case KW_MODEL:
+        return modelDecl();
       default:
         Expression se = expression();
         consume(TokenType.SEMICOLON);
@@ -194,19 +195,34 @@ public class MathParser {
     next();
     switch (next.type) {
       case KW_VAR:
-        return vardecl();
+        return varDecl();
       case KW_FUNC:
-        return funcdecl();
+        return funcDecl();
       case KW_OBJECT:
-        return objectdecl();
+        return objectDecl();
       case KW_CLASS:
-        return classdecl();
+        return classDecl();
       default:
         throw new ParseException("Unexpected token " + next + ". Declaration expected.");
     }
   }
 
-  private Expression vardecl() throws ParseException {
+  private Expression typedDeclaration() throws ParseException {
+    consume(TokenType.IDENTIFIER);
+    String t = current.text;
+    consume(TokenType.IDENTIFIER);
+    String i = current.text;
+    TypedDecl typedDecl = new TypedDecl(t, i);
+    next();
+    if (next.type == TokenType.ASSIGN) {
+      consume();
+      typedDecl.setDefaultValue(expression());
+    }
+    consume(TokenType.SEMICOLON);
+    return typedDecl;
+  }
+
+  private Expression varDecl() throws ParseException {
     consume(TokenType.KW_VAR);
     consume(TokenType.IDENTIFIER);
     VarDecl varDecl = new VarDecl(current.text);
@@ -219,7 +235,7 @@ public class MathParser {
     return varDecl;
   }
 
-  private Expression funcdecl() throws ParseException {
+  private Expression funcDecl() throws ParseException {
     consume(TokenType.KW_FUNC);
     consume(TokenType.IDENTIFIER);
     FunctionDecl fd = new FunctionDecl(current.text);
@@ -241,7 +257,7 @@ public class MathParser {
     return fd;
   }
 
-  private Expression objectdecl() throws ParseException {
+  private Expression objectDecl() throws ParseException {
     consume(TokenType.KW_OBJECT);
     consume(TokenType.IDENTIFIER);
     ObjectDecl od = new ObjectDecl(current.text);
@@ -255,7 +271,7 @@ public class MathParser {
     return od;
   }
 
-  private Expression classdecl() throws ParseException {
+  private Expression classDecl() throws ParseException {
     consume(TokenType.KW_CLASS);
     consume(TokenType.IDENTIFIER);
     String cl = current.text;
@@ -265,16 +281,30 @@ public class MathParser {
       consume();
       extExp = expression();
     }
-    ClassDecl cs = new ClassDecl(objectStore, extExp, cl);
+    ClassDecl cs = new ClassDecl(extExp, cl);
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
       cs.getDeclarations().add(declaration());
       next();
     }
-    objectStore.register(cs);
     consume();
     return cs;
+  }
+
+  private Expression modelDecl() throws ParseException {
+    consume(TokenType.KW_MODEL);
+    consume(TokenType.IDENTIFIER);
+    String m = current.text;
+    ModelDecl md = new ModelDecl(m);
+    consume(TokenType.LBRACE);
+    next();
+    while (next.type != TokenType.RBRACE) {
+      md.getDeclarations().add(typedDeclaration());
+      next();
+    }
+    consume();
+    return md;
   }
 
   private Expression expression() throws ParseException {
