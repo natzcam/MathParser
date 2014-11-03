@@ -13,7 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * 
+ *
  *
  * @author natz
  */
@@ -70,12 +70,12 @@ public class Tokenizer {
 
           if (t == TokenType.IDENTIFIER) {
             if (keywordMap.containsKey(str)) {
-              result = new Token(keywordMap.get(str), str, input, m.start(), m.end());
+              result = new Token(keywordMap.get(str), str, m.start(), m.end());
             } else {
-              result = new Token(t, str, input, m.start(), m.end());
+              result = new Token(t, str, m.start(), m.end());
             }
           } else {
-            result = new Token(t, str, input, m.start(), m.end());
+            result = new Token(t, str, m.start(), m.end());
           }
         }
       }
@@ -83,7 +83,7 @@ public class Tokenizer {
         throw new ParseException("Invalid token next to " + m.start() + ":" + m.end());
       }
     } else {
-      result = new Token(TokenType.EOF, null, "", 0, 0);
+      result = new Token(TokenType.EOF, null, 0, 0);
     }
     //skip comments;
     if (result.type == TokenType.COMMENTS || result.type == TokenType.COMMENTS2) {

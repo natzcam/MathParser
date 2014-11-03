@@ -51,7 +51,7 @@ public class MPModel extends MPObject {
     return new MPBoolean(true);
   }
 
-    public void register() throws EvalException {
+  public void register() throws EvalException {
     MySQLTable table = new MySQLTable(name);
     for (MPAttribute mPAttribute : attributes) {
       table.getColumns().add(mPAttribute.column());

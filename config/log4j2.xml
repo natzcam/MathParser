@@ -5,8 +5,14 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Root level="trace">
+    <Root level="debug">
       <AppenderRef ref="Console"/>
     </Root>
+    <Logger name="nac.mp.MathParser" level="debug" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Logger name="nac.mp.Tokenizer" level="trace" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
   </Loggers>
 </Configuration>

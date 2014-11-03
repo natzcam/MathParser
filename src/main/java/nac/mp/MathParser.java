@@ -557,12 +557,6 @@ public class MathParser {
   private Expression factor() throws ParseException {
     next();
     switch (next.type) {
-//      case GET:
-//        consume();
-//        GetExpr getEx = new GetExpr(objectStore);
-//        getEx.setClazzExp(expression());
-//        getEx.setIdExp(expression());
-//        return getEx;
       case FLOAT:
         consume();
         return new FloatLiteral(Float.parseFloat(current.text));

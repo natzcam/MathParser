@@ -48,12 +48,7 @@ public class MPTestNegativeParse {
   @Test(expected = ParseException.class)
   public void testNegativeParse() throws ParseException, EvalException, IOException {
     MathParser mp = new MathParser();
-    mp.eval(readFile(file, Charset.forName("UTF-8")));
+    mp.eval(Util.readFile(file));
   }
 
-  private static String readFile(Path path, Charset encoding)
-          throws IOException {
-    byte[] encoded = Files.readAllBytes(path);
-    return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-  }
 }

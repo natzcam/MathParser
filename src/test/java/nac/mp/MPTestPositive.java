@@ -6,7 +6,6 @@
 package nac.mp;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
@@ -38,7 +37,6 @@ public class MPTestPositive {
 
   @Parameters
   public static Collection<Object[]> data() throws IOException {
-    log.info("yes");
     Collection<Object[]> data = new ArrayList<>();
     try (DirectoryStream<Path> ds = Files.newDirectoryStream(FileSystems.getDefault().getPath(POSITIVE_DIR))) {
       for (Path p : ds) {
@@ -51,12 +49,6 @@ public class MPTestPositive {
   @Test
   public void testPositive() throws ParseException, EvalException, IOException {
     MathParser mp = new MathParser();
-    mp.eval(readFile(file, Charset.forName("UTF-8")));
-  }
-
-  private static String readFile(Path path, Charset encoding)
-          throws IOException {
-    byte[] encoded = Files.readAllBytes(path);
-    return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+    mp.eval(Util.readFile(file));
   }
 }
