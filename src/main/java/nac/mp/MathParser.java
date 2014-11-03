@@ -49,7 +49,9 @@ import nac.mp.ast.expression.MethodOptsExpr;
 import nac.mp.ast.expression.NewExpr;
 import nac.mp.ast.expression.NewOptsExpr;
 import nac.mp.ast.statement.ClassDecl;
+import nac.mp.ast.statement.ModelDecl;
 import nac.mp.ast.statement.ObjectDecl;
+import nac.mp.ast.statement.TypedDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import org.apache.logging.log4j.LogManager;
@@ -180,6 +182,8 @@ public class MathParser {
         return objectDecl();
       case KW_CLASS:
         return classDecl();
+      case KW_MODEL:
+        return modelDecl();
       default:
         Expression se = expression();
         consume(TokenType.SEMICOLON);
@@ -201,6 +205,21 @@ public class MathParser {
       default:
         throw new ParseException("Unexpected token " + next + ". Declaration expected.");
     }
+  }
+
+  private Expression typedDeclaration() throws ParseException {
+    consume(TokenType.IDENTIFIER);
+    String t = current.text;
+    consume(TokenType.IDENTIFIER);
+    String i = current.text;
+    TypedDecl typedDecl = new TypedDecl(t, i);
+    next();
+    if (next.type == TokenType.ASSIGN) {
+      consume();
+      typedDecl.setDefaultValue(expression());
+    }
+    consume(TokenType.SEMICOLON);
+    return typedDecl;
   }
 
   private Expression varDecl() throws ParseException {
@@ -271,6 +290,21 @@ public class MathParser {
     }
     consume();
     return cs;
+  }
+
+  private Expression modelDecl() throws ParseException {
+    consume(TokenType.KW_MODEL);
+    consume(TokenType.IDENTIFIER);
+    String m = current.text;
+    ModelDecl md = new ModelDecl(m);
+    consume(TokenType.LBRACE);
+    next();
+    while (next.type != TokenType.RBRACE) {
+      md.getDeclarations().add(typedDeclaration());
+      next();
+    }
+    consume();
+    return md;
   }
 
   private Expression expression() throws ParseException {
