@@ -125,27 +125,27 @@ public class MathParser {
   private Expression statement() throws ParseException {
     next();
     switch (next.type) {
-      case PRINT:
+      case KW_PRINT:
         consume();
         Expression ex1 = expression();
         consume(TokenType.SEMICOLON);
         return new Print(ex1);
-      case INPUT:
+      case KW_INPUT:
         consume();
         consume(TokenType.IDENTIFIER);
         Input input = new Input(scanner, current.text);
         consume(TokenType.SEMICOLON);
         return input;
-      case EXIT:
+      case KW_EXIT:
         consume();
         consume(TokenType.SEMICOLON);
         return new Exit();
-      case ASSERT:
+      case KW_ASSERT:
         consume();
         Expression ex2 = expression();
         consume(TokenType.SEMICOLON);
         return new Assert(ex2);
-      case RETURN:
+      case KW_RETURN:
         consume();
         Expression ex = null;
         next();
@@ -154,7 +154,7 @@ public class MathParser {
         }
         consume(TokenType.SEMICOLON);
         return new Return(ex);
-      case IF:
+      case KW_IF:
         consume();
         consume(TokenType.LPAREN);
         Expression ifCond = expression();
@@ -162,26 +162,26 @@ public class MathParser {
         Block ifBody = block();
         IfStatement ifs = new IfStatement(ifCond, ifBody);
         next();
-        if (next.type == TokenType.ELSE) {
+        if (next.type == TokenType.KW_ELSE) {
           consume();
           Block elseBody = block();
           ifs.setElseBody(elseBody);
         }
         return ifs;
-      case WHILE:
+      case KW_WHILE:
         consume();
         consume(TokenType.LPAREN);
         Expression cond = expression();
         consume(TokenType.RPAREN);
         Block body = block();
         return new WhileStatement(cond, body);
-      case VAR:
+      case KW_VAR:
         return vardecl();
-      case FUNC:
+      case KW_FUNC:
         return funcdecl();
-      case OBJECT:
+      case KW_OBJECT:
         return objectdecl();
-      case CLASS:
+      case KW_CLASS:
         return classdecl();
       default:
         Expression se = expression();
@@ -193,13 +193,13 @@ public class MathParser {
   private Expression declaration() throws ParseException {
     next();
     switch (next.type) {
-      case VAR:
+      case KW_VAR:
         return vardecl();
-      case FUNC:
+      case KW_FUNC:
         return funcdecl();
-      case OBJECT:
+      case KW_OBJECT:
         return objectdecl();
-      case CLASS:
+      case KW_CLASS:
         return classdecl();
       default:
         throw new ParseException("Unexpected token " + next + ". Declaration expected.");
@@ -207,7 +207,7 @@ public class MathParser {
   }
 
   private Expression vardecl() throws ParseException {
-    consume(TokenType.VAR);
+    consume(TokenType.KW_VAR);
     consume(TokenType.IDENTIFIER);
     VarDecl varDecl = new VarDecl(current.text);
     next();
@@ -220,7 +220,7 @@ public class MathParser {
   }
 
   private Expression funcdecl() throws ParseException {
-    consume(TokenType.FUNC);
+    consume(TokenType.KW_FUNC);
     consume(TokenType.IDENTIFIER);
     FunctionDecl fd = new FunctionDecl(current.text);
     consume(TokenType.LPAREN);
@@ -242,7 +242,7 @@ public class MathParser {
   }
 
   private Expression objectdecl() throws ParseException {
-    consume(TokenType.OBJECT);
+    consume(TokenType.KW_OBJECT);
     consume(TokenType.IDENTIFIER);
     ObjectDecl od = new ObjectDecl(current.text);
     consume(TokenType.LBRACE);
@@ -256,12 +256,12 @@ public class MathParser {
   }
 
   private Expression classdecl() throws ParseException {
-    consume(TokenType.CLASS);
+    consume(TokenType.KW_CLASS);
     consume(TokenType.IDENTIFIER);
     String cl = current.text;
     next();
     Expression extExp = null;
-    if (next.type == TokenType.EXTENDS) {
+    if (next.type == TokenType.KW_EXTENDS) {
       consume();
       extExp = expression();
     }
@@ -400,7 +400,7 @@ public class MathParser {
 
   private Expression creation() throws ParseException {
     next();
-    if (next.type == TokenType.NEW) {
+    if (next.type == TokenType.KW_NEW) {
       consume();
       Expression ex = access();
 
@@ -543,10 +543,10 @@ public class MathParser {
         consume();
         String text = current.text.replaceAll("^\"|\"$", "");
         return new StringLiteral(text);
-      case TRUE:
+      case KW_TRUE:
         consume();
         return new BooleanLiteral(true);
-      case FALSE:
+      case KW_FALSE:
         consume();
         return new BooleanLiteral(false);
       case LPAREN:
@@ -557,7 +557,7 @@ public class MathParser {
       case IDENTIFIER:
         consume();
         return new VarExpr(current.text);
-      case FUNC:
+      case KW_FUNC:
         consume();
         FunctionDeclExpr fdx = new FunctionDeclExpr();
         consume(TokenType.LPAREN);
@@ -576,7 +576,7 @@ public class MathParser {
         Block b = block();
         fdx.setBody(b);
         return fdx;
-      case OBJECT:
+      case KW_OBJECT:
         consume();
         ObjectDeclExpr od = new ObjectDeclExpr();
         consume(TokenType.LBRACE);
