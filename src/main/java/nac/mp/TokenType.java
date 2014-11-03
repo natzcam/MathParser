@@ -12,6 +12,7 @@ package nac.mp;
 public enum TokenType {
 
   VAR("var"),
+  MODEL("get"),
   FUNC("func"),
   OBJECT("object"),
   PRINT("print"),

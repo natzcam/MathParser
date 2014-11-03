@@ -100,7 +100,7 @@ public class MathParser {
     if (e.type == t) {
       current = tokenizer.consume();
     } else {
-      throw new ParseException("Unexpected token " + next + ". " + t + " expected");
+      throw new ParseException("Unexpected token " + e + ". " + t + " expected");
     }
   }
 

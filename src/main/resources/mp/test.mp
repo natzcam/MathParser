@@ -1,24 +1,29 @@
-class Subject{
-  var name;
-  var teacher;
-  var students;
-}
-
-class Teacher{
-  var name;
-  func __init__(name){
-    this.name = name;
+model Client{
+  identifier id;
+  identifier{
+    firstName, lastName;
   }
+  string firstName;
+  string lastName;
+  int age;
+  int sex;
+  list:Physician doctors;
+  Physician currentDoctor;
+  Hospital hospitalConfined;
 }
 
-class Student{
-  var subjects;
+model Physician{
+  string firstName;
+  string lastName;
+  list:Client clients;
 }
 
-var t = new Teacher("test");
-print t.name;
-//persist t;
+model Hospital{
+  string name;
+  string address;
+  list:Client clients;
+}
 
-//var t = get Teacher with id = 1;
-//print t.__id__;
-//print t.name;
+relationship Client.currentDoctor <> Doctor.id
+relationship Client.doctors <<>> Physician.clients;
+relationship Hospital.clients <<> Client.hospital;
