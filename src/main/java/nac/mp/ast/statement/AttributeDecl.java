@@ -10,7 +10,6 @@ import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.Scope;
 import nac.mp.type.MPAttribute;
-import nac.mp.type.MPModel;
 
 /**
  *
@@ -37,10 +36,8 @@ public class AttributeDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPModel model = (MPModel) scope;
     MPAttribute attr = new MPAttribute(scope, type, identifier);
     scope.declareVarLocal(identifier, attr);
-    model.getAttributes().add(attr);
     return null;
   }
 }

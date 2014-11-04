@@ -5,11 +5,9 @@
  */
 package nac.mp.type;
 
-import java.util.ArrayList;
-import java.util.List;
+import nac.mp.Creator;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.ast.Expression;
 import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,19 +16,14 @@ import org.apache.logging.log4j.Logger;
  *
  * @author camomon
  */
-public class MPModel extends MPObject {
+public class MPModel extends MPObject implements Creator {
 
   private static final Logger log = LogManager.getLogger(MPModel.class);
   private final String name;
-  private final List<MPAttribute> attributes = new ArrayList<>();
 
   public MPModel(Scope parent, String name) {
     super(parent, null);
     this.name = name;
-  }
-
-  public List<MPAttribute> getAttributes() {
-    return attributes;
   }
 
   @Override
@@ -54,25 +47,28 @@ public class MPModel extends MPObject {
 
   public void register() throws EvalException {
     MySQLTable table = new MySQLTable(name);
-    for (MPAttribute mPAttribute : attributes) {
-      table.getColumns().add(mPAttribute.column());
+
+    for (MPObject obj : vars.values()) {
+      if (obj instanceof MPAttribute) {
+        MPAttribute attr = (MPAttribute) obj;
+        table.getColumns().add(attr.column());
+      }
     }
     StringBuilder sb = new StringBuilder();
     table.emit(sb);
     log.trace(sb.toString());
   }
 
+  @Override
   public MPObject create() throws EvalException {
-    MPObject obj = new MPModeledObject(parent, null);
-    obj.setVarLocal(name, obj);
-//    if (extParent != null) {
-//      for (Expression d : extParent.declarations) {
-//        d.eval(obj);
-//      }
-//    }
-//    for (Expression d : declarations) {
-//      d.eval(obj);
-//    }
+    MPObject obj = new MPModeledObject(parent, this);
+
+    for (MPObject v : vars.values()) {
+      if (v instanceof MPAttribute) {
+        MPAttribute attr = (MPAttribute) v;
+        obj.declareVarLocal(attr.getName(), attr.create());
+      }
+    }
     return obj;
   }
 }

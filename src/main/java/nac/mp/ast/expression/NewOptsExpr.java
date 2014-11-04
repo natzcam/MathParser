@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import nac.mp.Creator;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
-import nac.mp.type.MPTemplate;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
 
@@ -40,7 +40,7 @@ public class NewOptsExpr implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPTemplate template = (MPTemplate) expression.eval(scope);
+    Creator creator = (Creator) expression.eval(scope);
     MPObject c;
 
     List<MPObject> argValues = new ArrayList<>();
@@ -52,7 +52,7 @@ public class NewOptsExpr implements Expression {
       optsValues.put(key, opts.get(key).eval(scope));
     }
 
-    c = template.create();
+    c = creator.create();
     MPFunc ctor = (MPFunc) c.getVar("__init__");
     if (ctor != null) {
       ctor.call(c, argValues, optsValues);

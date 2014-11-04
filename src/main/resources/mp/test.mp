@@ -21,7 +21,8 @@ model Hospital{
   list clients;
 }
 
-//print Hospital.name;
+var x = new Hospital();
+print x;
 //relationship Client.currentDoctor <> Doctor.id
 //relationship Client.doctors <<>> Physician.clients;
 //relationship Hospital.clients <<> Client.hospital;

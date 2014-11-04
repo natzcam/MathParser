@@ -8,6 +8,7 @@ package nac.mp.type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import nac.mp.Creator;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 
@@ -17,12 +18,12 @@ import nac.mp.Scope;
  */
 public class MPObject implements Scope {
 
-  protected final MPTemplate template;
+  protected final Creator creator;
   protected Scope parent;
   protected final Map<String, MPObject> vars = new HashMap<>();
 
-  public MPObject(Scope parent, MPTemplate template) {
-    this.template = template;
+  public MPObject(Scope parent, Creator creator) {
+    this.creator = creator;
     this.parent = parent;
   }
 
@@ -30,8 +31,8 @@ public class MPObject implements Scope {
     this.parent = parent;
   }
 
-  public MPTemplate getTemplate() {
-    return template;
+  public Creator getCreator() {
+    return creator;
   }
 
   public MPObject.Hint getHint() {
@@ -47,8 +48,8 @@ public class MPObject implements Scope {
   public Scope getParent() {
     return parent;
   }
-  
-  public void detachParent(){
+
+  public void detachParent() {
     parent = null;
   }
 

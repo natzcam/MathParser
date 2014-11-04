@@ -7,10 +7,10 @@ package nac.mp.ast.expression;
 
 import java.util.ArrayList;
 import java.util.List;
+import nac.mp.Creator;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
-import nac.mp.type.MPTemplate;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
 
@@ -33,14 +33,14 @@ public class NewExpr implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPTemplate template = (MPTemplate) expression.eval(scope);
+    Creator creator = (Creator) expression.eval(scope);
 
     List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
       argValues.add(exp.eval(scope));
     }
 
-    MPObject c = template.create();
+    MPObject c = creator.create();
     MPFunc ctor = (MPFunc) c.getVar("__init__");
 
     if (ctor != null) {

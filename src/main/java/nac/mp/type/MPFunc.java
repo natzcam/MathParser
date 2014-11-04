@@ -50,7 +50,7 @@ public class MPFunc extends MPObject {
     }
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
+      newScope.declareVarLocal(formalArgs.get(i), argsValues.get(i));
     }
     newScope.setVarLocal("this", thisRef);
     return body.eval(newScope);
@@ -63,7 +63,7 @@ public class MPFunc extends MPObject {
 
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.setVarLocal(formalArgs.get(i), argsValues.get(i));
+      newScope.declareVarLocal(formalArgs.get(i), argsValues.get(i));
     }
 
     MPObject opts = new MPObject(parent, null);

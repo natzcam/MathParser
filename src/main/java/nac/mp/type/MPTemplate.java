@@ -5,6 +5,7 @@
  */
 package nac.mp.type;
 
+import nac.mp.Creator;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
@@ -14,7 +15,7 @@ import nac.mp.ast.Expression;
  *
  * @author camomon
  */
-public class MPTemplate extends MPObject {
+public class MPTemplate extends MPObject implements Creator {
 
   private final MPTemplate extParent;
   private final String name;
@@ -50,6 +51,7 @@ public class MPTemplate extends MPObject {
     return new MPBoolean(true);
   }
 
+  @Override
   public MPObject create() throws EvalException {
     MPObject obj = new MPObject(parent, this);
     if (extParent != null) {
