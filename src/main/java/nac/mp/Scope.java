@@ -6,6 +6,7 @@
 package nac.mp;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 import nac.mp.type.MPObject;
 
@@ -27,6 +28,8 @@ public interface Scope extends Serializable {
 
   public Set<String> getVarKeys();
 
+  public Collection<MPObject> getVarValues();
+
   public void setVar(String name, MPObject value) throws EvalException;
-  
+
 }

@@ -51,7 +51,7 @@ public class MPAttribute extends MPObject implements Creator {
     return new MPBoolean(true);
   }
 
-  public MySQLColumn column() throws EvalException {
+  public MySQLColumn column(){
     MySQLColumn column = new MySQLColumn(name, MySQLColumn.ColumnType.STRING);
     return column;
   }

@@ -5,6 +5,7 @@
  */
 package nac.mp.type;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -101,6 +102,11 @@ public class MPObject implements Scope {
   @Override
   public Set<String> getVarKeys() {
     return vars.keySet();
+  }
+
+  @Override
+  public Collection<MPObject> getVarValues() {
+    return vars.values();
   }
 
   public static enum Hint {

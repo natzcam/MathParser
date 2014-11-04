@@ -1,5 +1,4 @@
 model Client{
-  key id;
   string firstName;
   string lastName;
   int age;

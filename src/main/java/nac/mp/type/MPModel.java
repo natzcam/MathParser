@@ -8,9 +8,11 @@ package nac.mp.type;
 import nac.mp.Creator;
 import nac.mp.EvalException;
 import nac.mp.Scope;
+import nac.mp.store.mysql.DBUtil;
 import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  *
@@ -24,6 +26,10 @@ public class MPModel extends MPObject implements Creator {
   public MPModel(Scope parent, String name) {
     super(parent, null);
     this.name = name;
+  }
+
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -45,18 +51,9 @@ public class MPModel extends MPObject implements Creator {
     return new MPBoolean(true);
   }
 
-  public void register() throws EvalException {
-    MySQLTable table = new MySQLTable(name);
-
-    for (MPObject obj : vars.values()) {
-      if (obj instanceof MPAttribute) {
-        MPAttribute attr = (MPAttribute) obj;
-        table.getColumns().add(attr.column());
-      }
-    }
-    StringBuilder sb = new StringBuilder();
-    table.emit(sb);
-    log.trace(sb.toString());
+  public void register() {
+    MySQLTable table = new MySQLTable(this);
+    table.create();
   }
 
   @Override

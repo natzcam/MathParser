@@ -7,6 +7,9 @@ package nac.mp.store.mysql;
 
 import java.util.ArrayList;
 import java.util.List;
+import nac.mp.type.MPAttribute;
+import nac.mp.type.MPModel;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -14,20 +17,24 @@ import java.util.List;
  */
 public class MySQLTable extends SQLTemplate {
 
+  private final MPModel model;
   private final String engine = "InnoDB";
-  private final String name;
   private final List<MySQLColumn> columns = new ArrayList<>();
 
-  public MySQLTable(String name) {
-    this.name = name;
-  }
+  public MySQLTable(MPModel model) {
+    this.model = model;
 
-  public List<MySQLColumn> getColumns() {
-    return columns;
+    for (MPObject obj : model.getVarValues()) {
+      if (obj instanceof MPAttribute) {
+        MPAttribute attr = (MPAttribute) obj;
+        columns.add(attr.column());
+      }
+    }
   }
 
   @Override
   public void emit(StringBuilder query) {
+    String name = model.getName();
     query.append("CREATE TABLE IF NOT EXISTS ").append(name).append(" (");
     query.append(name).append("_id INT NOT NULL AUTO_INCREMENT");
     for (MySQLColumn c : columns) {

@@ -5,6 +5,7 @@
  */
 package nac.mp;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -74,6 +75,11 @@ public class BasicScope implements Scope{
   @Override
   public Set<String> getVarKeys() {
     return vars.keySet();
+  }
+  
+    @Override
+  public Collection<MPObject> getVarValues() {
+    return vars.values();
   }
 
 }

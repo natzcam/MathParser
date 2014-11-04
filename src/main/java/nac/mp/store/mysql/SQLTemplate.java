@@ -5,6 +5,8 @@
  */
 package nac.mp.store.mysql;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -13,12 +15,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public abstract class SQLTemplate implements Emittable {
 
+  private static final Logger log = LogManager.getLogger(SQLTemplate.class);
   private final JdbcTemplate jdbcTemplate = DBUtil.getJbdcTemplate();
   private final StringBuilder query = new StringBuilder();
 
-  public void execute() {
+  public void create() {
     emit(query);
-    System.out.println("query: " + query.toString());
+    log.info("query: {} ", query.toString());
     jdbcTemplate.execute(query.toString());
   }
 }
