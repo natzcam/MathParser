@@ -6,7 +6,6 @@
 package nac.mp.ast;
 
 import java.io.Serializable;
-import nac.mp.Scope;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 

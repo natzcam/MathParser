@@ -27,7 +27,7 @@ public class MySQLTable extends SQLTemplate {
     for (MPObject obj : model.getVarValues()) {
       if (obj instanceof MPAttribute) {
         MPAttribute attr = (MPAttribute) obj;
-        columns.add(attr.column());
+        columns.add(attr.getColumn());
       }
     }
   }
@@ -35,8 +35,8 @@ public class MySQLTable extends SQLTemplate {
   @Override
   public void emit(StringBuilder query) {
     String name = model.getName();
-    query.append("CREATE TABLE IF NOT EXISTS ").append(name).append(" (");
-    query.append(name).append("_id INT NOT NULL AUTO_INCREMENT");
+    query.append("CREATE TABLE ").append(name).append(" (");
+    query.append(name).append("__id__ INT NOT NULL AUTO_INCREMENT");
     for (MySQLColumn c : columns) {
       query.append(",");
       c.emit(query);

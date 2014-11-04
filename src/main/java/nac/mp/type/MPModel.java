@@ -5,14 +5,12 @@
  */
 package nac.mp.type;
 
-import nac.mp.Creator;
+import nac.mp.store.Creator;
 import nac.mp.EvalException;
-import nac.mp.Scope;
-import nac.mp.store.mysql.DBUtil;
+import nac.mp.ast.Scope;
 import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  *
@@ -51,19 +49,19 @@ public class MPModel extends MPObject implements Creator {
     return new MPBoolean(true);
   }
 
-  public void register() {
+  public void model() {
     MySQLTable table = new MySQLTable(this);
     table.create();
   }
 
   @Override
-  public MPObject create() throws EvalException {
+  public MPObject newInstance() throws EvalException {
     MPObject obj = new MPModeledObject(parent, this);
 
     for (MPObject v : vars.values()) {
       if (v instanceof MPAttribute) {
         MPAttribute attr = (MPAttribute) v;
-        obj.declareVarLocal(attr.getName(), attr.create());
+        obj.declareVarLocal(attr.getName(), attr.newInstance());
       }
     }
     return obj;

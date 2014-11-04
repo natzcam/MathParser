@@ -5,7 +5,7 @@
  */
 package nac.mp.type;
 
-import nac.mp.Scope;
+import nac.mp.ast.Scope;
 
 /**
  *

@@ -8,7 +8,7 @@ package nac.mp.ast.statement;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Scope;
+import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.store.mysql.MySQLTable;
@@ -38,7 +38,7 @@ public class ModelDecl implements Expression {
     for (AttributeDecl attributeDecl : declarations) {
       attributeDecl.eval(model);
     }
-    model.register();
+    model.model();
     return null;
   }
 }

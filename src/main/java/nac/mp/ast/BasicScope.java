@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp;
+package nac.mp.ast;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 
 /**

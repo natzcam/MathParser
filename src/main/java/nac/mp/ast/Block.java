@@ -5,7 +5,6 @@
  */
 package nac.mp.ast;
 
-import nac.mp.Scope;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;

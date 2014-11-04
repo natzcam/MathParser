@@ -3,7 +3,6 @@ model Client{
   string lastName;
   int age;
   int sex;
-  list doctors;
   Physician currentDoctor;
   Hospital hospitalConfined;
 }
@@ -11,13 +10,13 @@ model Client{
 model Physician{
   string firstName;
   string lastName;
-  list clients;
+  //list clients;
 }
 
 model Hospital{
   string name;
   string address;
-  list clients;
+  //list clients;
 }
 
 var x = new Hospital();

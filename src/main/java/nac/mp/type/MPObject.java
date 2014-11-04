@@ -9,9 +9,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import nac.mp.Creator;
+import nac.mp.store.Creator;
 import nac.mp.EvalException;
-import nac.mp.Scope;
+import nac.mp.ast.Scope;
 
 /**
  *

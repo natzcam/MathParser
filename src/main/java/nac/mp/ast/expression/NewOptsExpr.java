@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import nac.mp.Creator;
+import nac.mp.store.Creator;
 import nac.mp.EvalException;
-import nac.mp.Scope;
+import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
@@ -52,7 +52,7 @@ public class NewOptsExpr implements Expression {
       optsValues.put(key, opts.get(key).eval(scope));
     }
 
-    c = creator.create();
+    c = creator.newInstance();
     MPFunc ctor = (MPFunc) c.getVar("__init__");
     if (ctor != null) {
       ctor.call(c, argValues, optsValues);

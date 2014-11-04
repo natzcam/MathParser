@@ -5,9 +5,9 @@
  */
 package nac.mp.type;
 
-import nac.mp.Creator;
+import nac.mp.store.Creator;
 import nac.mp.EvalException;
-import nac.mp.Scope;
+import nac.mp.ast.Scope;
 import nac.mp.store.mysql.MySQLColumn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,31 +17,31 @@ import org.apache.logging.log4j.Logger;
  * @author camomon
  */
 public class MPAttribute extends MPObject implements Creator {
-
+  
   private static final Logger log = LogManager.getLogger(MPAttribute.class);
   private final String type;
   private final String name;
-
+  
   public MPAttribute(Scope parent, String type, String name) {
     super(parent, null);
     this.type = type;
     this.name = name;
   }
-
+  
   public String getName() {
     return name;
   }
-
+  
   @Override
   public MPObject.Hint getHint() {
     return MPObject.Hint.ATTRIBUTE;
   }
-
+  
   @Override
   public String toString() {
     return "attr:" + name;
   }
-
+  
   @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
@@ -50,14 +50,35 @@ public class MPAttribute extends MPObject implements Creator {
     }
     return new MPBoolean(true);
   }
-
-  public MySQLColumn column(){
-    MySQLColumn column = new MySQLColumn(name, MySQLColumn.ColumnType.STRING);
+  
+  public MySQLColumn getColumn() {
+    MySQLColumn.ColumnType ct;
+    MPModel refParent = null;
+    switch (type) {
+      case "string":
+        ct = MySQLColumn.ColumnType.STRING;
+        break;
+      case "int":
+        ct = MySQLColumn.ColumnType.INTEGER;
+        break;
+      case "bool":
+        ct = MySQLColumn.ColumnType.BOOLEAN;
+        break;
+      case "float":
+        ct = MySQLColumn.ColumnType.FLOAT;
+        break;
+      default:
+        ct = MySQLColumn.ColumnType.REFERENCE;
+        log.debug("type {}", type);
+        refParent = (MPModel) parent.getVar(type);
+        break;
+    }
+    MySQLColumn column = new MySQLColumn(refParent, name, ct);
     return column;
   }
-
+  
   @Override
-  public MPObject create() throws EvalException {
+  public MPObject newInstance() throws EvalException {
     switch (type) {
       case "string":
         return new MPVoid();
@@ -70,8 +91,7 @@ public class MPAttribute extends MPObject implements Creator {
       case "list":
         return new MPVoid();
       default:
-        MPModel model = (MPModel) parent.getVar(type);
-        return model.create();
+        return new MPVoid();
     }
   }
 }

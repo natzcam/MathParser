@@ -6,7 +6,7 @@ package nac.mp.ast.expression;
 
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
-import nac.mp.Scope;
+import nac.mp.ast.Scope;
 import nac.mp.type.MPString;
 
 /**

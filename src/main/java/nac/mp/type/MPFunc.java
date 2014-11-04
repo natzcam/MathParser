@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import nac.mp.EvalException;
-import nac.mp.BasicScope;
-import nac.mp.Scope;
+import nac.mp.ast.BasicScope;
+import nac.mp.ast.Scope;
 import nac.mp.ast.Block;
 
 /**

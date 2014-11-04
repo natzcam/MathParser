@@ -5,10 +5,10 @@
  */
 package nac.mp.type;
 
-import nac.mp.Creator;
+import nac.mp.store.Creator;
 import java.util.List;
 import nac.mp.EvalException;
-import nac.mp.Scope;
+import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
 
 /**
@@ -52,7 +52,7 @@ public class MPTemplate extends MPObject implements Creator {
   }
 
   @Override
-  public MPObject create() throws EvalException {
+  public MPObject newInstance() throws EvalException {
     MPObject obj = new MPObject(parent, this);
     if (extParent != null) {
       for (Expression d : extParent.declarations) {

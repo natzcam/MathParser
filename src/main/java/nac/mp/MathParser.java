@@ -5,6 +5,8 @@
  */
 package nac.mp;
 
+import nac.mp.ast.Scope;
+import nac.mp.ast.BasicScope;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;

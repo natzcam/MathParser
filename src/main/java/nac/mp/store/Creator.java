@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 
-package nac.mp;
+package nac.mp.store;
 
+import nac.mp.EvalException;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 
@@ -15,6 +16,6 @@ import nac.mp.type.MPObject;
  */
 public interface Creator {
 
-  MPObject create() throws EvalException;
+  MPObject newInstance() throws EvalException;
   
 }
