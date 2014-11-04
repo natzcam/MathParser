@@ -5,6 +5,7 @@
  */
 package nac.mp.ast.statement;
 
+import java.util.Map;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
@@ -20,8 +21,10 @@ public class AttributeDecl implements Expression {
   private final String type;
   private final String identifier;
   private Expression defaultValue = null;
+  private final Map<String, ModelDecl> modelRepository;
 
-  public AttributeDecl(String type, String identifier) {
+  public AttributeDecl(Map<String, ModelDecl> modelRepository, String type, String identifier) {
+    this.modelRepository = modelRepository;
     this.type = type;
     this.identifier = identifier;
   }

@@ -11,7 +11,6 @@ import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
-import nac.mp.store.mysql.MySQLTable;
 import nac.mp.type.MPModel;
 
 /**
@@ -38,7 +37,6 @@ public class ModelDecl implements Expression {
     for (AttributeDecl attributeDecl : declarations) {
       attributeDecl.eval(model);
     }
-    model.model();
     return null;
   }
 }
