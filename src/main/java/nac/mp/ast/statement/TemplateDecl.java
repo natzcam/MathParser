@@ -11,19 +11,19 @@ import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
-import nac.mp.type.MPClass;
+import nac.mp.type.MPTemplate;
 
 /**
  *
  * @author camomon
  */
-public class ClassDecl implements Expression {
+public class TemplateDecl implements Expression {
 
   private final Expression extnds;
   private final String name;
   private final List<Expression> declarations = new ArrayList<>();
 
-  public ClassDecl(Expression extnds, String name) {
+  public TemplateDecl(Expression extnds, String name) {
     this.extnds = extnds;
     this.name = name;
   }
@@ -34,12 +34,12 @@ public class ClassDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPClass eclas = null;
+    MPTemplate eclas = null;
     if (extnds != null) {
-      eclas = (MPClass) extnds.eval(scope);
+      eclas = (MPTemplate) extnds.eval(scope);
     }
-    MPClass clazz = new MPClass(scope, name, eclas, declarations);
-    scope.declareVarLocal(name, clazz);
+    MPTemplate template = new MPTemplate(scope, name, eclas, declarations);
+    scope.declareVarLocal(name, template);
 
     return null;
   }

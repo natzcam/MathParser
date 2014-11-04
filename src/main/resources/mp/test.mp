@@ -1,10 +1,10 @@
 model Client{
-  Id id;
-  String firstName;
-  String lastName;
-  Int age;
-  Int sex;
-  List doctors;
+  key id;
+  string firstName;
+  string lastName;
+  int age;
+  int sex;
+  list doctors;
   Physician currentDoctor;
   Hospital hospitalConfined;
 }
@@ -21,6 +21,7 @@ model Hospital{
   list clients;
 }
 
+//print Hospital.name;
 //relationship Client.currentDoctor <> Doctor.id
 //relationship Client.doctors <<>> Physician.clients;
 //relationship Hospital.clients <<> Client.hospital;

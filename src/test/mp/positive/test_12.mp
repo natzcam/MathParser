@@ -17,20 +17,20 @@ print x.toInt();
 var y = "122.00";
 print y.toFloat();
 
-class Subject{
+template Subject{
   var name;
   var teacher;
   var students;
 }
 
-class Teacher{
+template Teacher{
   var name;
   func __init__(name){
     this.name = name;
   }
 }
 
-class Student{
+template Student{
   var subjects;
 }
 

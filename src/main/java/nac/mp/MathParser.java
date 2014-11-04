@@ -48,7 +48,7 @@ import nac.mp.ast.expression.MethodExpr;
 import nac.mp.ast.expression.MethodOptsExpr;
 import nac.mp.ast.expression.NewExpr;
 import nac.mp.ast.expression.NewOptsExpr;
-import nac.mp.ast.statement.ClassDecl;
+import nac.mp.ast.statement.TemplateDecl;
 import nac.mp.ast.statement.ModelDecl;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.AttributeDecl;
@@ -76,7 +76,11 @@ public class MathParser {
     tokenizer.process(input);
     next();
     while (next.type != TokenType.EOF) {
-      fileBlock.addStatement(statement());
+      if (next.type == TokenType.KW_MODEL) {
+        fileBlock.addStatement(modelDecl());
+      } else {
+        fileBlock.addStatement(statement());
+      }
       next();
     }
     fileBlock.eval(globalScope);
@@ -180,10 +184,8 @@ public class MathParser {
         return funcDecl();
       case KW_OBJECT:
         return objectDecl();
-      case KW_CLASS:
+      case KW_TEMPLATE:
         return classDecl();
-      case KW_MODEL:
-        return modelDecl();
       default:
         Expression se = expression();
         consume(TokenType.SEMICOLON);
@@ -200,7 +202,7 @@ public class MathParser {
         return funcDecl();
       case KW_OBJECT:
         return objectDecl();
-      case KW_CLASS:
+      case KW_TEMPLATE:
         return classDecl();
       default:
         throw new ParseException("Unexpected token " + next + ". Declaration expected.");
@@ -272,7 +274,7 @@ public class MathParser {
   }
 
   private Expression classDecl() throws ParseException {
-    consume(TokenType.KW_CLASS);
+    consume(TokenType.KW_TEMPLATE);
     consume(TokenType.IDENTIFIER);
     String cl = current.text;
     next();
@@ -281,15 +283,15 @@ public class MathParser {
       consume();
       extExp = expression();
     }
-    ClassDecl cs = new ClassDecl(extExp, cl);
+    TemplateDecl td = new TemplateDecl(extExp, cl);
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
-      cs.getDeclarations().add(declaration());
+      td.getDeclarations().add(declaration());
       next();
     }
     consume();
-    return cs;
+    return td;
   }
 
   private Expression modelDecl() throws ParseException {

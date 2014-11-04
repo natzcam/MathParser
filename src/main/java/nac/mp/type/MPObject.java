@@ -5,7 +5,6 @@
  */
 package nac.mp.type;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -18,12 +17,12 @@ import nac.mp.Scope;
  */
 public class MPObject implements Scope {
 
-  protected final MPClass clazz;
+  protected final MPTemplate template;
   protected Scope parent;
   protected final Map<String, MPObject> vars = new HashMap<>();
 
-  public MPObject(Scope parent, MPClass clazz) {
-    this.clazz = clazz;
+  public MPObject(Scope parent, MPTemplate template) {
+    this.template = template;
     this.parent = parent;
   }
 
@@ -31,8 +30,8 @@ public class MPObject implements Scope {
     this.parent = parent;
   }
 
-  public MPClass getClazz() {
-    return clazz;
+  public MPTemplate getTemplate() {
+    return template;
   }
 
   public MPObject.Hint getHint() {
@@ -112,7 +111,7 @@ public class MPObject implements Scope {
     VOID,
     FUNCTION,
     OBJECT,
-    CLASS,
+    TEMPLATE,
     LIST,
     MODEL,
     ATTRIBUTE;

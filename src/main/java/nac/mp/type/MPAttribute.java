@@ -5,10 +5,8 @@
  */
 package nac.mp.type;
 
-import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
-import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.store.mysql.MySQLColumn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,10 +18,12 @@ import org.apache.logging.log4j.Logger;
 public class MPAttribute extends MPObject {
 
   private static final Logger log = LogManager.getLogger(MPAttribute.class);
+  private final String type;
   private final String name;
 
-  public MPAttribute(Scope parent, String name) {
+  public MPAttribute(Scope parent, String type, String name) {
     super(parent, null);
+    this.type = type;
     this.name = name;
   }
 

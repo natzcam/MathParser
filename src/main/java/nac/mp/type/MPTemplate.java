@@ -14,13 +14,13 @@ import nac.mp.ast.Expression;
  *
  * @author camomon
  */
-public class MPClass extends MPObject {
+public class MPTemplate extends MPObject {
 
-  private final MPClass extParent;
+  private final MPTemplate extParent;
   private final String name;
   private final List<Expression> declarations;
 
-    public MPClass(Scope parent, String name, MPClass extParent, List<Expression> declarations) {
+  public MPTemplate(Scope parent, String name, MPTemplate extParent, List<Expression> declarations) {
     super(parent, null);
     this.name = name;
     this.extParent = extParent;
@@ -33,7 +33,7 @@ public class MPClass extends MPObject {
 
   @Override
   public MPObject.Hint getHint() {
-    return MPObject.Hint.CLASS;
+    return MPObject.Hint.TEMPLATE;
   }
 
   @Override
@@ -44,7 +44,7 @@ public class MPClass extends MPObject {
   @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
-      case CLASS:
+      case TEMPLATE:
         return new MPBoolean(this != right);
     }
     return new MPBoolean(true);

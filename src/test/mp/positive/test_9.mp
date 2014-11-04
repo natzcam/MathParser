@@ -1,5 +1,5 @@
 object hi{
-  class TestExtend{
+  template TestExtend{
     func hi(){
       print "hi there";
     }
@@ -7,7 +7,7 @@ object hi{
 
 }
 object hello{
-  class Test extends hi.TestExtend{
+  template Test extends hi.TestExtend{
     var prop;
 
     func testf(){

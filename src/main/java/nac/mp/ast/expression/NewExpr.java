@@ -10,7 +10,7 @@ import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
 import nac.mp.ast.Expression;
-import nac.mp.type.MPClass;
+import nac.mp.type.MPTemplate;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
 
@@ -33,14 +33,14 @@ public class NewExpr implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPClass clazz = (MPClass) expression.eval(scope);
+    MPTemplate template = (MPTemplate) expression.eval(scope);
 
     List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
       argValues.add(exp.eval(scope));
     }
 
-    MPObject c = clazz.create();
+    MPObject c = template.create();
     MPFunc ctor = (MPFunc) c.getVar("__init__");
 
     if (ctor != null) {

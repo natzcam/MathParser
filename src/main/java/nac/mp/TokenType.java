@@ -30,7 +30,7 @@ public enum TokenType {
   KW_TRUE("true"),
   KW_FALSE("false"),
   KW_ASSERT("assert"),
-  KW_CLASS("class"),
+  KW_TEMPLATE("template"),
   KW_EXTENDS("extends"),
   KW_NEW("new"),
   PLUS("\\+"),

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.Scope;
+import nac.mp.ast.Expression;
 import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,5 +60,19 @@ public class MPModel extends MPObject {
     StringBuilder sb = new StringBuilder();
     table.emit(sb);
     log.trace(sb.toString());
+  }
+
+  public MPObject create() throws EvalException {
+    MPObject obj = new MPModeledObject(parent, null);
+    obj.setVarLocal(name, obj);
+//    if (extParent != null) {
+//      for (Expression d : extParent.declarations) {
+//        d.eval(obj);
+//      }
+//    }
+//    for (Expression d : declarations) {
+//      d.eval(obj);
+//    }
+    return obj;
   }
 }
