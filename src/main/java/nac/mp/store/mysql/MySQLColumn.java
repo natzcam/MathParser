@@ -5,6 +5,7 @@
  */
 package nac.mp.store.mysql;
 
+import nac.mp.store.Emittable;
 import java.util.Map;
 import nac.mp.ast.statement.ModelDecl;
 import org.apache.logging.log4j.LogManager;

@@ -56,7 +56,7 @@ import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
-import nac.mp.store.mysql.DBUtil;
+import nac.mp.store.Emittable;
 import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,7 +77,7 @@ public class MathParser {
   private Token current = null;
   private Token next = null;
   private final Map<String, ModelDecl> modelRepo = new HashMap<>();
-  private final JdbcTemplate jdbcTemplate = DBUtil.getJbdcTemplate();
+  private final JdbcTemplate jdbcTemplate = DBUtil.getDefault();
 
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);
@@ -91,12 +91,11 @@ public class MathParser {
       next();
     }
     for (ModelDecl modelDecl : modelRepo.values()) {
-      MySQLTable tb = modelDecl.table();
-      
+      Emittable tb = new MySQLTable(modelRepo, modelDecl);
       StringBuilder sb = new StringBuilder();
       tb.emit(sb);
       log.debug(sb.toString());
-//      jdbcTemplate.update(sb.toString());
+      jdbcTemplate.update(sb.toString());
     }
     //eval
     fileBlock.eval(globalScope);
@@ -230,7 +229,7 @@ public class MathParser {
     String t = current.text;
     consume(TokenType.IDENTIFIER);
     String i = current.text;
-    AttributeDecl typedDecl = new AttributeDecl(modelRepo, t, i);
+    AttributeDecl typedDecl = new AttributeDecl(t, i);
     next();
     if (next.type == TokenType.ASSIGN) {
       consume();

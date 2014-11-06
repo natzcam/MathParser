@@ -5,10 +5,8 @@
  */
 package nac.mp.type;
 
-import nac.mp.store.Creator;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
-import nac.mp.store.mysql.MySQLColumn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

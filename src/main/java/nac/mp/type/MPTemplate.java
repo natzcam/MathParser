@@ -5,7 +5,6 @@
  */
 package nac.mp.type;
 
-import nac.mp.store.Creator;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;

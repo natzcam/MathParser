@@ -1,4 +1,4 @@
-package nac.mp.store.mysql;
+package nac.mp;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -11,7 +11,7 @@ public class DBUtil {
 
   private static JdbcTemplate jdbcTemplate = null;
 
-  public static JdbcTemplate getJbdcTemplate() {
+  public static JdbcTemplate getDefault() {
     if (jdbcTemplate == null) {
       DriverManagerDataSource dataSource = new DriverManagerDataSource();
       dataSource.setDriverClassName("com.mysql.jdbc.Driver");

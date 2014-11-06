@@ -5,7 +5,6 @@
  */
 package nac.mp.type;
 
-import nac.mp.store.Creator;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import org.apache.logging.log4j.LogManager;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import nac.mp.store.Creator;
+import nac.mp.type.Creator;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
