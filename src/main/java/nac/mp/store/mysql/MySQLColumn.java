@@ -5,7 +5,8 @@
  */
 package nac.mp.store.mysql;
 
-import nac.mp.type.MPModel;
+import java.util.Map;
+import nac.mp.ast.statement.ModelDecl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,24 +15,44 @@ import org.apache.logging.log4j.Logger;
  * @author user
  */
 public class MySQLColumn implements Emittable {
-  private static final Logger log = LogManager.getLogger(MySQLColumn.class);
-  private final String name;
-  private final ColumnType type;
-  private final MPModel parent;
 
-  public MySQLColumn(MPModel parent, String name, ColumnType type) {
-    this.parent = parent;
-    this.name = name;
+  private static final Logger log = LogManager.getLogger(MySQLColumn.class);
+  private final String type;
+  private final String identifier;
+  private final Map<String, ModelDecl> modelRepo;
+  private final MySQLColumn.ColumnType columnType;
+
+  public MySQLColumn(Map<String, ModelDecl> modelRepo, String type, String identifier) {
+    this.modelRepo = modelRepo;
     this.type = type;
+    this.identifier = identifier;
+
+    switch (type) {
+      case "string":
+        columnType = MySQLColumn.ColumnType.STRING;
+        break;
+      case "int":
+        columnType = MySQLColumn.ColumnType.INTEGER;
+        break;
+      case "bool":
+        columnType = MySQLColumn.ColumnType.BOOLEAN;
+        break;
+      case "float":
+        columnType = MySQLColumn.ColumnType.FLOAT;
+        break;
+      default:
+        columnType = MySQLColumn.ColumnType.REFERENCE;
+        log.debug("type {}", type);
+        break;
+    }
   }
 
   @Override
   public void emit(StringBuilder query) {
-    log.debug(parent);
-    query.append(name).append(" ").append(type.toString());
-    if (type == ColumnType.REFERENCE) {
-      query.append(", FOREIGN KEY (").append(name).append(")");
-      query.append(" REFERENCES ").append(parent.getName()).append("__id__");
+    query.append(identifier).append(" ").append(columnType.toString());
+    if (columnType == ColumnType.REFERENCE) {
+      query.append(", FOREIGN KEY (").append(identifier).append(")");
+      query.append(" REFERENCES ").append(modelRepo.get(type).getName()).append("(__id__)");
     }
   }
 

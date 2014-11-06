@@ -8,7 +8,6 @@ package nac.mp.type;
 import nac.mp.store.Creator;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
-import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,12 +47,7 @@ public class MPModel extends MPObject implements Creator {
     }
     return new MPBoolean(true);
   }
-
-  public void model() {
-    MySQLTable table = new MySQLTable(this);
-    table.create();
-  }
-
+  
   @Override
   public MPObject newInstance() throws EvalException {
     MPObject obj = new MPModeledObject(parent, this);

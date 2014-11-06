@@ -56,8 +56,11 @@ import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
+import nac.mp.store.mysql.DBUtil;
+import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * concat strings TODO: assoc Token to AST nodes to improve debug
@@ -65,7 +68,7 @@ import org.apache.logging.log4j.Logger;
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
-  
+
   private static final Logger log = LogManager.getLogger(MathParser.class);
   private final Tokenizer tokenizer = new Tokenizer();
   private final Scanner scanner = new Scanner(System.in);
@@ -73,8 +76,9 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
-  private final Map<String, ModelDecl> modelRepository = new HashMap<>();
-  
+  private final Map<String, ModelDecl> modelRepo = new HashMap<>();
+  private final JdbcTemplate jdbcTemplate = DBUtil.getJbdcTemplate();
+
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);
     next();
@@ -86,25 +90,30 @@ public class MathParser {
       }
       next();
     }
-//    for (Object object : modelRepository) {
-//      
-//    }
+    for (ModelDecl modelDecl : modelRepo.values()) {
+      MySQLTable tb = modelDecl.table();
+      
+      StringBuilder sb = new StringBuilder();
+      tb.emit(sb);
+      log.debug(sb.toString());
+//      jdbcTemplate.update(sb.toString());
+    }
     //eval
     fileBlock.eval(globalScope);
   }
-  
+
   public Tokenizer getTokenizer() {
     return tokenizer;
   }
-  
+
   private void consume() throws ParseException {
     current = tokenizer.consume();
   }
-  
+
   private void next() throws ParseException {
     next = tokenizer.lookahead(1);
   }
-  
+
   private void consume(TokenType t) throws ParseException {
     Token e = tokenizer.lookahead(1);
     if (e.type == t) {
@@ -113,9 +122,9 @@ public class MathParser {
       throw new ParseException("Unexpected token " + e + ". " + t + " expected");
     }
   }
-  
+
   private Block block() throws ParseException {
-    
+
     Block bl = new Block();
     next();
     if (next.type == TokenType.LBRACE) {
@@ -131,7 +140,7 @@ public class MathParser {
     }
     return bl;
   }
-  
+
   private Expression statement() throws ParseException {
     next();
     switch (next.type) {
@@ -199,7 +208,7 @@ public class MathParser {
         return se;
     }
   }
-  
+
   private Expression declaration() throws ParseException {
     next();
     switch (next.type) {
@@ -215,13 +224,13 @@ public class MathParser {
         throw new ParseException("Unexpected token " + next + ". Declaration expected.");
     }
   }
-  
+
   private AttributeDecl attributeDecl() throws ParseException {
     consume(TokenType.IDENTIFIER);
     String t = current.text;
     consume(TokenType.IDENTIFIER);
     String i = current.text;
-    AttributeDecl typedDecl = new AttributeDecl(modelRepository, t, i);
+    AttributeDecl typedDecl = new AttributeDecl(modelRepo, t, i);
     next();
     if (next.type == TokenType.ASSIGN) {
       consume();
@@ -230,7 +239,7 @@ public class MathParser {
     consume(TokenType.SEMICOLON);
     return typedDecl;
   }
-  
+
   private Expression varDecl() throws ParseException {
     consume(TokenType.KW_VAR);
     consume(TokenType.IDENTIFIER);
@@ -243,7 +252,7 @@ public class MathParser {
     consume(TokenType.SEMICOLON);
     return varDecl;
   }
-  
+
   private Expression funcDecl() throws ParseException {
     consume(TokenType.KW_FUNC);
     consume(TokenType.IDENTIFIER);
@@ -265,7 +274,7 @@ public class MathParser {
     fd.setBody(b);
     return fd;
   }
-  
+
   private Expression objectDecl() throws ParseException {
     consume(TokenType.KW_OBJECT);
     consume(TokenType.IDENTIFIER);
@@ -279,7 +288,7 @@ public class MathParser {
     consume();
     return od;
   }
-  
+
   private Expression classDecl() throws ParseException {
     consume(TokenType.KW_TEMPLATE);
     consume(TokenType.IDENTIFIER);
@@ -300,7 +309,7 @@ public class MathParser {
     consume();
     return td;
   }
-  
+
   private Expression modelDecl() throws ParseException {
     consume(TokenType.KW_MODEL);
     consume(TokenType.IDENTIFIER);
@@ -313,10 +322,10 @@ public class MathParser {
       next();
     }
     consume();
-    modelRepository.put(m, md);
+    modelRepo.put(m, md);
     return md;
   }
-  
+
   private Expression expression() throws ParseException {
     Expression left = comparison();
     while (true) {
@@ -334,7 +343,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression comparison() throws ParseException {
     Expression left = additive();
     while (true) {
@@ -387,7 +396,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression additive() throws ParseException {
     Expression left = multiplicative();
     while (true) {
@@ -412,7 +421,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression multiplicative() throws ParseException {
     Expression left = creation();
     while (true) {
@@ -437,19 +446,19 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression creation() throws ParseException {
     next();
     if (next.type == TokenType.KW_NEW) {
       consume();
       Expression ex = access();
-      
+
       consume(TokenType.LPAREN);
       List<Expression> expList = new ArrayList<>();
       Map<String, Expression> optsMap = new HashMap<>();
-      
+
       argsProc(expList, optsMap);
-      
+
       if (optsMap.size() > 0) {
         NewOptsExpr nex1 = new NewOptsExpr(ex);
         nex1.getArgs().addAll(expList);
@@ -469,9 +478,9 @@ public class MathParser {
             consume();
             List<Expression> expList = new ArrayList<>();
             Map<String, Expression> optsMap = new HashMap<>();
-            
+
             argsProc(expList, optsMap);
-            
+
             if (optsMap.size() > 0) {
               if (left instanceof MemberExpr) {
                 MethodOptsExpr mex1 = new MethodOptsExpr((MemberExpr) left);
@@ -502,7 +511,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private void argsProc(List<Expression> expList, Map<String, Expression> optsMap) throws ParseException {
     next();
     if (next.type != TokenType.RPAREN && next.type != TokenType.SEMICOLON) {
@@ -516,7 +525,7 @@ public class MathParser {
         }
       }
     }
-    
+
     if (next.type == TokenType.SEMICOLON) {
       consume();
       while (true) {
@@ -532,10 +541,10 @@ public class MathParser {
         }
       }
     }
-    
+
     consume(TokenType.RPAREN);
   }
-  
+
   private Expression access() throws ParseException {
     Expression left = factor();
     while (true) {
@@ -563,7 +572,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression factor() throws ParseException {
     next();
     switch (next.type) {
@@ -647,7 +656,7 @@ public class MathParser {
         throw new ParseException("Unexpected token '" + next + "'. Expression expected.");
     }
   }
-  
+
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
@@ -656,5 +665,5 @@ public class MathParser {
       log.error(ex);
     }
   }
-  
+
 }

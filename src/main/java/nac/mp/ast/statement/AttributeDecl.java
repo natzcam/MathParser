@@ -10,7 +10,11 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.store.mysql.MySQLColumn;
 import nac.mp.type.MPAttribute;
+import nac.mp.type.MPModel;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -18,13 +22,14 @@ import nac.mp.type.MPAttribute;
  */
 public class AttributeDecl implements Expression {
 
+  private static final Logger log = LogManager.getLogger(AttributeDecl.class);
   private final String type;
   private final String identifier;
   private Expression defaultValue = null;
-  private final Map<String, ModelDecl> modelRepository;
+  private final Map<String, ModelDecl> modelRepo;
 
-  public AttributeDecl(Map<String, ModelDecl> modelRepository, String type, String identifier) {
-    this.modelRepository = modelRepository;
+  public AttributeDecl(Map<String, ModelDecl> modelRepo, String type, String identifier) {
+    this.modelRepo = modelRepo;
     this.type = type;
     this.identifier = identifier;
   }
@@ -35,6 +40,11 @@ public class AttributeDecl implements Expression {
 
   public String getIdentifier() {
     return identifier;
+  }
+
+  public MySQLColumn column() {
+    MySQLColumn column = new MySQLColumn(modelRepo, type, identifier);
+    return column;
   }
 
   @Override

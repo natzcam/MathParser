@@ -7,29 +7,26 @@ package nac.mp.store.mysql;
 
 import java.util.ArrayList;
 import java.util.List;
+import nac.mp.ast.statement.AttributeDecl;
+import nac.mp.ast.statement.ModelDecl;
 import nac.mp.type.MPAttribute;
-import nac.mp.type.MPModel;
-import nac.mp.type.MPObject;
 
 /**
  *
  * @author user
  */
-public class MySQLTable extends SQLTemplate {
+public class MySQLTable implements Emittable {
 
-  private final MPModel model;
+  private final ModelDecl model;
   private final String engine = "InnoDB";
   private final List<MySQLColumn> columns = new ArrayList<>();
 
-  public MySQLTable(MPModel model) {
+  public MySQLTable(ModelDecl model) {
     this.model = model;
+  }
 
-    for (MPObject obj : model.getVarValues()) {
-      if (obj instanceof MPAttribute) {
-        MPAttribute attr = (MPAttribute) obj;
-        columns.add(attr.getColumn());
-      }
-    }
+  public List<MySQLColumn> getColumns() {
+    return columns;
   }
 
   @Override
@@ -41,7 +38,7 @@ public class MySQLTable extends SQLTemplate {
       query.append(",");
       c.emit(query);
     }
-    query.append(",PRIMARY KEY (").append(name).append("_id)");
+    query.append(",PRIMARY KEY (__id__)");
     query.append(") ENGINE=").append(engine).append(";");
   }
 }

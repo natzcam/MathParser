@@ -11,6 +11,7 @@ import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
+import nac.mp.store.mysql.MySQLTable;
 import nac.mp.type.MPModel;
 
 /**
@@ -28,6 +29,18 @@ public class ModelDecl implements Expression {
 
   public List<AttributeDecl> getDeclarations() {
     return declarations;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public MySQLTable table() {
+    MySQLTable table = new MySQLTable(this);
+    for (AttributeDecl decl : declarations) {
+      table.getColumns().add(decl.column());
+    }
+    return table;
   }
 
   @Override

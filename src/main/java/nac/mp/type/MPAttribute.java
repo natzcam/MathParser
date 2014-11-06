@@ -51,32 +51,6 @@ public class MPAttribute extends MPObject implements Creator {
     return new MPBoolean(true);
   }
   
-  public MySQLColumn getColumn() {
-    MySQLColumn.ColumnType ct;
-    MPModel refParent = null;
-    switch (type) {
-      case "string":
-        ct = MySQLColumn.ColumnType.STRING;
-        break;
-      case "int":
-        ct = MySQLColumn.ColumnType.INTEGER;
-        break;
-      case "bool":
-        ct = MySQLColumn.ColumnType.BOOLEAN;
-        break;
-      case "float":
-        ct = MySQLColumn.ColumnType.FLOAT;
-        break;
-      default:
-        ct = MySQLColumn.ColumnType.REFERENCE;
-        log.debug("type {}", type);
-        refParent = (MPModel) parent.getVar(type);
-        break;
-    }
-    MySQLColumn column = new MySQLColumn(refParent, name, ct);
-    return column;
-  }
-  
   @Override
   public MPObject newInstance() throws EvalException {
     switch (type) {
