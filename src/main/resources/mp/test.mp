@@ -1,26 +1,12 @@
-model Client{
-  string firstName;
-  string lastName;
-  int age;
-  int sex;
-  Physician currentDoctor;
-  Hospital hospitalConfined;
-}
-
-model Physician{
-  string firstName;
-  string lastName;
-  //list clients;
-}
-
-model Hospital{
+model Parent{
   string name;
-  string address;
-  //list clients;
+  list children;
 }
 
-var x = new Hospital();
-print x;
-//relationship Client.currentDoctor <> Doctor.id
-//relationship Client.doctors <<>> Physician.clients;
-//relationship Hospital.clients <<> Client.hospital;
+model Child{
+  string name;
+  ref parent;
+}
+
+rel Parent.children <>> Child;
+rel Parent <>> Child.parent;
