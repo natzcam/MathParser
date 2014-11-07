@@ -18,59 +18,36 @@ import org.apache.logging.log4j.Logger;
 public class MySQLColumn implements Emittable {
 
   private static final Logger log = LogManager.getLogger(MySQLColumn.class);
-  private final String type;
   private final String identifier;
   private final Map<String, ModelDecl> modelRepo;
-  private MySQLColumn.ColumnType columnType = null;
+  private String columnType = null;
 
   public MySQLColumn(Map<String, ModelDecl> modelRepo, String type, String identifier) {
     this.modelRepo = modelRepo;
-    this.type = type;
     this.identifier = identifier;
 
     switch (type) {
       case "string":
-        columnType = MySQLColumn.ColumnType.STRING;
+        columnType = "VARCHAR(255)";
         break;
       case "int":
-        columnType = MySQLColumn.ColumnType.INTEGER;
+        columnType = "INT";
         break;
       case "bool":
-        columnType = MySQLColumn.ColumnType.BOOLEAN;
+        columnType = "BIT";
         break;
       case "float":
-        columnType = MySQLColumn.ColumnType.FLOAT;
+        columnType = "REAL";
         break;
       case "ref":
       case "list":
-        columnType = MySQLColumn.ColumnType.INTEGER;
+        columnType = "INT";
         break;
     }
   }
 
   @Override
   public void emit(StringBuilder query) {
-    query.append(identifier).append(" ").append(columnType.toString());
-    if (columnType == ColumnType.REFERENCE) {
-      query.append(", FOREIGN KEY (").append(identifier).append(")");
-      query.append(" REFERENCES ").append(modelRepo.get(type).getName()).append("(__id__)");
-    }
+    query.append(identifier).append(" ").append(columnType);
   }
-
-  public static enum ColumnType {
-
-    INTEGER("INT"), BOOLEAN("BIT"), FLOAT("REAL"), STRING("VARCHAR(255)"), REFERENCE("INT");
-    private final String template;
-
-    private ColumnType(String template) {
-      this.template = template;
-    }
-
-    @Override
-    public String toString() {
-      return template;
-    }
-
-  }
-
 }

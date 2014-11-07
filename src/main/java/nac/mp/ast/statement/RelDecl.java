@@ -15,7 +15,7 @@ import nac.mp.type.MPObject;
  *
  * @author user
  */
-public class RelDecl implements Expression{
+public class RelDecl implements Expression {
 
   private final Expression left;
   private final Expression right;
@@ -27,9 +27,21 @@ public class RelDecl implements Expression{
     this.relType = relType;
   }
 
+  public Expression getLeft() {
+    return left;
+  }
+
+  public Expression getRight() {
+    return right;
+  }
+
+  public TokenType getRelType() {
+    return relType;
+  }
+
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    
+
     return null;
   }
 }

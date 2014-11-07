@@ -79,6 +79,7 @@ public class MathParser {
   private Token current = null;
   private Token next = null;
   private final Map<String, ModelDecl> modelRepo = new HashMap<>();
+  private final List<RelDecl> relationshipRepo = new ArrayList<>();
   private final JdbcTemplate jdbcTemplate = DBUtil.getDefault();
 
   public void eval(String input) throws ParseException, EvalException {
@@ -100,6 +101,10 @@ public class MathParser {
       tb.emit(sb);
       log.debug(sb.toString());
       //jdbcTemplate.update(sb.toString());
+    }
+    for (RelDecl rd : relationshipRepo) {
+      log.info("rd: " + rd.getLeft().getClass());
+      log.info("rd: " + rd.getRight().getClass());
     }
     //eval
     fileBlock.eval(globalScope);
@@ -327,7 +332,7 @@ public class MathParser {
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
-      md.getDeclarations().add(attributeDecl());
+      md.addDeclaration(attributeDecl());
       next();
     }
     consume();
@@ -343,6 +348,7 @@ public class MathParser {
     Expression right = expression();
     RelDecl rd = new RelDecl(left, right, rt);
     consume(TokenType.SEMICOLON);
+    relationshipRepo.add(rd);
     return rd;
   }
 

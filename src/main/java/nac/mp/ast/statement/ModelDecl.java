@@ -5,8 +5,9 @@
  */
 package nac.mp.ast.statement;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
@@ -20,14 +21,18 @@ import nac.mp.type.MPModel;
 public class ModelDecl implements Expression {
 
   private final String name;
-  private final List<AttributeDecl> declarations = new ArrayList<>();
+  private final Map<String, AttributeDecl> attrMap = new HashMap<>();
 
   public ModelDecl(String name) {
     this.name = name;
   }
 
-  public List<AttributeDecl> getDeclarations() {
-    return declarations;
+  public void addDeclaration(AttributeDecl attr) {
+    attrMap.put(attr.getIdentifier(), attr);
+  }
+  
+  public Collection<AttributeDecl> getDeclarations(){
+    return attrMap.values();
   }
 
   public String getName() {
@@ -38,7 +43,7 @@ public class ModelDecl implements Expression {
   public MPObject eval(Scope scope) throws EvalException {
     MPModel model = new MPModel(scope, name);
     scope.declareVarLocal(name, model);
-    for (AttributeDecl attributeDecl : declarations) {
+    for (AttributeDecl attributeDecl : attrMap.values()) {
       attributeDecl.eval(model);
     }
     return null;

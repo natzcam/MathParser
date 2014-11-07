@@ -18,7 +18,7 @@ public enum TokenType {
 
   KW_VAR("var"),
   KW_MODEL("model"),
-  KW_REL("rel"),
+  KW_REL("relate"),
   KW_FUNC("func"),
   KW_OBJECT("object"),
   KW_PRINT("print"),
