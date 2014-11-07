@@ -580,9 +580,7 @@ public class MathParser {
           consume();
           consume(TokenType.IDENTIFIER);
           String name = current.text;
-          MemberExpr mex = new MemberExpr();
-          mex.setLeft(left);
-          mex.setId(name);
+          MemberExpr mex = new MemberExpr(left, name);
           left = mex;
           break;
         case LBRACKET:

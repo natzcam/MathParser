@@ -9,6 +9,8 @@ import nac.mp.EvalException;
 import nac.mp.TokenType;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.expression.MemberExpr;
+import nac.mp.ast.expression.VarExpr;
 import nac.mp.type.MPObject;
 
 /**
@@ -17,21 +19,26 @@ import nac.mp.type.MPObject;
  */
 public class RelDecl implements Expression {
 
-  private final Expression left;
-  private final Expression right;
+  private final MemberExpr left;
+  private final MemberExpr right;
   private final TokenType relType;
 
   public RelDecl(Expression left, Expression right, TokenType relType) {
-    this.left = left;
-    this.right = right;
+    this.left = left instanceof VarExpr ? convertToMemberExpr(left) : (MemberExpr) left;
+    this.right = right instanceof VarExpr ? convertToMemberExpr(left) : (MemberExpr) right;
     this.relType = relType;
   }
 
-  public Expression getLeft() {
+  private static MemberExpr convertToMemberExpr(Expression ex) {
+    VarExpr ve = (VarExpr) ex;
+    return new MemberExpr(ve, "id");
+  }
+
+  public MemberExpr getLeft() {
     return left;
   }
 
-  public Expression getRight() {
+  public MemberExpr getRight() {
     return right;
   }
 

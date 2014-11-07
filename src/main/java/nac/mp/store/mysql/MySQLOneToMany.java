@@ -19,14 +19,16 @@ public class MySQLOneToMany implements Emittable {
 
   private RelDecl relDecl;
   private Map<String, ModelDecl> modelRepo;
-  private AttributeDecl attrDecl;
+  private AttributeDecl left;
+  private AttributeDecl right;
 
   public MySQLOneToMany(Map<String, ModelDecl> modelRepo, RelDecl relDecl) {
     this.modelRepo = modelRepo;
     this.relDecl = relDecl;
     
+    relDecl.getLeft()
 //    MemberExp
-//    attrDecl = modelRepo.get()
+    left = modelRepo.get(relDecl.getLeft().)
   }
 
   @Override

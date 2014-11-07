@@ -22,13 +22,18 @@ public class MemberExpr extends LValue {
   private Expression left;
   private String id;
 
-  public void setId(String id) {
+  public MemberExpr(Expression left, String id) {
+    this.left = left;
     this.id = id;
   }
 
-  public void setLeft(Expression left) {
-    this.left = left;
-  }
+//  public void setId(String id) {
+//    this.id = id;
+//  }
+//
+//  public void setLeft(Expression left) {
+//    this.left = left;
+//  }
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
