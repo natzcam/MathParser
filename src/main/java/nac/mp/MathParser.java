@@ -9,6 +9,7 @@ import nac.mp.ast.Scope;
 import nac.mp.ast.BasicScope;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,7 @@ import nac.mp.ast.statement.TemplateDecl;
 import nac.mp.ast.statement.ModelDecl;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.AttributeDecl;
+import nac.mp.ast.statement.RelDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.Emittable;
@@ -85,6 +87,8 @@ public class MathParser {
     while (next.type != TokenType.EOF) {
       if (next.type == TokenType.KW_MODEL) {
         fileBlock.addStatement(modelDecl());
+      } else if (next.type == TokenType.KW_REL) {
+        fileBlock.addStatement(relDecl());
       } else {
         fileBlock.addStatement(statement());
       }
@@ -95,7 +99,7 @@ public class MathParser {
       StringBuilder sb = new StringBuilder();
       tb.emit(sb);
       log.debug(sb.toString());
-      jdbcTemplate.update(sb.toString());
+      //jdbcTemplate.update(sb.toString());
     }
     //eval
     fileBlock.eval(globalScope);
@@ -120,6 +124,17 @@ public class MathParser {
     } else {
       throw new ParseException("Unexpected token " + e + ". " + t + " expected");
     }
+  }
+
+  private void consume(TokenType... t) throws ParseException {
+    Token e = tokenizer.lookahead(1);
+    for (TokenType t1 : t) {
+      if (e.type == t1) {
+        current = tokenizer.consume();
+        return;
+      }
+    }
+    throw new ParseException("Unexpected token " + e + ". " + Arrays.toString(t) + " expected");
   }
 
   private Block block() throws ParseException {
@@ -230,11 +245,6 @@ public class MathParser {
     consume(TokenType.IDENTIFIER);
     String i = current.text;
     AttributeDecl typedDecl = new AttributeDecl(t, i);
-    next();
-    if (next.type == TokenType.ASSIGN) {
-      consume();
-      typedDecl.setDefaultValue(expression());
-    }
     consume(TokenType.SEMICOLON);
     return typedDecl;
   }
@@ -323,6 +333,17 @@ public class MathParser {
     consume();
     modelRepo.put(m, md);
     return md;
+  }
+
+  private Expression relDecl() throws ParseException {
+    consume(TokenType.KW_REL);
+    Expression left = expression();
+    consume(TokenType.ONE_TO_MANY, TokenType.MANY_TO_MANY, TokenType.ONE_TO_ONE);
+    TokenType rt = current.type;
+    Expression right = expression();
+    RelDecl rd = new RelDecl(left, right, rt);
+    consume(TokenType.SEMICOLON);
+    return rd;
   }
 
   private Expression expression() throws ParseException {

@@ -21,7 +21,7 @@ public class MySQLColumn implements Emittable {
   private final String type;
   private final String identifier;
   private final Map<String, ModelDecl> modelRepo;
-  private final MySQLColumn.ColumnType columnType;
+  private MySQLColumn.ColumnType columnType = null;
 
   public MySQLColumn(Map<String, ModelDecl> modelRepo, String type, String identifier) {
     this.modelRepo = modelRepo;
@@ -41,9 +41,9 @@ public class MySQLColumn implements Emittable {
       case "float":
         columnType = MySQLColumn.ColumnType.FLOAT;
         break;
-      default:
-        columnType = MySQLColumn.ColumnType.REFERENCE;
-        log.debug("type {}", type);
+      case "ref":
+      case "list":
+        columnType = MySQLColumn.ColumnType.INTEGER;
         break;
     }
   }

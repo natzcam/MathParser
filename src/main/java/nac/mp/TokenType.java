@@ -18,6 +18,7 @@ public enum TokenType {
 
   KW_VAR("var"),
   KW_MODEL("model"),
+  KW_REL("rel"),
   KW_FUNC("func"),
   KW_OBJECT("object"),
   KW_PRINT("print"),
@@ -39,6 +40,9 @@ public enum TokenType {
   COMMENTS("//.*"),
   COMMENTS2("/*[\\s\\S]*\\*/"),
   SLASH("/"),
+  ONE_TO_MANY("<>>"),
+  MANY_TO_MANY("<<>>"),
+  ONE_TO_ONE("<>"),
   LTE("<="),
   LT("<"),
   MTE(">="),
