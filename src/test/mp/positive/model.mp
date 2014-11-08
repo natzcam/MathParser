@@ -12,4 +12,4 @@ model Child{
 
 relate Parent.children <>> Child;
 relate Parent.children2 <>> Child.parent;
-relate Parent <>> Child.parent2;
+//relate Parent <>> Child.parent2;

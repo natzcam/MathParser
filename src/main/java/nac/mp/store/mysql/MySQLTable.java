@@ -26,7 +26,7 @@ public class MySQLTable implements Emittable {
   public MySQLTable(Map<String, ModelDecl> modelRepo, ModelDecl model) {
     this.modelRepo = modelRepo;
     this.model = model;
-    for (AttributeDecl decl : model.getDeclarations()) {
+    for (AttributeDecl decl : model.getAttrDecls()) {
       MySQLColumn column = new MySQLColumn(modelRepo, decl.getType(), decl.getIdentifier());
       columns.add(column);
     }
@@ -40,12 +40,16 @@ public class MySQLTable implements Emittable {
   public void emit(StringBuilder query) {
     String name = model.getName();
     query.append("CREATE TABLE ").append(name).append(" (");
-    query.append("__id__ INT NOT NULL AUTO_INCREMENT");
+    query.append("\n");
+    query.append("id INT NOT NULL AUTO_INCREMENT");
     for (MySQLColumn c : columns) {
       query.append(",");
+      query.append("\n");
       c.emit(query);
     }
-    query.append(",PRIMARY KEY (__id__)");
+    query.append(",");
+    query.append("\n");
+    query.append("PRIMARY KEY (id)");
     query.append(") ENGINE=").append(engine).append(";");
   }
 }

@@ -19,21 +19,21 @@ import nac.mp.type.MPFunc;
  */
 public class MemberExpr extends LValue {
 
-  private Expression left;
-  private String id;
+  private final Expression left;
+  private final String id;
 
   public MemberExpr(Expression left, String id) {
     this.left = left;
     this.id = id;
   }
 
-//  public void setId(String id) {
-//    this.id = id;
-//  }
-//
-//  public void setLeft(Expression left) {
-//    this.left = left;
-//  }
+  public Expression getLeft() {
+    return left;
+  }
+
+  public String getId() {
+    return id;
+  }
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {

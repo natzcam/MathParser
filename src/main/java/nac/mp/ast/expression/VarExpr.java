@@ -15,18 +15,22 @@ import nac.mp.type.MPObject;
  * @author natz
  */
 public class VarExpr extends LValue {
-  
+
   private final String id;
-  
+
   public VarExpr(String id) {
     this.id = id;
   }
-  
+
+  public String getId() {
+    return id;
+  }
+
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     return scope.getVar(id);
   }
-  
+
   @Override
   public void setValue(Scope scope, MPObject value) throws EvalException {
     scope.setVar(id, value);

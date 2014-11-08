@@ -55,10 +55,11 @@ import nac.mp.ast.statement.TemplateDecl;
 import nac.mp.ast.statement.ModelDecl;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.AttributeDecl;
-import nac.mp.ast.statement.RelDecl;
+import nac.mp.ast.statement.OneToManyDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.Emittable;
+import nac.mp.store.mysql.MySQLOneToMany;
 import nac.mp.store.mysql.MySQLTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,33 +80,48 @@ public class MathParser {
   private Token current = null;
   private Token next = null;
   private final Map<String, ModelDecl> modelRepo = new HashMap<>();
-  private final List<RelDecl> relationshipRepo = new ArrayList<>();
+  private final List<OneToManyDecl> oneToManyRepo = new ArrayList<>();
   private final JdbcTemplate jdbcTemplate = DBUtil.getDefault();
 
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);
-    next();
-    while (next.type != TokenType.EOF) {
-      if (next.type == TokenType.KW_MODEL) {
-        fileBlock.addStatement(modelDecl());
-      } else if (next.type == TokenType.KW_REL) {
-        fileBlock.addStatement(relDecl());
-      } else {
-        fileBlock.addStatement(statement());
-      }
+    try {
       next();
+      while (next.type != TokenType.EOF) {
+        switch (next.type) {
+          case KW_MODEL:
+            fileBlock.addStatement(modelDecl());
+            break;
+          case KW_REL:
+            fileBlock.addStatement(relDecl());
+            break;
+          default:
+            fileBlock.addStatement(statement());
+        }
+        next();
+      }
+      for (ModelDecl modelDecl : modelRepo.values()) {
+        Emittable tb = new MySQLTable(modelRepo, modelDecl);
+        StringBuilder sb = new StringBuilder();
+        tb.emit(sb);
+        log.debug(sb.toString());
+        if (sb.length() != 0) {
+          jdbcTemplate.update(sb.toString());
+        }
+      }
+      for (OneToManyDecl otm : oneToManyRepo) {
+        MySQLOneToMany motm = new MySQLOneToMany(modelRepo, otm);
+        StringBuilder sb = new StringBuilder();
+        motm.emit(sb);
+        log.debug(sb.toString());
+        if (sb.length() != 0) {
+          jdbcTemplate.update(sb.toString());
+        }
+      }
+    } catch (ClassCastException cce) {
+      throw new ParseException(cce);
     }
-    for (ModelDecl modelDecl : modelRepo.values()) {
-      Emittable tb = new MySQLTable(modelRepo, modelDecl);
-      StringBuilder sb = new StringBuilder();
-      tb.emit(sb);
-      log.debug(sb.toString());
-      //jdbcTemplate.update(sb.toString());
-    }
-    for (RelDecl rd : relationshipRepo) {
-      log.info("rd: " + rd.getLeft().getClass());
-      log.info("rd: " + rd.getRight().getClass());
-    }
+
     //eval
     fileBlock.eval(globalScope);
   }
@@ -120,6 +136,10 @@ public class MathParser {
 
   private void next() throws ParseException {
     next = tokenizer.lookahead(1);
+  }
+
+  private void next(int l) throws ParseException {
+    next = tokenizer.lookahead(l);
   }
 
   private void consume(TokenType t) throws ParseException {
@@ -332,7 +352,7 @@ public class MathParser {
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
-      md.addDeclaration(attributeDecl());
+      md.addAttrDecl(attributeDecl());
       next();
     }
     consume();
@@ -343,13 +363,19 @@ public class MathParser {
   private Expression relDecl() throws ParseException {
     consume(TokenType.KW_REL);
     Expression left = expression();
-    consume(TokenType.ONE_TO_MANY, TokenType.MANY_TO_MANY, TokenType.ONE_TO_ONE);
-    TokenType rt = current.type;
-    Expression right = expression();
-    RelDecl rd = new RelDecl(left, right, rt);
+    switch (next.type) {
+      case ONE_TO_MANY:
+        return oneToMany(left);
+    }
+    return null;
+  }
+
+  private Expression oneToMany(Expression left) throws ParseException {
+    consume(TokenType.ONE_TO_MANY);
+    OneToManyDecl otm = new OneToManyDecl(left, expression());
     consume(TokenType.SEMICOLON);
-    relationshipRepo.add(rd);
-    return rd;
+    oneToManyRepo.add(otm);
+    return otm;
   }
 
   private Expression expression() throws ParseException {

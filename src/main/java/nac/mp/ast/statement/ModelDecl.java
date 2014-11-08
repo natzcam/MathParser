@@ -27,12 +27,16 @@ public class ModelDecl implements Expression {
     this.name = name;
   }
 
-  public void addDeclaration(AttributeDecl attr) {
+  public void addAttrDecl(AttributeDecl attr) {
     attrMap.put(attr.getIdentifier(), attr);
   }
-  
-  public Collection<AttributeDecl> getDeclarations(){
+
+  public Collection<AttributeDecl> getAttrDecls() {
     return attrMap.values();
+  }
+
+  public AttributeDecl getAttrDecl(String name) {
+    return attrMap.get(name);
   }
 
   public String getName() {

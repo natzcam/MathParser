@@ -18,7 +18,6 @@ public class DBUtil {
       dataSource.setUrl("jdbc:mysql://localhost:3306/mp");
       dataSource.setUsername("root");
       dataSource.setPassword("root");
-
       jdbcTemplate = new JdbcTemplate(dataSource);
     }
     return jdbcTemplate;
