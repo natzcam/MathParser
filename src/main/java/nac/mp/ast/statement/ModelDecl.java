@@ -45,7 +45,7 @@ public class ModelDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPModel model = new MPModel(scope, name);
+    MPModel model = new MPModel(scope, this);
     scope.declareVarLocal(name, model);
     for (AttributeDecl attributeDecl : attrMap.values()) {
       attributeDecl.eval(model);

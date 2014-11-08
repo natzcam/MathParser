@@ -7,6 +7,7 @@ package nac.mp.type;
 
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
+import nac.mp.ast.statement.ModelDecl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,10 +19,12 @@ public class MPModel extends MPObject implements Creator {
 
   private static final Logger log = LogManager.getLogger(MPModel.class);
   private final String name;
+  private final ModelDecl modelDecl;
 
-  public MPModel(Scope parent, String name) {
+  public MPModel(Scope parent, ModelDecl modelDecl) {
     super(parent, null);
-    this.name = name;
+    this.modelDecl = modelDecl;
+    this.name = modelDecl.getName();
   }
 
   public String getName() {
@@ -46,7 +49,7 @@ public class MPModel extends MPObject implements Creator {
     }
     return new MPBoolean(true);
   }
-  
+
   @Override
   public MPObject newInstance() throws EvalException {
     MPObject obj = new MPModeledObject(parent, this);

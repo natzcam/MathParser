@@ -43,8 +43,8 @@ public class AttributeDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPAttribute attr = new MPAttribute(scope, type, identifier);
-    scope.declareVarLocal(identifier, attr);
+//    MPAttribute attr = new MPAttribute(scope, type, identifier);
+//    scope.declareVarLocal(identifier, attr);
     return null;
   }
 }

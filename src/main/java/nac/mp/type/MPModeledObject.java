@@ -13,8 +13,8 @@ import nac.mp.ast.Scope;
  */
 public class MPModeledObject extends MPObject {
 
-  public MPModeledObject(Scope parent, MPModel template) {
-    super(parent, template);
+  public MPModeledObject(Scope parent, MPModel creator) {
+    super(parent, creator);
   }
 
 }

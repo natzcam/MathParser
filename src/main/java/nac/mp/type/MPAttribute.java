@@ -7,6 +7,7 @@ package nac.mp.type;
 
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
+import nac.mp.ast.statement.AttributeDecl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,31 +16,33 @@ import org.apache.logging.log4j.Logger;
  * @author camomon
  */
 public class MPAttribute extends MPObject implements Creator {
-  
+
   private static final Logger log = LogManager.getLogger(MPAttribute.class);
+  private final AttributeDecl attrDecl;
   private final String type;
   private final String name;
-  
-  public MPAttribute(Scope parent, String type, String name) {
+
+  public MPAttribute(Scope parent, AttributeDecl attrDecl) {
     super(parent, null);
-    this.type = type;
-    this.name = name;
+    this.attrDecl = attrDecl;
+    this.type = attrDecl.getType();
+    this.name = attrDecl.getType();
   }
-  
+
   public String getName() {
     return name;
   }
-  
+
   @Override
   public MPObject.Hint getHint() {
     return MPObject.Hint.ATTRIBUTE;
   }
-  
+
   @Override
   public String toString() {
     return "attr:" + name;
   }
-  
+
   @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
@@ -48,7 +51,7 @@ public class MPAttribute extends MPObject implements Creator {
     }
     return new MPBoolean(true);
   }
-  
+
   @Override
   public MPObject newInstance() throws EvalException {
     switch (type) {
