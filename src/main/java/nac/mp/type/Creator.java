@@ -7,7 +7,6 @@
 package nac.mp.type;
 
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;
 
 /**
  *
