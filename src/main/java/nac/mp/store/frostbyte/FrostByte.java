@@ -9,6 +9,8 @@ import java.io.File;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mapdb.Atomic;
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
@@ -20,9 +22,9 @@ import org.mapdb.DBMaker;
  */
 public class FrostByte {
 
+  private static final Logger log = LogManager.getLogger(FrostByte.class);
   private static final File FILE_META = new File("data/meta.data");
   private static final File FILE_OBJECT = new File("data/object.data");
-  private static final String KEY_MODEL_DECL = "ModelDecl";
   private static final String APPEND_SEQUENCE = "_sequence";
 
   private final DB metaDB;
@@ -43,11 +45,11 @@ public class FrostByte {
     if (id == null) {
       Atomic.Long keyinc = objectDB.getAtomicLong(obj.getModel().getName() + APPEND_SEQUENCE);
       Long key = keyinc.incrementAndGet();
-      objectMap.put(key, obj);
-    } else {
-      objectMap.put(id.getInt(), obj);
+      id = new MPInteger(key);
+      obj.setVar("id", id);
     }
-
+    objectMap.put(id.getInt(), obj);
+    log.info("Save: {}", obj);
     objectDB.commit();
   }
 

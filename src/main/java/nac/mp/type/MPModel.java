@@ -51,7 +51,6 @@ public class MPModel extends MPObject implements Creator {
   @Override
   public MPObject newInstance() throws EvalException {
     MPObject obj = new MPModelObject(parent, this);
-//    obj.setVar("id", new MPVoid());
     for (MPObject v : vars.values()) {
       if (v instanceof MPAttribute) {
         MPAttribute attr = (MPAttribute) v;
