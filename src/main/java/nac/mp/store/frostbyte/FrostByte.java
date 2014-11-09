@@ -68,14 +68,16 @@ public class FrostByte {
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
+      mp.eval(Util.readFile("src/main/java/nac/mp/store/frostbyte/test.mp"));
     } catch (IOException | EvalException | ParseException ex) {
       log.error(ex);
     }
     FrostByte fb = new FrostByte();
-        
-    MPObject x = mp.getGlobal("x");
+
+    MPModelObject x = (MPModelObject) mp.getGlobal("x");
     log.info("x {}", x);
+
+    fb.save(x);
   }
 
 }
