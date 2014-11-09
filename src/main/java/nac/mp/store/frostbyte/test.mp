@@ -16,5 +16,6 @@ relate Parent <>> Child.parent2;
 
 
 var x = new Parent();
-print x;
 x.name = "FB";
+x.id = 1;
+var testid= 2;

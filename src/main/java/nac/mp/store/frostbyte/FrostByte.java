@@ -78,6 +78,9 @@ public class FrostByte {
     log.info("x {}", x);
 
     fb.save(x);
+    
+    MPObject getObj = fb.get(x.getModel(), (MPInteger)mp.getGlobal("testid"));
+    log.info("get by id {}", getObj);
   }
 
 }

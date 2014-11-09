@@ -5,7 +5,6 @@
  */
 package nac.mp.ast;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 import nac.mp.EvalException;
