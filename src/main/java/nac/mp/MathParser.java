@@ -56,19 +56,17 @@ import nac.mp.ast.statement.ModelDecl;
 import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.ast.statement.OneToManyDecl;
+import nac.mp.ast.statement.Save;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
-import nac.mp.store.Emittable;
-import nac.mp.store.mysql.MySQLOneToMany;
-import nac.mp.store.mysql.MySQLTable;
+import nac.mp.store.frostbyte.FrostByte;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * concat strings TODO: assoc Token to AST nodes to improve debug todo: Turn
- * TODO: MPObject to Scope
- * TODO: Declarations into MPOBjects
+ * TODO: MPObject to Scope TODO: Declarations into MPOBjects
+ *
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
@@ -80,9 +78,7 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
-  private final Map<String, ModelDecl> modelRepo = new HashMap<>();
-  private final List<OneToManyDecl> oneToManyRepo = new ArrayList<>();
-  private final JdbcTemplate jdbcTemplate = DBUtil.getDefault();
+  private final FrostByte fb = new FrostByte();
 
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);
@@ -100,24 +96,6 @@ public class MathParser {
             fileBlock.addStatement(statement());
         }
         next();
-      }
-      for (ModelDecl modelDecl : modelRepo.values()) {
-        Emittable tb = new MySQLTable(modelRepo, modelDecl);
-        StringBuilder sb = new StringBuilder();
-        tb.emit(sb);
-        log.debug(sb.toString());
-        if (sb.length() != 0) {
-          jdbcTemplate.update(sb.toString());
-        }
-      }
-      for (OneToManyDecl otm : oneToManyRepo) {
-        MySQLOneToMany motm = new MySQLOneToMany(otm);
-        StringBuilder sb = new StringBuilder();
-        motm.emit(sb);
-        log.debug(sb.toString());
-        if (sb.length() != 0) {
-          jdbcTemplate.update(sb.toString());
-        }
       }
     } catch (ClassCastException cce) {
       throw new ParseException(cce);
@@ -184,6 +162,11 @@ public class MathParser {
   private Expression statement() throws ParseException {
     next();
     switch (next.type) {
+      case KW_SAVE:
+        consume();
+        Expression sve = expression();
+        consume(TokenType.SEMICOLON);
+        return new Save(fb, sve);
       case KW_PRINT:
         consume();
         Expression ex1 = expression();
@@ -357,7 +340,6 @@ public class MathParser {
       next();
     }
     consume();
-    modelRepo.put(m, md);
     return md;
   }
 
@@ -373,9 +355,8 @@ public class MathParser {
 
   private Expression oneToMany(Expression left) throws ParseException {
     consume(TokenType.ONE_TO_MANY);
-    OneToManyDecl otm = new OneToManyDecl(modelRepo, left, expression());
+    OneToManyDecl otm = new OneToManyDecl(left, expression());
     consume(TokenType.SEMICOLON);
-    oneToManyRepo.add(otm);
     return otm;
   }
 

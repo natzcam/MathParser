@@ -1,0 +1,63 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package nac.mp.store.frostbyte;
+
+import java.io.File;
+import nac.mp.type.MPInteger;
+import nac.mp.type.MPModel;
+import nac.mp.type.MPModelObject;
+import org.mapdb.Atomic;
+import org.mapdb.BTreeMap;
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
+
+/**
+ *
+ * @author user
+ */
+public class FrostByte {
+
+  private static final File FILE_META = new File("data/meta.data");
+  private static final File FILE_OBJECT = new File("data/object.data");
+  private static final String KEY_MODEL_DECL = "ModelDecl";
+  private static final String APPEND_SEQUENCE = "_sequence";
+
+  private final DB metaDB;
+  private final DB objectDB;
+
+  public FrostByte() {
+    metaDB = DBMaker.newFileDB(FILE_META).make();
+    objectDB = DBMaker.newFileDB(FILE_OBJECT).make();
+  }
+
+  public static void main(String[] args) {
+    FrostByte fb = new FrostByte();
+  }
+
+  public void save(MPModelObject obj) {
+    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(obj.getModel().getName());
+    MPInteger id = (MPInteger) obj.getVar("id");
+    if (id == null) {
+      Atomic.Long keyinc = objectDB.getAtomicLong(obj.getModel().getName() + APPEND_SEQUENCE);
+      Long key = keyinc.incrementAndGet();
+      objectMap.put(key, obj);
+    } else {
+      objectMap.put(id.getInt(), obj);
+    }
+
+    objectDB.commit();
+  }
+
+  public MPModelObject get(MPModel model, MPInteger id) {
+    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName());
+    return objectMap.get(id.getInt());
+  }
+
+  public void close() {
+    metaDB.close();
+    objectDB.close();
+  }
+}

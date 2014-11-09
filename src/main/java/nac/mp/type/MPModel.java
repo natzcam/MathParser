@@ -18,17 +18,15 @@ import org.apache.logging.log4j.Logger;
 public class MPModel extends MPObject implements Creator {
 
   private static final Logger log = LogManager.getLogger(MPModel.class);
-  private final String name;
   private final ModelDecl modelDecl;
 
   public MPModel(Scope parent, ModelDecl modelDecl) {
     super(parent, null);
     this.modelDecl = modelDecl;
-    this.name = modelDecl.getName();
   }
 
   public String getName() {
-    return name;
+    return modelDecl.getName();
   }
 
   @Override
@@ -38,7 +36,7 @@ public class MPModel extends MPObject implements Creator {
 
   @Override
   public String toString() {
-    return "model:" + name;
+    return "model:" + modelDecl.getName();
   }
 
   @Override
@@ -52,8 +50,8 @@ public class MPModel extends MPObject implements Creator {
 
   @Override
   public MPObject newInstance() throws EvalException {
-    MPObject obj = new MPModeledObject(parent, this);
-
+    MPObject obj = new MPModelObject(parent, this);
+//    obj.setVar("id", new MPVoid());
     for (MPObject v : vars.values()) {
       if (v instanceof MPAttribute) {
         MPAttribute attr = (MPAttribute) v;

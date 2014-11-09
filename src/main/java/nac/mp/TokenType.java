@@ -17,6 +17,7 @@ import java.util.Map;
 public enum TokenType {
 
   KW_VAR("var"),
+  KW_SAVE("save"),
   KW_MODEL("model"),
   KW_REL("relate"),
   KW_FUNC("func"),

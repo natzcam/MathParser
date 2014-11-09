@@ -19,18 +19,14 @@ public class MPAttribute extends MPObject implements Creator {
 
   private static final Logger log = LogManager.getLogger(MPAttribute.class);
   private final AttributeDecl attrDecl;
-  private final String type;
-  private final String name;
 
   public MPAttribute(Scope parent, AttributeDecl attrDecl) {
     super(parent, null);
     this.attrDecl = attrDecl;
-    this.type = attrDecl.getType();
-    this.name = attrDecl.getType();
   }
 
   public String getName() {
-    return name;
+    return attrDecl.getIdentifier();
   }
 
   @Override
@@ -40,7 +36,7 @@ public class MPAttribute extends MPObject implements Creator {
 
   @Override
   public String toString() {
-    return "attr:" + name;
+    return "attr:" + attrDecl.getIdentifier();
   }
 
   @Override
@@ -54,7 +50,7 @@ public class MPAttribute extends MPObject implements Creator {
 
   @Override
   public MPObject newInstance() throws EvalException {
-    switch (type) {
+    switch (attrDecl.getType()) {
       case "string":
         return new MPVoid();
       case "int":

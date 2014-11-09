@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.ast.statement.ModelDecl;
+import nac.mp.ast.statement.OneToManyDecl;
 
 /**
  *
@@ -22,7 +23,26 @@ public class MySQLTable implements Emittable {
   private final String engine = "InnoDB";
   private final List<MySQLColumn> columns = new ArrayList<>();
   private final Map<String, ModelDecl> modelRepo;
-
+  
+//   for (ModelDecl modelDecl : modelRepo.values()) {
+//        Emittable tb = new MySQLTable(modelRepo, modelDecl);
+//        StringBuilder sb = new StringBuilder();
+//        tb.emit(sb);
+//        log.debug(sb.toString());
+//        if (sb.length() != 0) {
+//          jdbcTemplate.update(sb.toString());
+//        }
+//      }
+//      for (OneToManyDecl otm : oneToManyRepo) {
+//        MySQLOneToMany motm = new MySQLOneToMany(otm);
+//        StringBuilder sb = new StringBuilder();
+//        motm.emit(sb);
+//        log.debug(sb.toString());
+//        if (sb.length() != 0) {
+//          jdbcTemplate.update(sb.toString());
+//        }
+//      }
+  
   public MySQLTable(Map<String, ModelDecl> modelRepo, ModelDecl model) {
     this.modelRepo = modelRepo;
     this.model = model;

@@ -17,4 +17,4 @@ relate Parent <>> Child.parent2;
 var x = new Parent();
 print x;
 x.name = "Papa";
-print x;
+save x;
