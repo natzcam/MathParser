@@ -6,9 +6,15 @@
 package nac.mp.store.frostbyte;
 
 import java.io.File;
+import java.io.IOException;
+import nac.mp.EvalException;
+import nac.mp.MathParser;
+import nac.mp.ParseException;
+import nac.mp.Util;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObject;
+import nac.mp.type.MPObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapdb.Atomic;
@@ -35,10 +41,6 @@ public class FrostByte {
     objectDB = DBMaker.newFileDB(FILE_OBJECT).make();
   }
 
-  public static void main(String[] args) {
-    FrostByte fb = new FrostByte();
-  }
-
   public void save(MPModelObject obj) {
     BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(obj.getModel().getName());
     MPInteger id = (MPInteger) obj.getVar("id");
@@ -62,4 +64,18 @@ public class FrostByte {
     metaDB.close();
     objectDB.close();
   }
+
+  public static void main(String[] args) {
+    MathParser mp = new MathParser();
+    try {
+      mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
+    } catch (IOException | EvalException | ParseException ex) {
+      log.error(ex);
+    }
+    FrostByte fb = new FrostByte();
+        
+    MPObject x = mp.getGlobal("x");
+    log.info("x {}", x);
+  }
+
 }
