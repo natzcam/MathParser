@@ -8,7 +8,7 @@ package nac.mp.type;
  *
  * @author user
  */
-public class MPInteger extends MPObject {
+public class MPInteger extends MPObject implements Comparable<MPInteger> {
 
   private final long value;
 
@@ -130,7 +130,7 @@ public class MPInteger extends MPObject {
 
   @Override
   public int hashCode() {
-    int hash = 7;
+    int hash = 3;
     hash = 59 * hash + (int) (this.value ^ (this.value >>> 32));
     return hash;
   }
@@ -143,4 +143,10 @@ public class MPInteger extends MPObject {
     }
     return new MPBoolean(true);
   }
+
+  @Override
+  public int compareTo(MPInteger o) {
+    return Long.compare(this.value, o.value);
+  }
+
 }

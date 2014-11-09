@@ -131,7 +131,7 @@ public class MPObject implements Scope {
     throw new UnsupportedOperationException("No int representation: " + getHint());
   }
 
-  public float getFloat() {
+  public double getFloat() {
     throw new UnsupportedOperationException("No float representation: " + getHint());
   }
 

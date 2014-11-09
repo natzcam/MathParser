@@ -1,21 +1,26 @@
 model Parent{
-  string name;
-  list children;
-  list children2;
+  string attr1;
+  string attr2;
+  int attr3;
 }
 
-model Child{
-  string name;
-  ref parent;
-  ref parent2;
+var i = 1;
+var y;
+while(i < 100){
+  print i;
+  y = new Parent();
+  y.id = i;
+  y.attr1 = "attr1_" + i;
+  y.attr2 = "attr2_" + i;
+  
+  if(i < 30){
+    y.attr3 = i;
+  }else{
+    y.attr3 = 3;
+  }
+
+  print y;
+  save y;
+
+  i = i + 1;
 }
-
-relate Parent.children <>> Child;
-relate Parent.children2 <>> Child.parent;
-relate Parent <>> Child.parent2;
-
-
-var x = new Parent();
-x.name = "FB";
-x.id = 1;
-var testid= 2;

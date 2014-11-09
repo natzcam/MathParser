@@ -6,9 +6,10 @@ package nac.mp.type;
 
 /**
  * TODO use 1 instance of True and False
+ *
  * @author user
  */
-public class MPBoolean extends MPObject{
+public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
 
   private final boolean value;
 
@@ -54,6 +55,11 @@ public class MPBoolean extends MPObject{
         return new MPBoolean(value != right.getBoolean());
     }
     return new MPBoolean(true);
+  }
+
+  @Override
+  public int compareTo(MPBoolean o) {
+    return (this.value == o.value) ? 0 : (this.value ? 1 : -1);
   }
 
 }

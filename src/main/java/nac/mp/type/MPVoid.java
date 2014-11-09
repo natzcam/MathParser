@@ -9,7 +9,7 @@ package nac.mp.type;
  *
  * @author user
  */
-public class MPVoid extends MPObject{
+public class MPVoid extends MPObject implements Comparable<MPObject> {
 
   public MPVoid() {
     super(null, null);
@@ -48,6 +48,11 @@ public class MPVoid extends MPObject{
         return new MPBoolean(false);
     }
     return new MPBoolean(true);
+  }
+
+  @Override
+  public int compareTo(MPObject o) {
+    return -1;
   }
 
 }

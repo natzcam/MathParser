@@ -13,7 +13,7 @@ import nac.mp.EvalException;
  *
  * @author user
  */
-public class MPString extends MPObject{
+public class MPString extends MPObject implements Comparable<MPString> {
 
   private final String value;
 
@@ -75,8 +75,8 @@ public class MPString extends MPObject{
 
   @Override
   public int hashCode() {
-    int hash = 5;
-    hash = 83 * hash + Objects.hashCode(this.value);
+    int hash = 7;
+    hash = 97 * hash + Objects.hashCode(this.value);
     return hash;
   }
 
@@ -87,5 +87,15 @@ public class MPString extends MPObject{
         return new MPBoolean(!value.equals(right.getString()));
     }
     return new MPBoolean(false);
+  }
+
+  @Override
+  public MPObject plus(MPObject right) {
+    return new MPString(value + right.toString());
+  }
+
+  @Override
+  public int compareTo(MPString o) {
+    return value.compareTo(o.value);
   }
 }

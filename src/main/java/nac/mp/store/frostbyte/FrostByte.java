@@ -7,10 +7,14 @@ package nac.mp.store.frostbyte;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NavigableSet;
 import nac.mp.EvalException;
 import nac.mp.MathParser;
 import nac.mp.ParseException;
 import nac.mp.Util;
+import nac.mp.type.MPAttribute;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObject;
@@ -19,8 +23,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapdb.Atomic;
 import org.mapdb.BTreeMap;
+import org.mapdb.Bind;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+import org.mapdb.Fun;
 
 /**
  *
@@ -29,40 +35,76 @@ import org.mapdb.DBMaker;
 public class FrostByte {
 
   private static final Logger log = LogManager.getLogger(FrostByte.class);
-  private static final File FILE_META = new File("data/meta.data");
   private static final File FILE_OBJECT = new File("data/object.data");
+  private static final File FILE_INDEX = new File("data/index.data");
+  private static final String APPEND_MODEL = "_model";
   private static final String APPEND_SEQUENCE = "_sequence";
-
-  private final DB metaDB;
+  private static final String APPEND_INDEX = "_index";
   private final DB objectDB;
+  private final DB indexDB;
 
   public FrostByte() {
-    metaDB = DBMaker.newFileDB(FILE_META).make();
     objectDB = DBMaker.newFileDB(FILE_OBJECT).make();
+    indexDB = DBMaker.newFileDB(FILE_INDEX).make();
   }
 
   public void save(MPModelObject obj) {
-    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(obj.getModel().getName());
+
+    MPModel model = obj.getModel();
     MPInteger id = (MPInteger) obj.getVar("id");
+
+    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
+
     if (id == null) {
-      Atomic.Long keyinc = objectDB.getAtomicLong(obj.getModel().getName() + APPEND_SEQUENCE);
+      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
       Long key = keyinc.incrementAndGet();
       id = new MPInteger(key);
       obj.setVar("id", id);
     }
+
+    for (String k : model.getVarKeys()) {
+      if (k.equals("id")) {
+        continue;
+      }
+
+      final MPAttribute attr = (MPAttribute) model.getVar(k);
+      NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attr.getName() + APPEND_INDEX);
+
+      Bind.secondaryKey(objectMap, attrIndex, new Fun.Function2<MPObject, Long, MPModelObject>() {
+        @Override
+        public MPObject run(Long key, MPModelObject value) {
+          return value.getVar(attr.getName());
+        }
+      });
+    }
+
     objectMap.put(id.getInt(), obj);
     log.info("Save: {}", obj);
+
+    indexDB.commit();
     objectDB.commit();
   }
 
   public MPModelObject get(MPModel model, MPInteger id) {
-    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName());
+    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
     return objectMap.get(id.getInt());
   }
 
+  public List<MPModelObject> get(MPModel model, String attr, MPObject value) {
+    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
+    NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attr + APPEND_INDEX);
+
+    Iterable<Long> ids = Fun.filter(attrIndex, value);
+    List<MPModelObject> result = new ArrayList<>();
+    for (Long lid : ids) {
+      result.add(objectMap.get(lid));
+    }
+    return result;
+  }
+
   public void close() {
-    metaDB.close();
     objectDB.close();
+    indexDB.close();
   }
 
   public static void main(String[] args) {
@@ -72,15 +114,14 @@ public class FrostByte {
     } catch (IOException | EvalException | ParseException ex) {
       log.error(ex);
     }
-    FrostByte fb = new FrostByte();
+    FrostByte fb = mp.getFb();
 
-    MPModelObject x = (MPModelObject) mp.getGlobal("x");
-    log.info("x {}", x);
+    MPModel model = (MPModel) mp.getGlobal("Parent");
+    List<MPModelObject> res = fb.get(model, "attr3", new MPInteger(3));
 
-    fb.save(x);
-    
-    MPObject getObj = fb.get(x.getModel(), (MPInteger)mp.getGlobal("testid"));
-    log.info("get by id {}", getObj);
+    for (MPModelObject r : res) {
+      log.info("Found" + r);
+    }
   }
 
 }

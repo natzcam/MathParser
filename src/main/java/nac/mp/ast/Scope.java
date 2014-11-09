@@ -5,6 +5,7 @@
  */
 package nac.mp.ast;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 import nac.mp.EvalException;
@@ -14,7 +15,7 @@ import nac.mp.type.MPObject;
  *
  * @author user
  */
-public interface Scope {
+public interface Scope extends Serializable {
 
   public void setVarLocal(String name, MPObject value);
 

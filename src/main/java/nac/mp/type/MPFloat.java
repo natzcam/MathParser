@@ -8,17 +8,17 @@ package nac.mp.type;
  *
  * @author user
  */
-public class MPFloat extends MPObject{
+public class MPFloat extends MPObject implements Comparable<MPFloat> {
 
-  private final float value;
+  private final double value;
 
-  public MPFloat(float value) {
+  public MPFloat(double value) {
     super(null, null);
     this.value = value;
   }
 
   @Override
-  public float getFloat() {
+  public double getFloat() {
     return value;
   }
 
@@ -29,7 +29,7 @@ public class MPFloat extends MPObject{
 
   @Override
   public String toString() {
-    return Float.toString(value);
+    return Double.toString(value);
   }
 
   @Override
@@ -131,7 +131,7 @@ public class MPFloat extends MPObject{
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = 97 * hash + Float.floatToIntBits(this.value);
+    hash = 89 * hash + (int) (Double.doubleToLongBits(this.value) ^ (Double.doubleToLongBits(this.value) >>> 32));
     return hash;
   }
 
@@ -142,5 +142,10 @@ public class MPFloat extends MPObject{
         return new MPBoolean(value != right.getFloat());
     }
     return new MPBoolean(true);
+  }
+
+  @Override
+  public int compareTo(MPFloat o) {
+    return Double.compare(this.value, o.value);
   }
 }

@@ -71,7 +71,7 @@ import org.apache.logging.log4j.Logger;
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
-  
+
   private static final Logger log = LogManager.getLogger(MathParser.class);
   private final Tokenizer tokenizer = new Tokenizer();
   private final Scanner scanner = new Scanner(System.in);
@@ -80,7 +80,7 @@ public class MathParser {
   private Token current = null;
   private Token next = null;
   private final FrostByte fb = new FrostByte();
-  
+
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);
     try {
@@ -105,27 +105,31 @@ public class MathParser {
     //eval
     fileBlock.eval(globalScope);
   }
-  
+
   public MPObject getGlobal(String key) {
     return globalScope.getVar(key);
   }
-  
+
+  public FrostByte getFb() {
+    return fb;
+  }
+
   public Tokenizer getTokenizer() {
     return tokenizer;
   }
-  
+
   private void consume() throws ParseException {
     current = tokenizer.consume();
   }
-  
+
   private void next() throws ParseException {
     next = tokenizer.lookahead(1);
   }
-  
+
   private void next(int l) throws ParseException {
     next = tokenizer.lookahead(l);
   }
-  
+
   private void consume(TokenType t) throws ParseException {
     Token e = tokenizer.lookahead(1);
     if (e.type == t) {
@@ -134,7 +138,7 @@ public class MathParser {
       throw new ParseException("Unexpected token " + e + ". " + t + " expected");
     }
   }
-  
+
   private void consume(TokenType... t) throws ParseException {
     Token e = tokenizer.lookahead(1);
     for (TokenType t1 : t) {
@@ -145,9 +149,9 @@ public class MathParser {
     }
     throw new ParseException("Unexpected token " + e + ". " + Arrays.toString(t) + " expected");
   }
-  
+
   private Block block() throws ParseException {
-    
+
     Block bl = new Block();
     next();
     if (next.type == TokenType.LBRACE) {
@@ -163,7 +167,7 @@ public class MathParser {
     }
     return bl;
   }
-  
+
   private Expression statement() throws ParseException {
     next();
     switch (next.type) {
@@ -236,7 +240,7 @@ public class MathParser {
         return se;
     }
   }
-  
+
   private Expression declaration() throws ParseException {
     next();
     switch (next.type) {
@@ -252,7 +256,7 @@ public class MathParser {
         throw new ParseException("Unexpected token " + next + ". Declaration expected.");
     }
   }
-  
+
   private AttributeDecl attributeDecl() throws ParseException {
     consume(TokenType.IDENTIFIER);
     String t = current.text;
@@ -262,7 +266,7 @@ public class MathParser {
     consume(TokenType.SEMICOLON);
     return typedDecl;
   }
-  
+
   private Expression varDecl() throws ParseException {
     consume(TokenType.KW_VAR);
     consume(TokenType.IDENTIFIER);
@@ -275,7 +279,7 @@ public class MathParser {
     consume(TokenType.SEMICOLON);
     return varDecl;
   }
-  
+
   private Expression funcDecl() throws ParseException {
     consume(TokenType.KW_FUNC);
     consume(TokenType.IDENTIFIER);
@@ -297,7 +301,7 @@ public class MathParser {
     fd.setBody(b);
     return fd;
   }
-  
+
   private Expression objectDecl() throws ParseException {
     consume(TokenType.KW_OBJECT);
     consume(TokenType.IDENTIFIER);
@@ -311,7 +315,7 @@ public class MathParser {
     consume();
     return od;
   }
-  
+
   private Expression classDecl() throws ParseException {
     consume(TokenType.KW_TEMPLATE);
     consume(TokenType.IDENTIFIER);
@@ -332,7 +336,7 @@ public class MathParser {
     consume();
     return td;
   }
-  
+
   private Expression modelDecl() throws ParseException {
     consume(TokenType.KW_MODEL);
     consume(TokenType.IDENTIFIER);
@@ -347,7 +351,7 @@ public class MathParser {
     consume();
     return md;
   }
-  
+
   private Expression relDecl() throws ParseException {
     consume(TokenType.KW_REL);
     Expression left = expression();
@@ -357,14 +361,14 @@ public class MathParser {
     }
     return null;
   }
-  
+
   private Expression oneToMany(Expression left) throws ParseException {
     consume(TokenType.ONE_TO_MANY);
     OneToManyDecl otm = new OneToManyDecl(left, expression());
     consume(TokenType.SEMICOLON);
     return otm;
   }
-  
+
   private Expression expression() throws ParseException {
     Expression left = comparison();
     while (true) {
@@ -382,7 +386,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression comparison() throws ParseException {
     Expression left = additive();
     while (true) {
@@ -435,7 +439,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression additive() throws ParseException {
     Expression left = multiplicative();
     while (true) {
@@ -460,7 +464,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression multiplicative() throws ParseException {
     Expression left = creation();
     while (true) {
@@ -485,19 +489,19 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression creation() throws ParseException {
     next();
     if (next.type == TokenType.KW_NEW) {
       consume();
       Expression ex = access();
-      
+
       consume(TokenType.LPAREN);
       List<Expression> expList = new ArrayList<>();
       Map<String, Expression> optsMap = new HashMap<>();
-      
+
       argsProc(expList, optsMap);
-      
+
       if (optsMap.size() > 0) {
         NewOptsExpr nex1 = new NewOptsExpr(ex);
         nex1.getArgs().addAll(expList);
@@ -517,9 +521,9 @@ public class MathParser {
             consume();
             List<Expression> expList = new ArrayList<>();
             Map<String, Expression> optsMap = new HashMap<>();
-            
+
             argsProc(expList, optsMap);
-            
+
             if (optsMap.size() > 0) {
               if (left instanceof MemberExpr) {
                 MethodOptsExpr mex1 = new MethodOptsExpr((MemberExpr) left);
@@ -550,7 +554,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private void argsProc(List<Expression> expList, Map<String, Expression> optsMap) throws ParseException {
     next();
     if (next.type != TokenType.RPAREN && next.type != TokenType.SEMICOLON) {
@@ -564,7 +568,7 @@ public class MathParser {
         }
       }
     }
-    
+
     if (next.type == TokenType.SEMICOLON) {
       consume();
       while (true) {
@@ -580,10 +584,10 @@ public class MathParser {
         }
       }
     }
-    
+
     consume(TokenType.RPAREN);
   }
-  
+
   private Expression access() throws ParseException {
     Expression left = factor();
     while (true) {
@@ -609,7 +613,7 @@ public class MathParser {
       }
     }
   }
-  
+
   private Expression factor() throws ParseException {
     next();
     switch (next.type) {
@@ -693,7 +697,7 @@ public class MathParser {
         throw new ParseException("Unexpected token '" + next + "'. Expression expected.");
     }
   }
-  
+
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
@@ -702,5 +706,5 @@ public class MathParser {
       log.error(ex);
     }
   }
-  
+
 }
