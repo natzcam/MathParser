@@ -66,8 +66,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * concat strings TODO: assoc Token to AST nodes to improve debug
- *
+ * concat strings TODO: assoc Token to AST nodes to improve debug todo: Turn
+ * TODO: MPObject to Scope
+ * TODO: Declarations into MPOBjects
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
@@ -110,7 +111,7 @@ public class MathParser {
         }
       }
       for (OneToManyDecl otm : oneToManyRepo) {
-        MySQLOneToMany motm = new MySQLOneToMany(modelRepo, otm);
+        MySQLOneToMany motm = new MySQLOneToMany(otm);
         StringBuilder sb = new StringBuilder();
         motm.emit(sb);
         log.debug(sb.toString());
@@ -372,7 +373,7 @@ public class MathParser {
 
   private Expression oneToMany(Expression left) throws ParseException {
     consume(TokenType.ONE_TO_MANY);
-    OneToManyDecl otm = new OneToManyDecl(left, expression());
+    OneToManyDecl otm = new OneToManyDecl(modelRepo, left, expression());
     consume(TokenType.SEMICOLON);
     oneToManyRepo.add(otm);
     return otm;

@@ -39,7 +39,7 @@ public class MySQLTable implements Emittable {
   @Override
   public void emit(StringBuilder query) {
     String name = model.getName();
-    query.append("CREATE TABLE ").append(name).append(" (");
+    query.append("CREATE TABLE IF NOT EXISTS ").append(name).append(" (");
     query.append("\n");
     query.append("id INT NOT NULL AUTO_INCREMENT");
     for (MySQLColumn c : columns) {
