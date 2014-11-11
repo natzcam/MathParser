@@ -128,14 +128,6 @@ public class FrostByte {
       log.error("Parse/Eval failed", ex);
       return;
     }
-    FrostByte fb = mp.getFb();
-
-    MPModel model = (MPModel) mp.getGlobal("Parent");
-    List<MPModelObject> res = fb.getByIndexedAttr(model, "attr3", new MPInteger(3));
-
-    for (MPModelObject r : res) {
-      log.info("Found" + r);
-    }
   }
 
 }

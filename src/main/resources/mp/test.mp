@@ -8,5 +8,9 @@ model Parent{
 //relate Parent.children2 <>> Child.parent;
 //relate Parent <>> Child.parent2;
 
-var x = select Parent where {this.attr3 == 3;};
+if(1 == 2 || 2 == 2){
+  print "yes";
+}
+
+var x = select Parent where {this.attr3 == 3 && this.attr1 == "attr1_50";};
 print x;

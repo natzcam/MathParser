@@ -61,7 +61,7 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
   public MPObject lo(MPObject right) {
     switch (right.getHint()) {
       case BOOLEAN:
-        return new MPBoolean(value != right.getBoolean());
+        return new MPBoolean(value || right.getBoolean());
     }
     throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
   }
@@ -70,7 +70,7 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
   public MPObject la(MPObject right) {
     switch (right.getHint()) {
       case BOOLEAN:
-        return new MPBoolean(value != right.getBoolean());
+        return new MPBoolean(value && right.getBoolean());
     }
     throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
   }
