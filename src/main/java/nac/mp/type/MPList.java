@@ -20,7 +20,9 @@ public class MPList extends MPObject {
   public MPList(int capacity, List<MPObject> initialValues) {
     super(null, null);
     list = new ArrayList<>(capacity);
-    list.addAll(initialValues);
+    if (initialValues != null) {
+      list.addAll(initialValues);
+    }
   }
 
   public MPObject get(int index) {
@@ -29,6 +31,10 @@ public class MPList extends MPObject {
 
   public MPObject get(MPInteger index) {
     return list.get((int) index.getInt());
+  }
+
+  public void add(MPObject obj) {
+    list.add(obj);
   }
 
   @Override
@@ -58,6 +64,11 @@ public class MPList extends MPObject {
         return new MPBoolean(this != right);
     }
     return new MPBoolean(true);
+  }
+
+  @Override
+  public String toString() {
+    return list.toString();
   }
 
 }

@@ -9,16 +9,18 @@ import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
+import nac.mp.ast.statement.Print;
 import nac.mp.store.frostbyte.FrostByte;
-import nac.mp.type.MPModelObject;
 import nac.mp.type.QueryPredicate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
  * @author nathaniel
  */
 public class SelectExpression implements Expression {
-
+private static final Logger log = LogManager.getLogger(Print.class);
   private final String modelName;
   private final WhereBlock whereBlock;
   private final FrostByte fb;
@@ -31,6 +33,7 @@ public class SelectExpression implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    return new QueryPredicate(scope, whereBlock);
+    log.info("select started");
+    return fb.select(modelName, new QueryPredicate(scope, whereBlock));
   }
 }

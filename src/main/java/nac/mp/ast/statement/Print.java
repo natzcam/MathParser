@@ -8,6 +8,8 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -15,6 +17,7 @@ import nac.mp.ast.Scope;
  */
 public class Print implements Expression {
 
+  private static final Logger log = LogManager.getLogger(Print.class);
   private final Expression expression;
 
   public Print(Expression expression) {
@@ -23,7 +26,7 @@ public class Print implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    System.out.println(expression.eval(scope));
+    log.info(expression.eval(scope));
     return null;
   }
 }

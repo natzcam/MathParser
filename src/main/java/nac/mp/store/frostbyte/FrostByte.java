@@ -16,9 +16,11 @@ import nac.mp.ParseException;
 import nac.mp.Util;
 import nac.mp.type.MPAttribute;
 import nac.mp.type.MPInteger;
+import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObject;
 import nac.mp.type.MPObject;
+import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapdb.Atomic;
@@ -102,16 +104,17 @@ public class FrostByte {
     return result;
   }
 
-//  public List<MPModelObject> select(String modelName, WhereBlock whereBlock) {
-//    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(modelName + APPEND_MODEL);
-//
-//    Iterable<Long> ids = Fun.filter(attrIndex, value);
-//    List<MPModelObject> result = new ArrayList<>();
-//    for (Long lid : ids) {
-//      result.add(objectMap.get(lid));
-//    }
-//    return result;
-//  }
+  public MPList select(String modelName, QueryPredicate predicate) throws EvalException {
+    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(modelName + APPEND_MODEL);
+    MPList result = new MPList(10, null);
+    for (MPModelObject obj : objectMap.values()) {
+      if (predicate.call(obj)) {
+        result.add(obj);
+      }
+    }
+    return result;
+  }
+
   public void close() {
     objectDB.close();
     indexDB.close();

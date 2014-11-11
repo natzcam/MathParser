@@ -28,9 +28,9 @@ public class QueryPredicate extends MPObject {
     return body;
   }
 
-  public boolean call(Map<String, MPObject> vars) throws EvalException {
+  public boolean call(MPObject thisObj) throws EvalException {
     Scope newScope = new BasicScope(parent);
-    newScope.setLocalVars(vars);
+    newScope.setLocalVar("this", thisObj);
     MPBoolean b = (MPBoolean) body.eval(newScope);
     return b.getBoolean();
   }
