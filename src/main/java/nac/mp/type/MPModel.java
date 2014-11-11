@@ -54,7 +54,7 @@ public class MPModel extends MPObject implements Creator {
     for (MPObject v : vars.values()) {
       if (v instanceof MPAttribute) {
         MPAttribute attr = (MPAttribute) v;
-        obj.declareVarLocal(attr.getName(), attr.newInstance());
+        obj.declareLocalVar(attr.getName(), attr.newInstance());
       }
     }
     return obj;

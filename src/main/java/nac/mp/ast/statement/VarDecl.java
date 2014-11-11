@@ -35,9 +35,9 @@ public class VarDecl implements Expression {
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     if (defaultValue != null) {
-      scope.declareVarLocal(identifier, defaultValue.eval(scope));
+      scope.declareLocalVar(identifier, defaultValue.eval(scope));
     } else {
-      scope.declareVarLocal(identifier, new MPVoid());
+      scope.declareLocalVar(identifier, new MPVoid());
     }
     return null;
   }

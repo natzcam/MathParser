@@ -62,7 +62,7 @@ public class FrostByte {
       obj.setVar("id", id);
     }
 
-    for (String k : model.getVarKeys()) {
+    for (String k : model.getLocalVarKeys()) {
       if (k.equals("id")) {
         continue;
       }
@@ -85,12 +85,12 @@ public class FrostByte {
     objectDB.commit();
   }
 
-  public MPModelObject get(MPModel model, MPInteger id) {
+  public MPModelObject getById(MPModel model, MPInteger id) {
     BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
     return objectMap.get(id.getInt());
   }
 
-  public List<MPModelObject> get(MPModel model, String attr, MPObject value) {
+  public List<MPModelObject> getByIndexedAttr(MPModel model, String attr, MPObject value) {
     BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
     NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attr + APPEND_INDEX);
 
@@ -102,6 +102,16 @@ public class FrostByte {
     return result;
   }
 
+//  public List<MPModelObject> select(String modelName, WhereBlock whereBlock) {
+//    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(modelName + APPEND_MODEL);
+//
+//    Iterable<Long> ids = Fun.filter(attrIndex, value);
+//    List<MPModelObject> result = new ArrayList<>();
+//    for (Long lid : ids) {
+//      result.add(objectMap.get(lid));
+//    }
+//    return result;
+//  }
   public void close() {
     objectDB.close();
     indexDB.close();
@@ -118,7 +128,7 @@ public class FrostByte {
     FrostByte fb = mp.getFb();
 
     MPModel model = (MPModel) mp.getGlobal("Parent");
-    List<MPModelObject> res = fb.get(model, "attr3", new MPInteger(3));
+    List<MPModelObject> res = fb.getByIndexedAttr(model, "attr3", new MPInteger(3));
 
     for (MPModelObject r : res) {
       log.info("Found" + r);

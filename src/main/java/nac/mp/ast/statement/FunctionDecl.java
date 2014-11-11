@@ -40,7 +40,7 @@ public class FunctionDecl implements Expression {
   public MPObject eval(Scope scope) throws EvalException {
     MPFunc func = new MPFunc(scope, body);
     func.getFormalArgs().addAll(argNames);
-    scope.declareVarLocal(name, func);
+    scope.declareLocalVar(name, func);
     return null;
   }
 }

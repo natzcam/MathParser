@@ -16,7 +16,7 @@ import nac.mp.type.MPObject;
  *
  * @author user
  */
-public class BasicScope implements Scope{
+public class BasicScope implements Scope {
 
   private final Scope parent;
   private final Map<String, MPObject> vars = new HashMap<>();
@@ -31,17 +31,32 @@ public class BasicScope implements Scope{
   }
 
   @Override
-  public void setVarLocal(String name, MPObject value) {
+  public void setLocalVar(String name, MPObject value) {
     vars.put(name, value);
   }
 
   @Override
-  public void declareVarLocal(String name, MPObject defaultValue) throws EvalException {
+  public void setLocalVars(Map<String, MPObject> vars) {
+    vars.putAll(vars);
+  }
+
+  @Override
+  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
     if (vars.containsKey(name)) {
       throw new EvalException("Duplicate var: " + name);
     } else {
       vars.put(name, defaultValue);
     }
+  }
+
+  @Override
+  public Set<String> getLocalVarKeys() {
+    return vars.keySet();
+  }
+
+  @Override
+  public Collection<MPObject> getLocalVarValues() {
+    return vars.values();
   }
 
   @Override
@@ -72,15 +87,4 @@ public class BasicScope implements Scope{
     }
     return result;
   }
-
-  @Override
-  public Set<String> getVarKeys() {
-    return vars.keySet();
-  }
-  
-    @Override
-  public Collection<MPObject> getVarValues() {
-    return vars.values();
-  }
-
 }

@@ -8,7 +8,4 @@ model Parent{
 //relate Parent.children2 <>> Child.parent;
 //relate Parent <>> Child.parent2;
 
-
-  
-
 var x = select Parent where {attr2 == 2 && attr3 == 1;};

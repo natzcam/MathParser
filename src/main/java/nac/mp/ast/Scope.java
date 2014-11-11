@@ -7,6 +7,7 @@ package nac.mp.ast;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
@@ -17,19 +18,21 @@ import nac.mp.type.MPObject;
  */
 public interface Scope extends Serializable {
 
-  public void setVarLocal(String name, MPObject value);
+  public void setLocalVar(String name, MPObject value);
 
-  public void declareVarLocal(String name, MPObject defaultValue) throws EvalException;
+  public void setLocalVars(Map<String, MPObject> vars);
+
+  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException;
+
+  public Set<String> getLocalVarKeys();
+
+  public Collection<MPObject> getLocalVarValues();
 
   public Scope getParent();
 
   public boolean containsVar(String name);
 
   public MPObject getVar(String name);
-
-  public Set<String> getVarKeys();
-
-  public Collection<MPObject> getVarValues();
 
   public void setVar(String name, MPObject value) throws EvalException;
 

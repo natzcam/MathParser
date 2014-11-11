@@ -30,7 +30,7 @@ public class Input implements Expression {
     if (scope.containsVar(identifier)) {
       scope.setVar(identifier, new MPString(scanner.nextLine()));
     } else {
-      scope.declareVarLocal(identifier, new MPString(scanner.nextLine()));
+      scope.declareLocalVar(identifier, new MPString(scanner.nextLine()));
     }
     return null;
   }

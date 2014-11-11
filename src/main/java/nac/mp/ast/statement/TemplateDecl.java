@@ -39,7 +39,7 @@ public class TemplateDecl implements Expression {
       eclas = (MPTemplate) extnds.eval(scope);
     }
     MPTemplate template = new MPTemplate(scope, name, eclas, declarations);
-    scope.declareVarLocal(name, template);
+    scope.declareLocalVar(name, template);
 
     return null;
   }

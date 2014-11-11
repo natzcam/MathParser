@@ -54,12 +54,12 @@ public class MPObject implements Scope {
   }
 
   @Override
-  public void setVarLocal(String name, MPObject value) {
+  public void setLocalVar(String name, MPObject value) {
     vars.put(name, value);
   }
 
   @Override
-  public void declareVarLocal(String name, MPObject defaultValue) throws EvalException {
+  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
     if (vars.containsKey(name)) {
       throw new EvalException("Duplicate var: " + name);
     } else {
@@ -78,7 +78,7 @@ public class MPObject implements Scope {
 
   @Override
   public void setVar(String name, MPObject value) {
-    setVarLocal(name, value);
+    vars.put(name, value);
   }
 
   @Override
@@ -99,13 +99,18 @@ public class MPObject implements Scope {
   }
 
   @Override
-  public Set<String> getVarKeys() {
+  public Set<String> getLocalVarKeys() {
     return vars.keySet();
   }
 
   @Override
-  public Collection<MPObject> getVarValues() {
+  public Collection<MPObject> getLocalVarValues() {
     return vars.values();
+  }
+
+  @Override
+  public void setLocalVars(Map<String, MPObject> vars) {
+    this.vars.putAll(vars);
   }
 
   public static enum Hint {
@@ -174,11 +179,11 @@ public class MPObject implements Scope {
   public MPObject mt(MPObject right) {
     throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
   }
-  
+
   public MPObject la(MPObject right) {
     throw new UnsupportedOperationException(getHint() + " && " + right.getHint() + " not supported");
   }
-  
+
   public MPObject lo(MPObject right) {
     throw new UnsupportedOperationException(getHint() + " || " + right.getHint() + " not supported");
   }

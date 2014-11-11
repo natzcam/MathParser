@@ -50,9 +50,9 @@ public class MPFunc extends MPObject {
     }
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.declareVarLocal(formalArgs.get(i), argsValues.get(i));
+      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
     }
-    newScope.setVarLocal("this", thisRef);
+    newScope.setLocalVar("this", thisRef);
     return body.eval(newScope);
   }
 
@@ -63,16 +63,16 @@ public class MPFunc extends MPObject {
 
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.declareVarLocal(formalArgs.get(i), argsValues.get(i));
+      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
     }
 
     MPObject opts = new MPObject(parent, null);
     for (String key : optsValues.keySet()) {
-      opts.setVarLocal(key, optsValues.get(key));
+      opts.setLocalVar(key, optsValues.get(key));
     }
 
-    newScope.setVarLocal("opts", opts);
-    newScope.setVarLocal("this", thisRef);
+    newScope.setLocalVar("opts", opts);
+    newScope.setLocalVar("this", thisRef);
     return body.eval(newScope);
   }
 

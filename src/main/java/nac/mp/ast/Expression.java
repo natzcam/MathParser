@@ -16,6 +16,5 @@ import nac.mp.type.MPObject;
 public interface Expression extends Serializable{
 
   public MPObject eval(Scope scope) throws EvalException;
-  
-  
+ 
 }

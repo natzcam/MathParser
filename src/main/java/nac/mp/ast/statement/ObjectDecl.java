@@ -32,7 +32,7 @@ public class ObjectDecl implements Expression {
   public MPObject eval(Scope scope) throws EvalException {
 
     MPObject obj = new MPObject(scope, null);
-    scope.declareVarLocal(name, obj);
+    scope.declareLocalVar(name, obj);
     for (Expression d : declarations) {
       d.eval(obj);
     }
