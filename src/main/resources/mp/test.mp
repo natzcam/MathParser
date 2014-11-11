@@ -1,15 +1,14 @@
 model Parent{
-  string name;
-  list children;
-  list children2;
+  string attr1;
+  string attr2;
+  int attr3;
 }
 
-model Child{
-  string name;
-  ref parent;
-  ref parent2;
-}
+//relate Parent.children <>> Child;
+//relate Parent.children2 <>> Child.parent;
+//relate Parent <>> Child.parent2;
 
-relate Parent.children <>> Child;
-relate Parent.children2 <>> Child.parent;
-relate Parent <>> Child.parent2;
+
+
+
+var x = select Parent where {attr2 == 2 && attr3 == 1;};

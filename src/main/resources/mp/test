@@ -1,9 +1,4 @@
-model Parent{
-  string attr1;
-  string attr2;
-  int attr3;
-}
-
+/*
 var i = 1;
 var y;
 while(i < 100){
@@ -20,7 +15,10 @@ while(i < 100){
   }
 
   print y;
+
+//save
   save y;
 
   i = i + 1;
 }
+*/

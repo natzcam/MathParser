@@ -110,9 +110,10 @@ public class FrostByte {
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.eval(Util.readFile("src/main/java/nac/mp/store/frostbyte/test.mp"));
+      mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
     } catch (IOException | EvalException | ParseException ex) {
-      log.error(ex);
+      log.error("Parse/Eval failed", ex);
+      return;
     }
     FrostByte fb = mp.getFb();
 

@@ -20,6 +20,7 @@ import nac.mp.ast.expression.Parenthesis;
 import nac.mp.ast.expression.VarExpr;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
+import nac.mp.ast.WhereBlock;
 import nac.mp.ast.expression.BooleanLiteral;
 import nac.mp.ast.expression.MemberExpr;
 import nac.mp.ast.expression.EqualExpr;
@@ -47,6 +48,8 @@ import nac.mp.ast.expression.StringLiteral;
 import nac.mp.ast.statement.Assert;
 import nac.mp.ast.expression.Assignment;
 import nac.mp.ast.expression.ListExpr;
+import nac.mp.ast.expression.LogicalAnd;
+import nac.mp.ast.expression.LogicalOr;
 import nac.mp.ast.expression.MethodExpr;
 import nac.mp.ast.expression.MethodOptsExpr;
 import nac.mp.ast.expression.NewExpr;
@@ -57,6 +60,7 @@ import nac.mp.ast.statement.ObjectDecl;
 import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.ast.statement.OneToManyDecl;
 import nac.mp.ast.statement.Save;
+import nac.mp.ast.expression.SelectExpression;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.frostbyte.FrostByte;
@@ -65,9 +69,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * concat strings TODO: assoc Token to AST nodes to improve debug todo: Turn
- * TODO: MPObject to Scope TODO: Declarations into MPOBjects
- *
+ * TODO: assoc Token to AST nodes to improve debug
+ * TODO: MPObject to Scope 
+ * TODO: Declarations into MPOBjects 
+ * TODO: review use of expression(); 
+ * TODO: throw new UnsupportedOperationException in all operators
+ *  TODo: comments2 does not work
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
@@ -370,7 +377,7 @@ public class MathParser {
   }
 
   private Expression expression() throws ParseException {
-    Expression left = comparison();
+    Expression left = andor();
     while (true) {
       next();
       switch (next.type) {
@@ -378,8 +385,33 @@ public class MathParser {
           consume();
           Assignment as = new Assignment();
           as.setLeftValue(left);
-          as.setRightValue(comparison());
+          as.setRightValue(andor());
           left = as;
+          break;
+        default:
+          return left;
+      }
+    }
+  }
+
+  private Expression andor() throws ParseException {
+    Expression left = comparison();
+    while (true) {
+      next();
+      switch (next.type) {
+        case LOGICAL_AND:
+          consume();
+          LogicalAnd la = new LogicalAnd();
+          la.setLeft(left);
+          la.setRight(comparison());
+          left = la;
+          break;
+        case LOGICAL_OR:
+          consume();
+          LogicalOr lo = new LogicalOr();
+          lo.setLeft(left);
+          lo.setRight(comparison());
+          left = lo;
           break;
         default:
           return left;
@@ -693,9 +725,34 @@ public class MathParser {
           consume(TokenType.RPAREN);
         }
         return le;
+      case KW_SELECT:
+        consume(TokenType.KW_SELECT);
+        consume(TokenType.IDENTIFIER);
+        String modelName = current.text;
+        consume(TokenType.KW_WHERE);
+        WhereBlock wb = whereBlock();
+        return new SelectExpression(fb, modelName, wb);
       default:
         throw new ParseException("Unexpected token '" + next + "'. Expression expected.");
     }
+  }
+
+  private WhereBlock whereBlock() throws ParseException {
+
+    WhereBlock bl = new WhereBlock();
+    next();
+    if (next.type == TokenType.LBRACE) {
+      consume();
+      next();
+      while (next.type != TokenType.RBRACE) {
+        bl.addStatement(statement());
+        next();
+      }
+      consume();
+    } else {
+      bl.addStatement(statement());
+    }
+    return bl;
   }
 
   public static void main(String[] args) {
@@ -703,7 +760,7 @@ public class MathParser {
     try {
       mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
     } catch (IOException | EvalException | ParseException ex) {
-      log.error(ex);
+      log.error("Parse/Eval failed", ex); 
     }
   }
 
