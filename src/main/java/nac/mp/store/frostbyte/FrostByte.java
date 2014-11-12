@@ -45,9 +45,14 @@ public class FrostByte {
   private final DB objectDB;
   private final DB indexDB;
 
-  public FrostByte() {
-    objectDB = DBMaker.newFileDB(FILE_OBJECT).make();
-    indexDB = DBMaker.newFileDB(FILE_INDEX).make();
+  public FrostByte(boolean temp) {
+    if (temp) {
+      objectDB = DBMaker.newTempFileDB().make();
+      indexDB = DBMaker.newTempFileDB().make();
+    } else {
+      objectDB = DBMaker.newFileDB(FILE_OBJECT).make();
+      indexDB = DBMaker.newFileDB(FILE_INDEX).make();
+    }
   }
 
   public void save(MPModelObject obj) {

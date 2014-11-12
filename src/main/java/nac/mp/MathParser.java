@@ -87,7 +87,7 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
-  private final FrostByte fb = new FrostByte();
+  private final FrostByte fb = new FrostByte(true);
 
   public void eval(String input) throws ParseException, EvalException {
     tokenizer.process(input);

@@ -8,22 +8,25 @@ model Child{
 }
 
 var p = new Parent();
-p.id = 2;
-p.name = "P2";
+p.id = 1;
+p.name = "P1";
 var c = new Child();
 c.name = "natz";
-
 p.children.add(c);
+save p;
 
+p = new Parent();
+p.id = 2;
+p.name = "P2";
 //save to object db
 save p;
 
 //select
 var resultList = select Parent where {
-  this.name == "P2";
+  this.name == (select Parent where {this.name == "P1";})[0].name;
 };
 var result = resultList[0];
-print result.children[0].name;
+print result;
 
 var rc = select Child where {this.name == "natz";};
 print rc;
