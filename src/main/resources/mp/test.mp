@@ -19,7 +19,9 @@ p.children.add(c);
 save p;
 
 //select
-var resultList = select Parent where {this.name == "P2";};
+var resultList = select Parent where {
+  this.name == "P2";
+};
 var result = resultList[0];
 print result.children[0].name;
 
