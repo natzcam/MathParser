@@ -187,4 +187,8 @@ public class MPObject implements Scope {
   public MPObject lo(MPObject right) {
     throw new UnsupportedOperationException(getHint() + " || " + right.getHint() + " not supported");
   }
+
+  public MPObject pa(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " += " + right.getHint() + " not supported");
+  }
 }

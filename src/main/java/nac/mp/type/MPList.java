@@ -7,13 +7,15 @@ package nac.mp.type;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import nac.mp.EvalException;
 
 /**
  *
  * @author camomon
  */
-public class MPList extends MPObject {
+public class MPList extends MPObject implements Comparable {
 
   private final List<MPObject> list;
 
@@ -23,6 +25,7 @@ public class MPList extends MPObject {
     if (initialValues != null) {
       list.addAll(initialValues);
     }
+    vars.put("add", ADD);
   }
 
   public MPObject get(int index) {
@@ -36,6 +39,21 @@ public class MPList extends MPObject {
   public void add(MPObject obj) {
     list.add(obj);
   }
+
+  private static final MPFunc ADD = new MPFunc(null, null) {
+
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
+      MPList thisList = (MPList) thisRef;
+      thisList.add(argsValues.get(0));
+      return null;
+    }
+
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
+      return call(thisRef, argsValues);
+    }
+  };
 
   @Override
   public Hint getHint() {
@@ -69,6 +87,11 @@ public class MPList extends MPObject {
   @Override
   public String toString() {
     return list.toString();
+  }
+
+  @Override
+  public int compareTo(Object o) {
+    return 0;
   }
 
 }

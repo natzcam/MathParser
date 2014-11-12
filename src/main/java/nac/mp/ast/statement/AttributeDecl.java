@@ -21,11 +21,13 @@ public class AttributeDecl implements Expression {
 
   private static final Logger log = LogManager.getLogger(AttributeDecl.class);
   private final String type;
+  private final String metaType;
   private final String identifier;
   private Expression defaultValue = null;
 
-  public AttributeDecl(String type, String identifier) {
+  public AttributeDecl(String type, String metaType, String identifier) {
     this.type = type;
+    this.metaType = metaType;
     this.identifier = identifier;
   }
 

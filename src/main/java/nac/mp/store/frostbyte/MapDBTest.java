@@ -16,7 +16,7 @@ import org.mapdb.Fun;
  *
  * @author user
  */
-public class Test {
+public class MapDBTest {
 
   public static void main(String[] args) {
 

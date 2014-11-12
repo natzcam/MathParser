@@ -60,7 +60,7 @@ public class MPAttribute extends MPObject implements Creator {
       case "float":
         return new MPVoid();
       case "list":
-        return new MPVoid();
+        return new MPList(10, null);
       default:
         return new MPVoid();
     }

@@ -75,6 +75,7 @@ import org.apache.logging.log4j.Logger;
  * TODO: review use of expression(); 
  * TODO: throw new UnsupportedOperationException in all operators
  *  TODo: comments2 does not work
+ * Todo: separate expression per type
  * @author natz TODO: remove while(true) TODO: use switch;
  */
 public class MathParser {
@@ -267,9 +268,16 @@ public class MathParser {
   private AttributeDecl attributeDecl() throws ParseException {
     consume(TokenType.IDENTIFIER);
     String t = current.text;
+    String mt = null;
+    next();
+    if(next.type == TokenType.COLON){
+      consume(TokenType.COLON);
+      consume(TokenType.IDENTIFIER);
+      mt = current.text;
+    }
     consume(TokenType.IDENTIFIER);
     String i = current.text;
-    AttributeDecl typedDecl = new AttributeDecl(t, i);
+    AttributeDecl typedDecl = new AttributeDecl(t, mt, i);
     consume(TokenType.SEMICOLON);
     return typedDecl;
   }

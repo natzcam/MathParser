@@ -52,10 +52,8 @@ public class MPModel extends MPObject implements Creator {
   public MPObject newInstance() throws EvalException {
     MPObject obj = new MPModelObject(parent, this);
     for (MPObject v : vars.values()) {
-      if (v instanceof MPAttribute) {
-        MPAttribute attr = (MPAttribute) v;
-        obj.declareLocalVar(attr.getName(), attr.newInstance());
-      }
+      MPAttribute attr = (MPAttribute) v;
+      obj.declareLocalVar(attr.getName(), attr.newInstance());
     }
     return obj;
   }

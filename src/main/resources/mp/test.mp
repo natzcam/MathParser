@@ -4,12 +4,21 @@ model Parent{
 }
 
 model Child{
-  string name
+  string name;
 }
 
-if(1 == 2 || 2 == 2){
-  print "yes";
-}
+var p = new Parent();
+p.id = 2;
+p.name = "P2";
+var c = new Child();
+c.name = "natz";
 
-var x = select Parent where {this.attr3 == 3 && this.attr1 == "attr1_50";};
-print x;
+p.children.add(c);
+
+//save to object db
+save p;
+
+//select
+var resultList = select Parent where {this.name == "P2";};
+var result = resultList[0];
+print result.children[0].name;
