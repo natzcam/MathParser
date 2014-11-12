@@ -22,3 +22,6 @@ save p;
 var resultList = select Parent where {this.name == "P2";};
 var result = resultList[0];
 print result.children[0].name;
+
+var rc = select Child where {this.name == "natz";};
+print rc;
