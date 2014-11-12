@@ -1,16 +1,11 @@
 model Parent{
-  string attr1;
-  string attr2;
-  int attr3;
+  string name;
+  list:Child children;
 }
 
 model Child{
-  string 
+  string name
 }
-
-//relate Parent.children <>> Child;
-//relate Parent.children2 <>> Child.parent;
-//relate Parent <>> Child.parent2;
 
 if(1 == 2 || 2 == 2){
   print "yes";
