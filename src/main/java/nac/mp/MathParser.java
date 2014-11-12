@@ -72,10 +72,10 @@ import org.apache.logging.log4j.Logger;
  * TODO: assoc Token to AST nodes to improve debug
  * TODO: Declarations into MPOBjects 
  * TODO: review use of expression(); 
- * TODO: throw new UnsupportedOperationException in all operators
- *  TODo: comments2 does not work
- * Todo: separate expression per type
- * @author natz TODO: remove while(true) TODO: use switch;
+ * TODO: comments2 does not work
+ * TODO: separate expression per type
+ * TODO: remove while(true)
+ * 
  */
 public class MathParser {
 
