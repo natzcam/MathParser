@@ -70,7 +70,6 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * TODO: assoc Token to AST nodes to improve debug
- * TODO: MPObject to Scope 
  * TODO: Declarations into MPOBjects 
  * TODO: review use of expression(); 
  * TODO: throw new UnsupportedOperationException in all operators
