@@ -101,7 +101,6 @@ public class FrostByte {
         continue;
       }
 
-      //create index for property
       final MPAttribute attr = (MPAttribute) model.getVar(k);
       if (attr.getType() == Type.REF) {
         MPModelObject mo = (MPModelObject) obj.getVar(attr.getName());

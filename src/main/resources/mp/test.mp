@@ -22,11 +22,13 @@ p2.name = "P2";
 save p2;
 
 //select
-var resultList = select Parent where {
-  this.name == (select Parent where {this.name == "P1";})[0].name;
+var rp = select Parent where {
+  this.name == "P1";
 };
-var result = resultList[0];
-print result;
+print rp[0].children[0];
 
 var rc = select Child where {this.name == "natz";};
-print rc;
+print rc[0];
+
+print rp[0].children[0] == rc[0];
+
