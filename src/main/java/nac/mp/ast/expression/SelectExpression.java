@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
  * @author nathaniel
  */
 public class SelectExpression implements Expression {
-private static final Logger log = LogManager.getLogger(Print.class);
+private static final Logger log = LogManager.getLogger(SelectExpression.class);
   private final String modelName;
   private final WhereBlock whereBlock;
   private final FrostByte fb;
@@ -33,7 +33,6 @@ private static final Logger log = LogManager.getLogger(Print.class);
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    log.info("select started");
     return fb.select(modelName, new QueryPredicate(scope, whereBlock));
   }
 }

@@ -26,6 +26,10 @@ public class MPModelObject extends MPObject {
     return model;
   }
 
+  public MPInteger getId() {
+    return (MPInteger) vars.get("id");
+  }
+
   public FrostByte getFb() {
     return fb;
   }
@@ -34,4 +38,12 @@ public class MPModelObject extends MPObject {
     this.fb = fb;
   }
 
+  public MPReference getReference() {
+    return new MPReference(parent, creator, this);
+  }
+  
+   @Override
+  public String toString() {
+    return hashCode() + ":" + vars.toString();
+  }
 }

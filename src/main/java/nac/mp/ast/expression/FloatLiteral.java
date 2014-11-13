@@ -18,7 +18,7 @@ public class FloatLiteral implements Expression {
 
   private final MPFloat value;
 
-  public FloatLiteral(float value) {
+  public FloatLiteral(double value) {
     this.value = new MPFloat(value);
   }
 

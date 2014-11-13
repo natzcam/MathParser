@@ -69,13 +69,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * TODO: assoc Token to AST nodes to improve debug
- * TODO: Declarations into MPOBjects 
- * TODO: review use of expression(); 
- * TODO: comments2 does not work
- * TODO: separate expression per type
- * TODO: remove while(true)
- * 
+ * TODO: assoc Token to AST nodes to improve debug TODO: Declarations into
+ * MPOBjects TODO: review use of expression(); TODO: comments2 does not work
+ * TODO: separate expression per type TODO: remove while(true)
+ *
  */
 public class MathParser {
 
@@ -269,7 +266,7 @@ public class MathParser {
     String t = current.text;
     String mt = null;
     next();
-    if(next.type == TokenType.COLON){
+    if (next.type == TokenType.COLON) {
       consume(TokenType.COLON);
       consume(TokenType.IDENTIFIER);
       mt = current.text;
@@ -363,6 +360,7 @@ public class MathParser {
       next();
     }
     consume();
+    fb.register(md);
     return md;
   }
 
@@ -658,10 +656,10 @@ public class MathParser {
     switch (next.type) {
       case FLOAT:
         consume();
-        return new FloatLiteral(Float.parseFloat(current.text));
+        return new FloatLiteral(Double.parseDouble(current.text));
       case INT:
         consume();
-        return new IntLiteral(Integer.parseInt(current.text));
+        return new IntLiteral(Long.parseLong(current.text));
       case STRING:
         consume();
         String text = current.text.replaceAll("^\"|\"$", "");
@@ -767,7 +765,7 @@ public class MathParser {
     try {
       mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
     } catch (IOException | EvalException | ParseException ex) {
-      log.error("Parse/Eval failed", ex); 
+      log.error("Parse/Eval failed", ex);
     }
   }
 

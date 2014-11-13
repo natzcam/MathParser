@@ -7,19 +7,19 @@ model Child{
   string name;
 }
 
-var p = new Parent();
-p.id = 1;
-p.name = "P1";
+var p1 = new Parent();
+p1.id = 1;
+p1.name = "P1";
 var c = new Child();
 c.name = "natz";
-p.children.add(c);
-save p;
+p1.children.add(c);
+save p1;
 
-p = new Parent();
-p.id = 2;
-p.name = "P2";
+var p2 = new Parent();
+p2.id = 2;
+p2.name = "P2";
 //save to object db
-save p;
+save p2;
 
 //select
 var resultList = select Parent where {

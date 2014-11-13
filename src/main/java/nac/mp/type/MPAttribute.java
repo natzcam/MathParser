@@ -8,6 +8,7 @@ package nac.mp.type;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.ast.statement.AttributeDecl;
+import nac.mp.ast.statement.AttributeDecl.Type;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,20 +48,26 @@ public class MPAttribute extends MPObject implements Creator {
     }
     return new MPBoolean(true);
   }
+  
+  public Type getType(){
+    return attrDecl.getType();
+  }
 
   @Override
   public MPObject newInstance() throws EvalException {
     switch (attrDecl.getType()) {
-      case "string":
+      case STRING:
         return new MPVoid();
-      case "int":
+      case INT:
         return new MPVoid();
-      case "bool":
+      case BOOL:
         return new MPVoid();
-      case "float":
+      case FLOAT:
         return new MPVoid();
-      case "list":
+      case LIST:
         return new MPList(10, null);
+      case REF:
+        return new MPVoid();
       default:
         return new MPVoid();
     }

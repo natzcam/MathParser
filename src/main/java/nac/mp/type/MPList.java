@@ -40,6 +40,10 @@ public class MPList extends MPObject implements Comparable {
     list.add(obj);
   }
 
+  public List<MPObject> getList() {
+    return list;
+  }
+
   private static final MPFunc ADD = new MPFunc(null, null) {
 
     @Override

@@ -17,7 +17,7 @@ public class IntLiteral implements Expression {
 
   private final MPInteger value;
 
-  public IntLiteral(int value) {
+  public IntLiteral(long value) {
     this.value = new MPInteger(value);
   }
 

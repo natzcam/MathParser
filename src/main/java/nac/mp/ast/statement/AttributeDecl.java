@@ -20,13 +20,23 @@ import org.apache.logging.log4j.Logger;
 public class AttributeDecl implements Expression {
 
   private static final Logger log = LogManager.getLogger(AttributeDecl.class);
-  private final String type;
+  private final Type type;
   private final String metaType;
   private final String identifier;
   private Expression defaultValue = null;
 
+  public static enum Type {
+
+    STRING,
+    FLOAT,
+    BOOL,
+    INT,
+    REF,
+    LIST,
+  }
+
   public AttributeDecl(String type, String metaType, String identifier) {
-    this.type = type;
+    this.type = Type.valueOf(type.toUpperCase());
     this.metaType = metaType;
     this.identifier = identifier;
   }
@@ -39,7 +49,15 @@ public class AttributeDecl implements Expression {
     return identifier;
   }
 
-  public String getType() {
+  public String getMetaType() {
+    return metaType;
+  }
+
+  public boolean isNative() {
+    return type != Type.LIST && type != Type.REF;
+  }
+
+  public Type getType() {
     return type;
   }
 

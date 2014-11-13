@@ -7,13 +7,14 @@ package nac.mp.store.frostbyte;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NavigableSet;
 import nac.mp.EvalException;
 import nac.mp.MathParser;
 import nac.mp.ParseException;
 import nac.mp.Util;
+import nac.mp.ast.statement.AttributeDecl;
+import nac.mp.ast.statement.AttributeDecl.Type;
+import nac.mp.ast.statement.ModelDecl;
 import nac.mp.type.MPAttribute;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPList;
@@ -55,10 +56,36 @@ public class FrostByte {
     }
   }
 
+  public void register(ModelDecl model) throws ParseException {
+    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
+
+    for (AttributeDecl ad : model.getAttrDecls()) {
+      final String attrName = ad.getIdentifier();
+      if (attrName.equals("id")) {
+        throw new ParseException("Can't define custom id property.");
+      }
+
+      //create index for property
+      if (ad.isNative()) {
+        NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attrName + APPEND_INDEX);
+
+        Bind.secondaryKey(objectMap, attrIndex, new Fun.Function2<MPObject, Long, MPModelObject>() {
+          @Override
+          public MPObject run(Long key, MPModelObject value) {
+            return value.getVar(attrName);
+          }
+        });
+      } else {
+
+      }
+
+    }
+  }
+
   public void save(MPModelObject obj) {
 
     MPModel model = obj.getModel();
-    MPInteger id = (MPInteger) obj.getVar("id");
+    MPInteger id = obj.getId();
 
     BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
 
@@ -74,41 +101,43 @@ public class FrostByte {
         continue;
       }
 
+      //create index for property
       final MPAttribute attr = (MPAttribute) model.getVar(k);
-      NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attr.getName() + APPEND_INDEX);
-
-      Bind.secondaryKey(objectMap, attrIndex, new Fun.Function2<MPObject, Long, MPModelObject>() {
-        @Override
-        public MPObject run(Long key, MPModelObject value) {
-          return value.getVar(attr.getName());
+      if (attr.getType() == Type.REF) {
+        MPModelObject mo = (MPModelObject) obj.getVar(attr.getName());
+        save(mo);
+      } else if (attr.getType() == Type.LIST) {
+        MPList ml = (MPList) obj.getVar(attr.getName());
+        for(MPObject mo: ml.getList()){
+          MPModelObject mdo = (MPModelObject) mo;
+          save(mdo);
         }
-      });
+      }
     }
 
     objectMap.put(id.getInt(), obj);
-    log.info("Save: {}", obj);
+    log.info("Save {}: {}", model.getName(), obj);
 
     indexDB.commit();
     objectDB.commit();
   }
 
-  public MPModelObject getById(MPModel model, MPInteger id) {
-    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
-    return objectMap.get(id.getInt());
-  }
-
-  public List<MPModelObject> getByIndexedAttr(MPModel model, String attr, MPObject value) {
-    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
-    NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attr + APPEND_INDEX);
-
-    Iterable<Long> ids = Fun.filter(attrIndex, value);
-    List<MPModelObject> result = new ArrayList<>();
-    for (Long lid : ids) {
-      result.add(objectMap.get(lid));
-    }
-    return result;
-  }
-
+//  public MPModelObject getById(MPModel model, MPInteger id) {
+//    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
+//    return objectMap.get(id.getInt());
+//  }
+//
+//  public List<MPModelObject> getByIndexedAttr(MPModel model, String attr, MPObject value) {
+//    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
+//    NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attr + APPEND_INDEX);
+//
+//    Iterable<Long> ids = Fun.filter(attrIndex, value);
+//    List<MPModelObject> result = new ArrayList<>();
+//    for (Long lid : ids) {
+//      result.add(objectMap.get(lid));
+//    }
+//    return result;
+//  }
   public MPList select(String modelName, QueryPredicate predicate) throws EvalException {
     BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(modelName + APPEND_MODEL);
     MPList result = new MPList(10, null);

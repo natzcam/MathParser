@@ -16,7 +16,7 @@ import nac.mp.type.MPObject;
  *
  * @author user
  */
-public interface Scope{
+public interface Scope extends Serializable{
 
   public void setLocalVar(String name, MPObject value);
 
