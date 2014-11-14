@@ -6,12 +6,11 @@
 package nac.mp.store.frostbyte;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NavigableSet;
 import nac.mp.EvalException;
-import nac.mp.MathParser;
 import nac.mp.ParseException;
-import nac.mp.Util;
 import nac.mp.ast.statement.AttributeDecl;
 import nac.mp.ast.statement.AttributeDecl.Type;
 import nac.mp.ast.statement.ModelDecl;
@@ -21,6 +20,7 @@ import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObject;
 import nac.mp.type.MPObject;
+import nac.mp.type.MPReference;
 import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +47,7 @@ public class FrostByte {
   private final DB indexDB;
 
   public FrostByte(boolean temp) {
-    if (temp) {
+    if (false) {
       objectDB = DBMaker.newTempFileDB().make();
       indexDB = DBMaker.newTempFileDB().make();
     } else {
@@ -104,13 +104,16 @@ public class FrostByte {
       final MPAttribute attr = (MPAttribute) model.getVar(k);
       if (attr.getType() == Type.REF) {
         MPModelObject mo = (MPModelObject) obj.getVar(attr.getName());
-        save(mo);
+        obj.setVar(attr.getName(), mo.getReference());
       } else if (attr.getType() == Type.LIST) {
         MPList ml = (MPList) obj.getVar(attr.getName());
-        for(MPObject mo: ml.getList()){
+        List<MPReference> refList = new ArrayList<>();
+        for (MPObject mo : ml.getList()) {
           MPModelObject mdo = (MPModelObject) mo;
-          save(mdo);
+          refList.add(mdo.getReference());
         }
+        ml.getList().clear();
+        ml.getList().addAll(refList);
       }
     }
 
@@ -151,16 +154,6 @@ public class FrostByte {
   public void close() {
     objectDB.close();
     indexDB.close();
-  }
-
-  public static void main(String[] args) {
-    MathParser mp = new MathParser();
-    try {
-      mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
-    } catch (IOException | EvalException | ParseException ex) {
-      log.error("Parse/Eval failed", ex);
-      return;
-    }
   }
 
 }
