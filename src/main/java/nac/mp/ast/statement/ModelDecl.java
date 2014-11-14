@@ -12,6 +12,7 @@ import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
+import nac.mp.store.frostbyte.FrostByte;
 import nac.mp.type.MPModel;
 
 /**
@@ -42,7 +43,7 @@ public class ModelDecl implements Expression {
   public String getName() {
     return name;
   }
-
+  
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     MPModel model = new MPModel(scope, this);

@@ -10,13 +10,14 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.type.Creator;
 import nac.mp.type.MPObject;
 
 /**
  *
  * @author user
  */
-public interface Scope extends Serializable{
+public interface Scope extends Serializable {
 
   public void setLocalVar(String name, MPObject value);
 

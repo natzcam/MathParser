@@ -9,7 +9,6 @@ import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
-import nac.mp.ast.statement.Print;
 import nac.mp.store.frostbyte.FrostByte;
 import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;

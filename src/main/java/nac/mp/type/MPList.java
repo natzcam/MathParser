@@ -6,9 +6,11 @@
 package nac.mp.type;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import nac.mp.EvalException;
 
 /**
@@ -25,7 +27,15 @@ public class MPList extends MPObject implements Comparable {
     if (initialValues != null) {
       list.addAll(initialValues);
     }
-    vars.put("add", ADD);
+  }
+
+  @Override
+  public MPObject getVar(String name) {
+    switch (name) {
+      case "add":
+        return ADD;
+    }
+    return null;
   }
 
   public MPObject get(int index) {
@@ -96,6 +106,41 @@ public class MPList extends MPObject implements Comparable {
   @Override
   public int compareTo(Object o) {
     return 0;
+  }
+
+  @Override
+  public void setLocalVar(String name, MPObject value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setLocalVars(Map<String, MPObject> vars) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Set<String> getLocalVarKeys() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Collection<MPObject> getLocalVarValues() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean containsVar(String name) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setVar(String name, MPObject value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
 }

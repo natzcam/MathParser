@@ -5,29 +5,19 @@
  */
 package nac.mp.type;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 
 /**
  *
  * @author user
  */
-public class MPObject implements Scope {
+public abstract class MPObject implements Scope {
 
   protected final Creator creator;
   protected Scope parent;
-  protected final Map<String, MPObject> vars = new HashMap<>();
 
   public MPObject(Scope parent, Creator creator) {
     this.creator = creator;
-    this.parent = parent;
-  }
-
-  public void setParent(Scope parent) {
     this.parent = parent;
   }
 
@@ -35,83 +25,12 @@ public class MPObject implements Scope {
     return creator;
   }
 
-  public MPObject.Hint getHint() {
-    return MPObject.Hint.OBJECT;
-  }
-
-  @Override
-  public String toString() {
-    return vars.toString();
-  }
-
   @Override
   public Scope getParent() {
     return parent;
   }
 
-  public void detachParent() {
-    parent = null;
-  }
-
-  @Override
-  public void setLocalVar(String name, MPObject value) {
-    vars.put(name, value);
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
-    if (vars.containsKey(name)) {
-      throw new EvalException("Duplicate var: " + name);
-    } else {
-      vars.put(name, defaultValue);
-    }
-  }
-
-  @Override
-  public boolean containsVar(String name) {
-    if (vars.containsKey(name)) {
-      return true;
-    } else {
-      return parent != null && parent.containsVar(name);
-    }
-  }
-
-  @Override
-  public void setVar(String name, MPObject value) {
-    vars.put(name, value);
-  }
-
-  @Override
-  public MPObject getVar(String name) {
-    MPObject result = vars.get(name);
-    if (result == null && parent != null) {
-      result = parent.getVar(name);
-    }
-    return result;
-  }
-
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case OBJECT:
-        return new MPBoolean(this != right);
-    }
-    return new MPBoolean(true);
-  }
-
-  @Override
-  public Set<String> getLocalVarKeys() {
-    return vars.keySet();
-  }
-
-  @Override
-  public Collection<MPObject> getLocalVarValues() {
-    return vars.values();
-  }
-
-  @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    this.vars.putAll(vars);
-  }
+  public abstract MPObject.Hint getHint();
 
   public static enum Hint {
 
@@ -122,10 +41,12 @@ public class MPObject implements Scope {
     VOID,
     FUNCTION,
     OBJECT,
+    MODEL_OBJECT,
     TEMPLATE,
     LIST,
     MODEL,
-    ATTRIBUTE;
+    ATTRIBUTE,
+    REFERENCE;
   }
 
   public boolean getBoolean() {
@@ -145,7 +66,11 @@ public class MPObject implements Scope {
   }
 
   public boolean isVoid() {
-    return false;
+    throw new UnsupportedOperationException("No isVoid representation: " + getHint());
+  }
+
+  public MPObject notEqual(MPObject right) {
+    throw new UnsupportedOperationException(getHint() + " != " + right.getHint() + " not supported");
   }
 
   public MPObject plus(MPObject right) {

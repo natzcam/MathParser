@@ -4,9 +4,11 @@
  */
 package nac.mp.type;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import nac.mp.EvalException;
 
 /**
@@ -46,8 +48,6 @@ public class MPString extends MPObject implements Comparable<MPString> {
   public MPString(String value) {
     super(null, null);
     this.value = value;
-    vars.put("toInt", TO_INT);
-    vars.put("toFloat", TO_FLOAT);
   }
 
   @Override
@@ -97,5 +97,51 @@ public class MPString extends MPObject implements Comparable<MPString> {
   @Override
   public int compareTo(MPString o) {
     return value.compareTo(o.value);
+  }
+
+  @Override
+  public void setLocalVar(String name, MPObject value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setLocalVars(Map<String, MPObject> vars) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Set<String> getLocalVarKeys() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Collection<MPObject> getLocalVarValues() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean containsVar(String name) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public MPObject getVar(String name) {
+    switch (name) {
+      case "toInt":
+        return TO_INT;
+      case "toFloat":
+        return TO_FLOAT;
+    }
+    return null;
+  }
+
+  @Override
+  public void setVar(String name, MPObject value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }
