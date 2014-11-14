@@ -38,6 +38,26 @@ public class MPList extends MPObject implements Comparable {
     return null;
   }
 
+  @Override
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case LIST:
+        MPList ml = (MPList) right;
+        return new MPBoolean(list.equals(ml.getList()));
+    }
+    return new MPBoolean(false);
+  }
+
+  @Override
+  public MPObject notEqual(MPObject right) {
+    switch (right.getHint()) {
+      case LIST:
+        MPList ml = (MPList) right;
+        return new MPBoolean(!list.equals(ml.getList()));
+    }
+    return new MPBoolean(false);
+  }
+
   public MPObject get(int index) {
     return list.get(index);
   }
