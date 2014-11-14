@@ -34,22 +34,13 @@ public class MPAttribute extends MPObject implements Creator {
   }
 
   @Override
-  public MPObject.Hint getHint() {
-    return MPObject.Hint.ATTRIBUTE;
+  public Hint getHint() {
+    return Hint.ATTRIBUTE;
   }
 
   @Override
   public String toString() {
     return "attr:" + attrDecl.getIdentifier();
-  }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case ATTRIBUTE:
-        return new MPBoolean(this != right);
-    }
-    return new MPBoolean(true);
   }
 
   public Type getType() {

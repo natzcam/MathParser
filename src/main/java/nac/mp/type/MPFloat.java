@@ -126,18 +126,12 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
   }
 
   @Override
-  public boolean equals(Object right) {
-    if (right instanceof MPFloat) {
-      return value == ((MPFloat) right).getFloat();
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case FLOAT:
+        return new MPBoolean(value == right.getFloat());
     }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 89 * hash + (int) (Double.doubleToLongBits(this.value) ^ (Double.doubleToLongBits(this.value) >>> 32));
-    return hash;
+    return new MPBoolean(false);
   }
 
   @Override
@@ -146,7 +140,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case FLOAT:
         return new MPBoolean(value != right.getFloat());
     }
-    return new MPBoolean(true);
+    return new MPBoolean(false);
   }
 
   @Override

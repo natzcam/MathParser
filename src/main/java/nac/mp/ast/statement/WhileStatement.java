@@ -32,7 +32,7 @@ public class WhileStatement implements Expression {
     scope = new BasicScope(scope);
     MPObject condValue = cond.eval(scope);
     if (condValue.getHint() != Hint.BOOLEAN) {
-      throw new EvalException("Condition not boolean");
+      throw new EvalException("Condition not boolean", scope);
     }
     while (condValue.getBoolean()) {
       MPObject result = body.eval(scope);

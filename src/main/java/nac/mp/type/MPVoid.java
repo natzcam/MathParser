@@ -36,23 +36,21 @@ public class MPVoid extends MPObject implements Comparable<MPObject> {
   }
 
   @Override
-  public boolean equals(Object right) {
-    return right instanceof MPVoid;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    return hash;
-  }
-
-  @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case VOID:
         return new MPBoolean(false);
     }
     return new MPBoolean(true);
+  }
+
+  @Override
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case VOID:
+        return new MPBoolean(true);
+    }
+    return new MPBoolean(false);
   }
 
   @Override

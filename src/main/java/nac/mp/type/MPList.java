@@ -71,31 +71,7 @@ public class MPList extends MPObject implements Comparable {
 
   @Override
   public Hint getHint() {
-    return MPObject.Hint.LIST;
-  }
-
-  @Override
-  public boolean equals(Object right) {
-    if (right instanceof MPList) {
-      return list.equals(((MPList) right).list);
-    }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 31 * hash + Objects.hashCode(this.list);
-    return hash;
-  }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case LIST:
-        return new MPBoolean(this != right);
-    }
-    return new MPBoolean(true);
+    return Hint.LIST;
   }
 
   @Override

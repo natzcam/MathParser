@@ -48,6 +48,26 @@ public class MPModelObject extends MPObject {
   }
 
   @Override
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case MODEL_OBJECT:
+        MPModelObject mo = (MPModelObject) right;
+        return new MPBoolean(id.getInt() == mo.getId().getInt() && model == mo.getModel());
+    }
+    return new MPBoolean(false);
+  }
+
+  @Override
+  public MPObject notEqual(MPObject right) {
+    switch (right.getHint()) {
+      case MODEL_OBJECT:
+        MPModelObject mo = (MPModelObject) right;
+        return new MPBoolean(id.getInt() != mo.getId().getInt() || model != mo.getModel());
+    }
+    return new MPBoolean(false);
+  }
+
+  @Override
   public Hint getHint() {
     return Hint.MODEL_OBJECT;
   }
@@ -88,7 +108,7 @@ public class MPModelObject extends MPObject {
   }
 
   @Override
-  public void setVar(String name, MPObject value){
+  public void setVar(String name, MPObject value) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

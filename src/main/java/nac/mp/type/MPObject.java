@@ -30,7 +30,7 @@ public abstract class MPObject implements Scope {
     return parent;
   }
 
-  public abstract MPObject.Hint getHint();
+  public abstract Hint getHint();
 
   public static enum Hint {
 
@@ -40,7 +40,7 @@ public abstract class MPObject implements Scope {
     STRING,
     VOID,
     FUNCTION,
-    OBJECT,
+    BASE_OBJECT,
     MODEL_OBJECT,
     TEMPLATE,
     LIST,
@@ -70,7 +70,11 @@ public abstract class MPObject implements Scope {
   }
 
   public MPObject notEqual(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " != " + right.getHint() + " not supported");
+    return new MPBoolean(this != right);
+  }
+
+  public MPObject isEqual(MPObject right) {
+    return new MPBoolean(this == right);
   }
 
   public MPObject plus(MPObject right) {

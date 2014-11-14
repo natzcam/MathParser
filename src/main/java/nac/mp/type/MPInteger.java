@@ -126,18 +126,12 @@ public class MPInteger extends MPObject implements Comparable<MPInteger> {
   }
 
   @Override
-  public boolean equals(Object right) {
-    if (right instanceof MPInteger) {
-      return value == ((MPInteger) right).getInt();
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case INTEGER:
+        return new MPBoolean(value == right.getInt());
     }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 3;
-    hash = 59 * hash + (int) (this.value ^ (this.value >>> 32));
-    return hash;
+    return new MPBoolean(false);
   }
 
   @Override
@@ -146,7 +140,7 @@ public class MPInteger extends MPObject implements Comparable<MPInteger> {
       case INTEGER:
         return new MPBoolean(value != right.getInt());
     }
-    return new MPBoolean(true);
+    return new MPBoolean(false);
   }
 
   @Override

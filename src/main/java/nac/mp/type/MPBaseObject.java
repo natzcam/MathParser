@@ -26,7 +26,12 @@ public class MPBaseObject extends MPObject implements Scope {
 
   @Override
   public String toString() {
-    return vars.toString();
+    return "baseobject:" + vars.toString();
+  }
+
+  @Override
+  public Hint getHint() {
+    return Hint.BASE_OBJECT;
   }
 
   @Override
@@ -37,7 +42,7 @@ public class MPBaseObject extends MPObject implements Scope {
   @Override
   public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
     if (vars.containsKey(name)) {
-      throw new EvalException("Duplicate var: " + name);
+      throw new EvalException("Duplicate var: " + name, this);
     } else {
       vars.put(name, defaultValue);
     }
@@ -81,17 +86,4 @@ public class MPBaseObject extends MPObject implements Scope {
     this.vars.putAll(vars);
   }
 
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case OBJECT:
-        return new MPBoolean(this != right);
-    }
-    return new MPBoolean(true);
-  }
-
-  @Override
-  public MPObject.Hint getHint() {
-    return MPObject.Hint.OBJECT;
-  }
 }

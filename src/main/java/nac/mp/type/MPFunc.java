@@ -37,8 +37,8 @@ public class MPFunc extends MPObject {
   }
 
   @Override
-  public MPObject.Hint getHint() {
-    return MPObject.Hint.FUNCTION;
+  public Hint getHint() {
+    return Hint.FUNCTION;
   }
 
   @Override
@@ -48,7 +48,7 @@ public class MPFunc extends MPObject {
 
   public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this);
+      throw new EvalException("Argument mismatch: " + this, this);
     }
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
@@ -60,7 +60,7 @@ public class MPFunc extends MPObject {
 
   public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this);
+      throw new EvalException("Argument mismatch: " + this, this);
     }
 
     Scope newScope = new BasicScope(parent);
@@ -77,16 +77,7 @@ public class MPFunc extends MPObject {
     newScope.setLocalVar("this", thisRef);
     return body.eval(newScope);
   }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case FUNCTION:
-        return new MPBoolean(this != right);
-    }
-    return new MPBoolean(true);
-  }
-
+  
   @Override
   public void setLocalVar(String name, MPObject value) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

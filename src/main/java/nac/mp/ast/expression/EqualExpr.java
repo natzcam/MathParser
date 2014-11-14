@@ -20,7 +20,7 @@ public class EqualExpr extends BinaryExpression {
   public MPObject eval(Scope scope) throws EvalException {
     MPObject leftValue = left.eval(scope);
     MPObject rightValue = right.eval(scope);
-    return new MPBoolean(leftValue.equals(rightValue));
+    return leftValue.isEqual(rightValue);
   }
 
 }

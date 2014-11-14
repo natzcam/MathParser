@@ -35,22 +35,13 @@ public class MPTemplate extends MPObject implements Creator {
   }
 
   @Override
-  public MPObject.Hint getHint() {
-    return MPObject.Hint.TEMPLATE;
+  public Hint getHint() {
+    return Hint.TEMPLATE;
   }
 
   @Override
   public String toString() {
     return "template:" + name;
-  }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case TEMPLATE:
-        return new MPBoolean(this != right);
-    }
-    return new MPBoolean(true);
   }
 
   @Override

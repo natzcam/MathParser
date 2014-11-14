@@ -4,14 +4,19 @@
  */
 package nac.mp;
 
+import nac.mp.ast.Scope;
+
 /**
  *
  * @author user
  */
-public class EvalException extends Exception{
+public class EvalException extends Exception {
 
-  public EvalException(String message) {
-    super(message);
+  private final Scope scope;
+
+  public EvalException(String message, Scope scope) {
+    super(message + scope);
+    this.scope = scope;
   }
-  
+
 }

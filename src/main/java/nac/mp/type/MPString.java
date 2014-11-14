@@ -66,18 +66,12 @@ public class MPString extends MPObject implements Comparable<MPString> {
   }
 
   @Override
-  public boolean equals(Object right) {
-    if (right instanceof MPString) {
-      return value.equals(((MPString) right).getString());
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case STRING:
+        return new MPBoolean(value.equals(right.getString()));
     }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 97 * hash + Objects.hashCode(this.value);
-    return hash;
+    return new MPBoolean(false);
   }
 
   @Override

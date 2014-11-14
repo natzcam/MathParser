@@ -39,18 +39,12 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
   }
 
   @Override
-  public boolean equals(Object right) {
-    if (right instanceof MPBoolean) {
-      return value == ((MPBoolean) right).getBoolean();
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case BOOLEAN:
+        return new MPBoolean(value == right.getBoolean());
     }
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 7;
-    hash = 11 * hash + (this.value ? 1 : 0);
-    return hash;
+    return new MPBoolean(false);
   }
 
   @Override
@@ -59,7 +53,7 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
       case BOOLEAN:
         return new MPBoolean(value != right.getBoolean());
     }
-    return new MPBoolean(true);
+    return new MPBoolean(false);
   }
 
   @Override

@@ -12,7 +12,6 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.ast.statement.ModelDecl;
-import nac.mp.store.frostbyte.FrostByte;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,24 +35,15 @@ public class MPModel extends MPObject implements Creator {
   }
 
   @Override
-  public MPObject.Hint getHint() {
-    return MPObject.Hint.MODEL;
+  public Hint getHint() {
+    return Hint.MODEL;
   }
 
   @Override
   public String toString() {
     return "model:" + modelDecl.getName();
   }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case MODEL:
-        return new MPBoolean(this != right);
-    }
-    return new MPBoolean(true);
-  }
-
+  
   @Override
   public MPObject newInstance() throws EvalException {
     MPObject obj = new MPModelObject(parent, this);
