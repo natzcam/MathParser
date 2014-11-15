@@ -77,7 +77,7 @@ import org.apache.logging.log4j.Logger;
 public class MathParser {
 
   private static final Logger log = LogManager.getLogger(MathParser.class);
-  private Tokenizer tokenizer = new Tokenizer();
+  private final Tokenizer tokenizer = new Tokenizer();
   private final Scope globalScope = new BasicScope(null);
   private final Block fileBlock = new Block();
   private Token current = null;
@@ -112,7 +112,7 @@ public class MathParser {
         next();
       }
     } catch (ClassCastException cce) {
-      throw new ParseException(cce, tokenizer.getHistory());
+      throw new ParseException(cce);
     }
 
     //eval
@@ -148,7 +148,7 @@ public class MathParser {
     if (e.type == t) {
       current = tokenizer.consume();
     } else {
-      throw new ParseException("Unexpected token " + e + ". " + t + " expected", tokenizer.getHistory());
+      throw new ParseException("Unexpected token " + e + ". " + t + " expected", tokenizer, e);
     }
   }
 
@@ -160,7 +160,7 @@ public class MathParser {
         return;
       }
     }
-    throw new ParseException("Unexpected token " + e + ". " + Arrays.toString(t) + " expected", tokenizer.getHistory());
+    throw new ParseException("Unexpected token " + e + ". " + Arrays.toString(t) + " expected", tokenizer, e);
   }
 
   private Block block() throws ParseException {
@@ -266,7 +266,7 @@ public class MathParser {
       case KW_TEMPLATE:
         return classDecl();
       default:
-        throw new ParseException("Unexpected token " + next + ". Declaration expected.", tokenizer.getHistory());
+        throw new ParseException("Unexpected token " + next + ". Declaration expected.", tokenizer, next);
     }
   }
 
@@ -747,7 +747,7 @@ public class MathParser {
         WhereBlock wb = whereBlock();
         return new SelectExpression(fb, modelName, wb);
       default:
-        throw new ParseException("Unexpected token '" + next + "'. Expression expected.", tokenizer.getHistory());
+        throw new ParseException("Unexpected token '" + next + "'. Expression expected.", tokenizer, next);
     }
   }
 

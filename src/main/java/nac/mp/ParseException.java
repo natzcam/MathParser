@@ -13,25 +13,21 @@ import java.util.LinkedList;
  */
 public class ParseException extends Exception {
 
-  public ParseException(String message, LinkedList<Token> history) {
-    super(message + ":" + printHistory(history));
+  public ParseException(String message, Tokenizer tokenizer, Token t) {
+    super(message + ":\n" + printTokenVicinity(tokenizer, t));
   }
 
-  private static String printHistory(LinkedList<Token> history) {
-    StringBuilder sb = new StringBuilder();
-    sb.append("\n");
-    for (Token token : history) {
-      sb.append(token).append("\n");
-    }
-    return sb.toString();
+  private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
+    String tv = tokenizer.getCurrentLine();
+    return "[" + t.line + "] " + tv.substring(t.start, t.end);
   }
 
   public ParseException(String message) {
     super(message);
   }
 
-  public ParseException(Throwable cause, LinkedList<Token> history) {
-    super(history.toString(), cause);
+  public ParseException(Throwable cause) {
+    super(cause);
   }
 
 }

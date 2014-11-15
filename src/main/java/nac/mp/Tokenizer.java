@@ -32,7 +32,6 @@ public class Tokenizer {
   private final static Map<String, TokenType> TOKEN_MAP = TokenType.getTokenMap();
   private final static TokenType[] NON_KEYWORD = TokenType.getNonKeywords();
   private final LinkedList<Token> llQueue = new LinkedList<>();
-  private LinkedList<Token> history = new LinkedList<>();
   private File currentFile = null;
   private LineNumberReader reader = null;
   private String currentLine = null;
@@ -45,12 +44,16 @@ public class Tokenizer {
     COMMENT;
   }
 
+  public String getCurrentLine() {
+    return currentLine;
+  }
+
   public void setCurrentFile(File file) throws ParseException {
     this.currentFile = file;
     try {
       reader = new LineNumberReader(new FileReader(this.currentFile));
     } catch (FileNotFoundException ex) {
-      throw new ParseException(ex, getHistory());
+      throw new ParseException(ex);
     }
     currentLine = null;
     matcher = null;
@@ -75,15 +78,7 @@ public class Tokenizer {
     } else {
       t = llQueue.poll();
     }
-    if (history.size() > 10) {
-      history.removeFirst();
-    }
-    history.addLast(t);
     return t;
-  }
-
-  public LinkedList<Token> getHistory() {
-    return new LinkedList(history);
   }
 
   private Token moveRight() throws ParseException {
@@ -93,7 +88,7 @@ public class Tokenizer {
       try {
         currentLine = reader.readLine();
       } catch (IOException ex) {
-        throw new ParseException(ex, getHistory());
+        throw new ParseException(ex);
       }
       if (currentLine == null) {
         Util.closeQuietly(reader);
