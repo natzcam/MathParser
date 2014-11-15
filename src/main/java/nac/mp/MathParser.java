@@ -112,7 +112,7 @@ public class MathParser {
         next();
       }
     } catch (ClassCastException cce) {
-      throw new ParseException(cce);
+      throw new ParseException(cce, tokenizer.getHistory());
     }
 
     //eval
@@ -148,7 +148,7 @@ public class MathParser {
     if (e.type == t) {
       current = tokenizer.consume();
     } else {
-      throw new ParseException("Unexpected token " + e + ". " + t + " expected");
+      throw new ParseException("Unexpected token " + e + ". " + t + " expected", tokenizer.getHistory());
     }
   }
 
@@ -160,7 +160,7 @@ public class MathParser {
         return;
       }
     }
-    throw new ParseException("Unexpected token " + e + ". " + Arrays.toString(t) + " expected");
+    throw new ParseException("Unexpected token " + e + ". " + Arrays.toString(t) + " expected", tokenizer.getHistory());
   }
 
   private Block block() throws ParseException {
@@ -266,7 +266,7 @@ public class MathParser {
       case KW_TEMPLATE:
         return classDecl();
       default:
-        throw new ParseException("Unexpected token " + next + ". Declaration expected.");
+        throw new ParseException("Unexpected token " + next + ". Declaration expected.", tokenizer.getHistory());
     }
   }
 
@@ -747,7 +747,7 @@ public class MathParser {
         WhereBlock wb = whereBlock();
         return new SelectExpression(fb, modelName, wb);
       default:
-        throw new ParseException("Unexpected token '" + next + "'. Expression expected.");
+        throw new ParseException("Unexpected token '" + next + "'. Expression expected.", tokenizer.getHistory());
     }
   }
 

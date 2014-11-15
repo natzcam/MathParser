@@ -24,9 +24,6 @@ public class Assignment implements Expression {
   private Expression rightValue;
 
   public void setLeftValue(Expression leftValue) throws ParseException {
-    if (!(leftValue instanceof LValue)) {
-      throw new ParseException("Not an Lvalue");
-    }
     this.leftValue = (LValue) leftValue;
   }
 

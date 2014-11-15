@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,10 +28,11 @@ import org.apache.logging.log4j.Logger;
 public class Tokenizer {
 
   private static final Logger log = LogManager.getLogger(Tokenizer.class);
-  private final static Pattern pattern = Pattern.compile(TokenType.getAllRegex());
-  private final static Map<String, TokenType> tokenMap = TokenType.getTokenMap();
-  private final static TokenType[] nonKeywords = TokenType.getNonKeywords();
+  private final static Pattern PATTERN = Pattern.compile(TokenType.getAllRegex());
+  private final static Map<String, TokenType> TOKEN_MAP = TokenType.getTokenMap();
+  private final static TokenType[] NON_KEYWORD = TokenType.getNonKeywords();
   private final LinkedList<Token> llQueue = new LinkedList<>();
+  private LinkedList<Token> history = new LinkedList<>();
   private File currentFile = null;
   private LineNumberReader reader = null;
   private String currentLine = null;
@@ -48,7 +50,7 @@ public class Tokenizer {
     try {
       reader = new LineNumberReader(new FileReader(this.currentFile));
     } catch (FileNotFoundException ex) {
-      throw new ParseException(ex);
+      throw new ParseException(ex, getHistory());
     }
     currentLine = null;
     matcher = null;
@@ -66,14 +68,22 @@ public class Tokenizer {
     return llQueue.get(l - 1);
   }
 
-  Token consume() throws ParseException {
+  public Token consume() throws ParseException {
     Token t;
     if (llQueue.isEmpty()) {
       t = moveRight();
     } else {
       t = llQueue.poll();
     }
+    if (history.size() > 10) {
+      history.removeFirst();
+    }
+    history.addLast(t);
     return t;
+  }
+
+  public LinkedList<Token> getHistory() {
+    return new LinkedList(history);
   }
 
   private Token moveRight() throws ParseException {
@@ -83,26 +93,26 @@ public class Tokenizer {
       try {
         currentLine = reader.readLine();
       } catch (IOException ex) {
-        throw new ParseException(ex);
+        throw new ParseException(ex, getHistory());
       }
       if (currentLine == null) {
         Util.closeQuietly(reader);
         return result;
       }
-      matcher = pattern.matcher(currentLine);
+      matcher = PATTERN.matcher(currentLine);
     }
 
     if (matcher.find()) {
 
-      for (int i = 0; i < nonKeywords.length - 1; i++) {
+      for (int i = 0; i < NON_KEYWORD.length - 1; i++) {
         String str = matcher.group(i + 1);
         //found group
         if (str != null) {
 
-          TokenType t = nonKeywords[i];
+          TokenType t = NON_KEYWORD[i];
 
-          if (t == TokenType.IDENTIFIER && tokenMap.containsKey(str)) {
-            result = new Token(tokenMap.get(str), str, reader.getLineNumber(), matcher.start(), matcher.end());
+          if (t == TokenType.IDENTIFIER && TOKEN_MAP.containsKey(str)) {
+            result = new Token(TOKEN_MAP.get(str), str, reader.getLineNumber(), matcher.start(), matcher.end());
           } else {
             result = new Token(t, str, reader.getLineNumber(), matcher.start(), matcher.end());
           }
