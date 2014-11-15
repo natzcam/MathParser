@@ -70,7 +70,6 @@ public class Tokenizer {
     } else {
       t = llQueue.poll();
     }
-    log.trace(t);
     return t;
   }
 
@@ -109,24 +108,19 @@ public class Tokenizer {
       }
     } else {
       currentLine = null;
-      log.trace(result);
       result = moveRight();
     }
 
     //skip comments;
     if (result.type == TokenType.COMMENTS) {
-      log.trace(result);
       result = moveRight();
     } else if (result.type == TokenType.COMMENTS2 && state == State.NON_COMMENT) {
       state = State.COMMENT;
-      log.trace(result);
       result = moveRight();
     } else if (result.type == TokenType.COMMENTS3 && state == State.COMMENT) {
       state = State.NON_COMMENT;
-      log.trace(result);
       result = moveRight();
     } else if (state == State.COMMENT) {
-      log.trace(result);
       result = moveRight();
     }
     return result;
