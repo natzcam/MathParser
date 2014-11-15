@@ -25,7 +25,7 @@ public class Read {
     MathParser mp = new MathParser();
     try {
       mp.eval("src/main/resources/mp/read.mp");
-    } catch (IOException | EvalException | ParseException ex) {
+    } catch (EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
     }
   }

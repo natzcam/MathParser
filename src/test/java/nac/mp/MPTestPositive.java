@@ -47,7 +47,7 @@ public class MPTestPositive {
   }
 
   @Test
-  public void testPositive() throws ParseException, EvalException, IOException {
+  public void testPositive() throws ParseException, EvalException {
     MathParser mp = new MathParser();
     mp.eval(file);
   }

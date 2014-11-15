@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
@@ -44,9 +43,13 @@ public class Tokenizer {
     COMMENT;
   }
 
-  public void setCurrentFile(File file) throws FileNotFoundException {
+  public void setCurrentFile(File file) throws ParseException {
     this.currentFile = file;
-    reader = new LineNumberReader(new FileReader(this.currentFile));
+    try {
+      reader = new LineNumberReader(new FileReader(this.currentFile));
+    } catch (FileNotFoundException ex) {
+      throw new ParseException(ex);
+    }
     currentLine = null;
     matcher = null;
     state = State.NON_COMMENT;
