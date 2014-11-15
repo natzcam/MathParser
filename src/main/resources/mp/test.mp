@@ -41,5 +41,11 @@ print t.name;
 //var t = get Teacher with id = 1;
 //print t.id;
 //print t.name;
-var ab = "t\\"x";
+
 //hey"test"
+
+/*
+ladjsflajdsf lcjaldsf print
+lajdsl dflkdjfdlk 
+sldkjflds k dkfjkd /5234/
+*/

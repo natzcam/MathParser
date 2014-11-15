@@ -33,6 +33,13 @@ public class Tokenizer {
   private File file;
   private LineNumberReader reader;
   private Matcher matcher;
+  private State state = State.NON_COMMENT;
+
+  public static enum State {
+
+    NON_COMMENT,
+    COMMENT;
+  }
 
   public Tokenizer(File file) throws IOException {
     this.file = file;
@@ -100,11 +107,21 @@ public class Tokenizer {
     }
 
     //skip comments;
-    if (result.type == TokenType.COMMENTS || result.type == TokenType.COMMENTS2) {
+    if (result.type == TokenType.COMMENTS) {
+      log.trace(result);
+      result = moveRight();
+    } else if (result.type == TokenType.COMMENTS2 && state == State.NON_COMMENT) {
+      state = State.COMMENT;
+      log.trace(result);
+      result = moveRight();
+    } else if (result.type == TokenType.COMMENTS3 && state == State.COMMENT) {
+      state = State.NON_COMMENT;
+      log.trace(result);
+      result = moveRight();
+    } else if (state == State.COMMENT) {
       log.trace(result);
       result = moveRight();
     }
-    
     return result;
   }
 }
