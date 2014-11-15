@@ -6,11 +6,13 @@
 package nac.mp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.logging.log4j.LogManager;
@@ -29,10 +31,11 @@ public class Tokenizer {
   private final static Pattern pattern = Pattern.compile(TokenType.getAllRegex());
   private final static Map<String, TokenType> tokenMap = TokenType.getTokenMap();
   private final static TokenType[] nonKeywords = TokenType.getNonKeywords();
-  private final LinkedList<Token> queue = new LinkedList<>();
-  private File file;
-  private LineNumberReader reader;
-  private Matcher matcher;
+  private final LinkedList<Token> llQueue = new LinkedList<>();
+  private File currentFile = null;
+  private LineNumberReader reader = null;
+  private String currentLine = null;
+  private Matcher matcher = null;
   private State state = State.NON_COMMENT;
 
   public static enum State {
@@ -41,44 +44,51 @@ public class Tokenizer {
     COMMENT;
   }
 
-  public Tokenizer(File file) throws IOException {
-    this.file = file;
-    reader = new LineNumberReader(new FileReader(this.file));
-    String line = reader.readLine();
-    matcher = pattern.matcher(line);
+  public void setCurrentFile(File file) throws FileNotFoundException {
+    this.currentFile = file;
+    reader = new LineNumberReader(new FileReader(this.currentFile));
+    currentLine = null;
+    matcher = null;
+    state = State.NON_COMMENT;
   }
 
   public Token lookahead(int l) throws ParseException {
-    int size = queue.size();
-    if (queue.isEmpty() || l > size) {
+    int size = llQueue.size();
+    if (llQueue.isEmpty() || l > size) {
       for (int i = 0; i < l - size; i++) {
-        try {
-          queue.offer(moveRight());
-        } catch (IOException ex) {
-          throw new ParseException(ex);
-        }
+        llQueue.offer(moveRight());
       }
     }
-    return queue.get(l - 1);
+
+    return llQueue.get(l - 1);
   }
 
   Token consume() throws ParseException {
     Token t;
-    if (queue.isEmpty()) {
-      try {
-        t = moveRight();
-      } catch (IOException ex) {
-        throw new ParseException(ex);
-      }
+    if (llQueue.isEmpty()) {
+      t = moveRight();
     } else {
-      t = queue.poll();
+      t = llQueue.poll();
     }
     log.trace(t);
     return t;
   }
 
-  private Token moveRight() throws ParseException, IOException {
-    Token result = new Token(TokenType.EOF, "EOF", -1, -1, -1);
+  private Token moveRight() throws ParseException {
+    Token result = new Token(TokenType.EOF, null, -1, -1, -1);
+
+    if (currentLine == null) {
+      try {
+        currentLine = reader.readLine();
+      } catch (IOException ex) {
+        throw new ParseException(ex);
+      }
+      if (currentLine == null) {
+        Util.closeQuietly(reader);
+        return result;
+      }
+      matcher = pattern.matcher(currentLine);
+    }
 
     if (matcher.find()) {
 
@@ -98,12 +108,9 @@ public class Tokenizer {
         }
       }
     } else {
-      String line = reader.readLine();
-
-      if (line != null) {
-        matcher = matcher.reset(line);
-        result = moveRight();
-      }
+      currentLine = null;
+      log.trace(result);
+      result = moveRight();
     }
 
     //skip comments;
