@@ -13,12 +13,14 @@ public class Token {
 
   final TokenType type;
   final String text;
+  final int line;
   final int start;
   final int end;
 
-  public Token(TokenType type, String text, int start, int end) {
+  public Token(TokenType type, String text, int line, int start, int end) {
     this.type = type;
     this.text = text;
+    this.line = line;
     this.start = start;
     this.end = end;
   }

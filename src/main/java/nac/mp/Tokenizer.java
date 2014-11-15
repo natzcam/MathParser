@@ -5,6 +5,10 @@
  */
 package nac.mp;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -14,82 +18,93 @@ import org.apache.logging.log4j.Logger;
 
 /**
  *
+ * Tokenizer that stores tokens in a queue and reads tokens on demand. If the
+ * lookahead is past the end of the file, null will be returned
  *
  * @author natz
  */
 public class Tokenizer {
 
   private static final Logger log = LogManager.getLogger(Tokenizer.class);
-  private final Pattern p = Pattern.compile(TokenType.getAllRegex());
-  private Matcher m;
-  private final Map<String, TokenType> keywordMap = TokenType.getKeywordMap();
-  private final TokenType[] nonKeywords = TokenType.getNonKeywords();
+  private final static Pattern pattern = Pattern.compile(TokenType.getAllRegex());
+  private final static Map<String, TokenType> tokenMap = TokenType.getTokenMap();
+  private final static TokenType[] nonKeywords = TokenType.getNonKeywords();
   private final LinkedList<Token> queue = new LinkedList<>();
-  private String input;
+  private File file;
+  private LineNumberReader reader;
+  private Matcher matcher;
 
-  public void process(String input) {
-    this.input = input;
-    queue.clear();
-    m = p.matcher(input);
+  public Tokenizer(File file) throws IOException {
+    this.file = file;
+    reader = new LineNumberReader(new FileReader(this.file));
+    String line = reader.readLine();
+    matcher = pattern.matcher(line);
   }
 
   public Token lookahead(int l) throws ParseException {
-    Token la = null;
-    if (!queue.isEmpty() && l <= queue.size()) {
-      return queue.get(l - 1);
-    } else {
-      int size = queue.size();
+    int size = queue.size();
+    if (queue.isEmpty() || l > size) {
       for (int i = 0; i < l - size; i++) {
-        la = moveRight();
-        queue.offer(la);
+        try {
+          queue.offer(moveRight());
+        } catch (IOException ex) {
+          throw new ParseException(ex);
+        }
       }
     }
-    return la;
+    return queue.get(l - 1);
   }
 
   Token consume() throws ParseException {
     Token t;
-    if (!queue.isEmpty()) {
-      t = queue.poll();
+    if (queue.isEmpty()) {
+      try {
+        t = moveRight();
+      } catch (IOException ex) {
+        throw new ParseException(ex);
+      }
     } else {
-      t = moveRight();
+      t = queue.poll();
     }
     log.trace(t);
     return t;
   }
 
-  private Token moveRight() throws ParseException {
-    Token result = null;
-    if (m.find()) {
-      for (int i = 0; i < nonKeywords.length - 1; i++) {
-        String str = m.group(i + 1);
+  private Token moveRight() throws ParseException, IOException {
+    Token result = new Token(TokenType.EOF, "EOF", -1, -1, -1);
 
+    if (matcher.find()) {
+
+      for (int i = 0; i < nonKeywords.length - 1; i++) {
+        String str = matcher.group(i + 1);
+        //found group
         if (str != null) {
 
           TokenType t = nonKeywords[i];
 
-          if (t == TokenType.IDENTIFIER) {
-            if (keywordMap.containsKey(str)) {
-              result = new Token(keywordMap.get(str), str, m.start(), m.end());
-            } else {
-              result = new Token(t, str, m.start(), m.end());
-            }
+          if (t == TokenType.IDENTIFIER && tokenMap.containsKey(str)) {
+            result = new Token(tokenMap.get(str), str, reader.getLineNumber(), matcher.start(), matcher.end());
           } else {
-            result = new Token(t, str, m.start(), m.end());
+            result = new Token(t, str, reader.getLineNumber(), matcher.start(), matcher.end());
           }
+
         }
       }
-      if (result == null) {
-        throw new ParseException("Invalid token next to " + m.start() + ":" + m.end());
-      }
     } else {
-      result = new Token(TokenType.EOF, null, 0, 0);
+      String line = reader.readLine();
+
+      if (line != null) {
+        matcher = matcher.reset(line);
+        result = moveRight();
+      }
     }
+
     //skip comments;
     if (result.type == TokenType.COMMENTS || result.type == TokenType.COMMENTS2) {
       log.trace(result);
       result = moveRight();
     }
+    
     return result;
   }
 }

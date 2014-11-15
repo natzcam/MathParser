@@ -48,7 +48,7 @@ public class MPTestNegativeParse {
   @Test(expected = ParseException.class)
   public void testNegativeParse() throws ParseException, EvalException, IOException {
     MathParser mp = new MathParser();
-    mp.eval(Util.readFile(file));
+    mp.eval(file);
   }
 
 }

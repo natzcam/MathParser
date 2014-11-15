@@ -24,7 +24,7 @@ public class Write {
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.eval(Util.readFile("src/main/resources/mp/write.mp"));
+      mp.eval("src/main/resources/mp/write.mp");
     } catch (IOException | EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
     }

@@ -5,15 +5,17 @@
  */
 package nac.mp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import nac.mp.ast.Scope;
 import nac.mp.ast.BasicScope;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import nac.mp.ast.statement.FunctionDecl;
 import nac.mp.ast.expression.FloatLiteral;
 import nac.mp.ast.expression.Parenthesis;
@@ -72,21 +74,30 @@ import org.apache.logging.log4j.Logger;
  * TODO: assoc Token to AST nodes to improve debug TODO: Declarations into
  * MPOBjects TODO: review use of expression(); TODO: comments2 does not work
  * TODO: separate expression per type TODO: remove while(true)
- *
+ * TODO: escape quotes
  */
 public class MathParser {
 
   private static final Logger log = LogManager.getLogger(MathParser.class);
-  private final Tokenizer tokenizer = new Tokenizer();
-  private final Scanner scanner = new Scanner(System.in);
+  private Tokenizer tokenizer;
   private final Scope globalScope = new BasicScope(null);
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
   private final FrostByte fb = new FrostByte(true);
 
-  public void eval(String input) throws ParseException, EvalException {
-    tokenizer.process(input);
+  public void eval(String path) throws ParseException, EvalException, IOException {
+    eval(new File(path));
+  }
+
+  public void eval(Path path) throws ParseException, EvalException, IOException {
+    eval(path.toFile());
+  }
+
+  public void eval(File path) throws ParseException, EvalException, FileNotFoundException, IOException {
+
+    tokenizer = new Tokenizer(path);
+
     try {
       next();
       while (next.type != TokenType.EOF) {
@@ -188,7 +199,7 @@ public class MathParser {
       case KW_INPUT:
         consume();
         consume(TokenType.IDENTIFIER);
-        Input input = new Input(scanner, current.text);
+        Input input = new Input(current.text);
         consume(TokenType.SEMICOLON);
         return input;
       case KW_EXIT:
@@ -763,7 +774,7 @@ public class MathParser {
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.eval(Util.readFile("src/main/resources/mp/test.mp"));
+      mp.eval("src/main/resources/mp/test.mp");
     } catch (IOException | EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
     }

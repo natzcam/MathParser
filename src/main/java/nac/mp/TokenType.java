@@ -39,10 +39,11 @@ public enum TokenType {
   KW_WHERE("where"),
   PLUS("\\+"),
   MINUS("-"),
-  STAR("\\*"),
   COMMENTS("//.*"),
-  COMMENTS2("/*[\\s\\S]*\\*/"),
+  COMMENTS2("/\\*"),
+  COMMENTS3("\\*/"),
   SLASH("/"),
+  STAR("\\*"),
   ONE_TO_MANY("<>>"),
   MANY_TO_MANY("<<>>"),
   ONE_TO_ONE("<>"),
@@ -88,14 +89,12 @@ public enum TokenType {
     return l.toArray(new TokenType[1]);
   }
 
-  public static Map<String, TokenType> getKeywordMap() {
-    Map<String, TokenType> keywords = new HashMap<>();
+  public static Map<String, TokenType> getTokenMap() {
+    Map<String, TokenType> tm = new HashMap<>();
     for (TokenType t : TokenType.values()) {
-      if (t.toString().contains("KW_")) {
-        keywords.put(t.regex, t);
-      }
+      tm.put(t.regex, t);
     }
-    return keywords;
+    return tm;
   }
 
   public static String getAllRegex() {

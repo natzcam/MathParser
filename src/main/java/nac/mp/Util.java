@@ -18,16 +18,16 @@ import java.nio.file.Paths;
  */
 public class Util {
 
-  public static String readFile(Path path)
-          throws IOException {
-    byte[] encoded = Files.readAllBytes(path);
-    return Charset.forName("UTF-8").decode(ByteBuffer.wrap(encoded)).toString();
-  }
-
-  public static String readFile(String path)
-          throws IOException {
-    byte[] encoded = Files.readAllBytes(Paths.get(path));
-    return Charset.forName("UTF-8").decode(ByteBuffer.wrap(encoded)).toString();
-  }
+//  public static String readFile(Path path)
+//          throws IOException {
+//    byte[] encoded = Files.readAllBytes(path);
+//    return Charset.forName("UTF-8").decode(ByteBuffer.wrap(encoded)).toString();
+//  }
+//
+//  public static String readFile(String path)
+//          throws IOException {
+//    byte[] encoded = Files.readAllBytes(Paths.get(path));
+//    return Charset.forName("UTF-8").decode(ByteBuffer.wrap(encoded)).toString();
+//  }
 
 }

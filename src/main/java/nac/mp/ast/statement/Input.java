@@ -17,11 +17,10 @@ import nac.mp.type.MPString;
  */
 public class Input implements Expression {
 
+  private final Scanner scanner = new Scanner(System.in);
   private final String identifier;
-  private final Scanner scanner;
 
-  public Input(Scanner scanner, String identifier) {
-    this.scanner = scanner;
+  public Input(String identifier) {
     this.identifier = identifier;
   }
 
