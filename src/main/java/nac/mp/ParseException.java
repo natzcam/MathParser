@@ -13,13 +13,16 @@ import java.util.LinkedList;
  */
 public class ParseException extends Exception {
 
+  private static int vicinity = 50;
+
   public ParseException(String message, Tokenizer tokenizer, Token t) {
     super(message + ":\n" + printTokenVicinity(tokenizer, t));
   }
 
   private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
     String tv = tokenizer.getCurrentLine();
-    return "[" + t.line + "] " + tv.substring(t.start, t.end);
+    return "[line " + t.line + "] " + tv.substring(t.start - vicinity < 0 ? 0 : t.start,
+            t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
   }
 
   public ParseException(String message) {

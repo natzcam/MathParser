@@ -6,7 +6,7 @@
 package nac.mp.type;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
@@ -23,7 +23,7 @@ public class MPModel extends MPObject implements Creator {
 
   private static final Logger log = LogManager.getLogger(MPModel.class);
   private final ModelDecl modelDecl;
-  private final Map<String, MPAttribute> attributes = new HashMap<>();
+  private final Map<String, MPAttribute> attributes = new LinkedHashMap<>();
 
   public MPModel(Scope parent, ModelDecl modelDecl) {
     super(parent, null);

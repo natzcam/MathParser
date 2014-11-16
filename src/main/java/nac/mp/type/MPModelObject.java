@@ -15,7 +15,7 @@ import nac.mp.ast.Scope;
  *
  * @author user
  */
-public class MPModelObject extends MPObject {
+public class MPModelObject extends MPBaseObject {
 
   private final MPModel model;
   private MPInteger id;
@@ -70,45 +70,5 @@ public class MPModelObject extends MPObject {
   @Override
   public Hint getHint() {
     return Hint.MODEL_OBJECT;
-  }
-
-  @Override
-  public void setLocalVar(String name, MPObject value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Set<String> getLocalVarKeys() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Collection<MPObject> getLocalVarValues() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean containsVar(String name) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public MPObject getVar(String name) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setVar(String name, MPObject value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }
