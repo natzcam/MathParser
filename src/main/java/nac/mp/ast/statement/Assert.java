@@ -27,7 +27,7 @@ public class Assert implements Expression {
     MPObject result = cond.eval(scope);
     if (result.getHint() == Hint.BOOLEAN) {
       if (!result.getBoolean()) {
-        throw new EvalException("Assertion failed.", scope);
+        throw new EvalException("Assertion failed.", scope, cond);
       }
     }
     return null;

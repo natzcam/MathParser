@@ -8,8 +8,8 @@ package nac.mp.type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import nac.mp.EvalException;
 
@@ -17,7 +17,7 @@ import nac.mp.EvalException;
  *
  * @author camomon
  */
-public class MPList extends MPObject implements Comparable {
+public class MPList extends MPObject implements Comparable<MPList> {
 
   private final List<MPObject> list;
 
@@ -42,8 +42,7 @@ public class MPList extends MPObject implements Comparable {
   public MPObject isEqual(MPObject right) {
     switch (right.getHint()) {
       case LIST:
-        MPList ml = (MPList) right;
-        return new MPBoolean(list.equals(ml.getList()));
+        return this.listEquals((MPList) right);
     }
     return new MPBoolean(false);
   }
@@ -52,10 +51,27 @@ public class MPList extends MPObject implements Comparable {
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
       case LIST:
-        MPList ml = (MPList) right;
-        return new MPBoolean(!list.equals(ml.getList()));
+        return this.listEquals((MPList) right).inverse();
     }
     return new MPBoolean(false);
+  }
+
+  private MPBoolean listEquals(MPList mpList) {
+    if (mpList == this) {
+      return new MPBoolean(true);
+    }
+
+    ListIterator<MPObject> e1 = list.listIterator();
+    ListIterator<MPObject> e2 = mpList.list.listIterator();
+    while (e1.hasNext() && e2.hasNext()) {
+      MPObject o1 = e1.next();
+      MPObject o2 = e2.next();
+
+      if (!(o1 == null ? o2 == null : o1.isEqual(o2).getBoolean())) {
+        return new MPBoolean(false);
+      }
+    }
+    return new MPBoolean(!(e1.hasNext() || e2.hasNext()));
   }
 
   public MPObject get(int index) {
@@ -96,11 +112,11 @@ public class MPList extends MPObject implements Comparable {
 
   @Override
   public String toString() {
-    return list.toString();
+    return "list:" + list.toString();
   }
 
   @Override
-  public int compareTo(Object o) {
+  public int compareTo(MPList o) {
     return 0;
   }
 

@@ -5,7 +5,8 @@
  */
 package nac.mp;
 
-import java.util.LinkedList;
+import nac.mp.ast.statement.ModelDecl;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ParseException extends Exception {
   private static int vicinity = 50;
 
   public ParseException(String message, Tokenizer tokenizer, Token t) {
-    super(message + ":\n" + printTokenVicinity(tokenizer, t));
+    super(message + ":" + System.lineSeparator() + printTokenVicinity(tokenizer, t));
   }
 
   private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
@@ -25,11 +26,11 @@ public class ParseException extends Exception {
             t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
   }
 
-  public ParseException(String message) {
-    super(message);
+  public ParseException(String message, ModelDecl model) {
+    super(message + ":" + System.lineSeparator() + ToStringBuilder.reflectionToString(model));
   }
 
-  public ParseException(Throwable cause) {
+  public ParseException(String message, Throwable cause) {
     super(cause);
   }
 

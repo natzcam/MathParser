@@ -18,10 +18,6 @@ import nac.mp.type.MPObject;
  */
 public interface Scope extends Serializable {
 
-  public void setLocalVar(String name, MPObject value);
-
-  public void setLocalVars(Map<String, MPObject> vars);
-
   public void declareLocalVar(String name, MPObject defaultValue) throws EvalException;
 
   public Set<String> getLocalVarKeys();
@@ -33,6 +29,10 @@ public interface Scope extends Serializable {
   public boolean containsVar(String name);
 
   public MPObject getVar(String name);
+
+  public void setLocalVar(String name, MPObject value);
+
+  public void setLocalVars(Map<String, MPObject> vars);
 
   public void setVar(String name, MPObject value) throws EvalException;
 

@@ -32,7 +32,7 @@ public class MPVoid extends MPObject implements Comparable<MPObject> {
 
   @Override
   public String toString() {
-    return "void";
+    return "<void>";
   }
 
   @Override

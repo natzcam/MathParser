@@ -62,7 +62,7 @@ public class FrostByte {
     for (AttributeDecl ad : model.getAttrDecls()) {
       final String attrName = ad.getIdentifier();
       if (attrName.equals("id")) {
-        throw new ParseException("Can't define custom id property.");
+        throw new ParseException("Can't define custom id property.", model);
       }
 
       //create index for property
@@ -96,25 +96,24 @@ public class FrostByte {
       obj.setVar("id", id);
     }
 
-    for (String k : model.getLocalVarKeys()) {
-      if (k.equals("id")) {
-        continue;
-      }
-
-      final MPAttribute attr = (MPAttribute) model.getVar(k);
-      if (attr.getType() == Type.REF) {
-        MPModelObject mo = (MPModelObject) obj.getVar(attr.getName());
-        obj.setVar(attr.getName(), mo.getReference());
-      } else if (attr.getType() == Type.LIST) {
-        MPList ml = (MPList) obj.getVar(attr.getName());
-        List<MPReference> refList = new ArrayList<>();
-        for (MPObject mo : ml.getList()) {
-          MPModelObject mdo = (MPModelObject) mo;
-          refList.add(mdo.getReference());
-        }
-        ml.getList().clear();
-        ml.getList().addAll(refList);
-      }
+    for (MPAttribute attr : model.getAttributes().values()) {
+//      if (attr.getName().equals("id")) {
+//        continue;
+//      }
+//
+//      if (attr.getType() == Type.REF) {
+//        MPModelObject mo = (MPModelObject) obj.getVar(attr.getName());
+//        obj.setVar(attr.getName(), mo.getReference());
+//      } else if (attr.getType() == Type.LIST) {
+//        MPList ml = (MPList) obj.getVar(attr.getName());
+//        List<MPReference> refList = new ArrayList<>();
+//        for (MPObject mo : ml.getList()) {
+//          MPModelObject mdo = (MPModelObject) mo;
+//          refList.add(mdo.getReference());
+//        }
+//        ml.getList().clear();
+//        ml.getList().addAll(refList);
+//      }
     }
 
     objectMap.put(id.getInt(), obj);

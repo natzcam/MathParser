@@ -43,7 +43,11 @@ public class MPModel extends MPObject implements Creator {
   public String toString() {
     return "model:" + modelDecl.getName();
   }
-  
+
+  public Map<String, MPAttribute> getAttributes() {
+    return attributes;
+  }
+
   @Override
   public MPObject newInstance() throws EvalException {
     MPObject obj = new MPModelObject(parent, this);

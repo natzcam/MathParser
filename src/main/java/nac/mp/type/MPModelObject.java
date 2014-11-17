@@ -5,10 +5,6 @@
  */
 package nac.mp.type;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 
 /**

@@ -46,7 +46,7 @@ public class IfStatement implements Expression {
         }
       }
     } else {
-      throw new EvalException("Condition not boolean.", scope);
+      throw new EvalException("Condition not boolean.", scope, this);
     }
     return null;
   }

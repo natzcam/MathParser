@@ -38,6 +38,10 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
     return Boolean.toString(value);
   }
 
+  public MPBoolean inverse() {
+    return new MPBoolean(!value);
+  }
+
   @Override
   public MPObject isEqual(MPObject right) {
     switch (right.getHint()) {

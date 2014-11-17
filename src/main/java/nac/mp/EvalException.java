@@ -14,17 +14,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class EvalException extends Exception {
 
-  private Scope scope = null;
-  private Expression expression = null;
+  public EvalException(String message, Scope scope, Expression expression) {
+    super(message + ":" + System.lineSeparator() + ToStringBuilder.reflectionToString(scope) + System.lineSeparator() + ToStringBuilder.reflectionToString(expression));
+  }
 
   public EvalException(String message, Scope scope) {
-    super(message + ToStringBuilder.reflectionToString(scope));
-    this.scope = scope;
+    super(message + ":" + System.lineSeparator() + ToStringBuilder.reflectionToString(scope));
   }
-
-  public EvalException(String message, Expression expression) {
-    super(message + ToStringBuilder.reflectionToString(expression));
-    this.expression = expression;
-  }
-
 }
