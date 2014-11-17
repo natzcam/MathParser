@@ -30,7 +30,7 @@ template Teacher{
   }
 }
 
-templadte Student{
+template Student{
   var subjects;
 }
 
