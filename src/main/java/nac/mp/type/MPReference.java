@@ -22,7 +22,7 @@ public class MPReference extends MPObject {
 
   public MPReference(Scope parent, Creator creator, MPModelObject obj) {
     super(parent, creator);
-    this.id = obj.getId().getInt();
+    this.id = obj.getVar("id").getInt();
     this.modelName = obj.getModel().getName();
   }
 

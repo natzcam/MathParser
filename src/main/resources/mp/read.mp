@@ -7,6 +7,8 @@ model Child{
   string name;
 }
 
+print Parent.name;
+
 //select
 var rp = select Parent where {
   this.name == "P1";

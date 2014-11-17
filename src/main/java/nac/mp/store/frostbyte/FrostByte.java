@@ -5,31 +5,20 @@
  */
 package nac.mp.store.frostbyte;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NavigableSet;
 import nac.mp.EvalException;
 import nac.mp.ParseException;
 import nac.mp.ast.statement.AttributeDecl;
-import nac.mp.ast.statement.AttributeDecl.Type;
 import nac.mp.ast.statement.ModelDecl;
 import nac.mp.type.MPAttribute;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObject;
-import nac.mp.type.MPObject;
-import nac.mp.type.MPReference;
 import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapdb.Atomic;
-import org.mapdb.BTreeMap;
-import org.mapdb.Bind;
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.Fun;
+import org.h2.mvstore.MVMap;
+import org.h2.mvstore.MVStore;
 
 /**
  *
@@ -38,47 +27,27 @@ import org.mapdb.Fun;
 public class FrostByte {
 
   private static final Logger log = LogManager.getLogger(FrostByte.class);
-  private static final File FILE_OBJECT = new File("data/object.data");
-  private static final File FILE_INDEX = new File("data/index.data");
+  private static final String FILE_OBJECT = "data/object.data";
+  private static final String FILE_INDEX = "data/index.data";
   private static final String APPEND_MODEL = "_model";
   private static final String APPEND_SEQUENCE = "_sequence";
   private static final String APPEND_INDEX = "_index";
-  private final DB objectDB;
-  private final DB indexDB;
+  private final MVStore objectDB;
+  private final MVStore indexDB;
 
-  public FrostByte(boolean temp) {
-    if (false) {
-      objectDB = DBMaker.newTempFileDB().make();
-      indexDB = DBMaker.newTempFileDB().make();
-    } else {
-      objectDB = DBMaker.newFileDB(FILE_OBJECT).make();
-      indexDB = DBMaker.newFileDB(FILE_INDEX).make();
-    }
+  public FrostByte() {
+    objectDB = MVStore.open(FILE_OBJECT);
+    indexDB = MVStore.open(FILE_INDEX);
   }
 
   public void register(ModelDecl model) throws ParseException {
-    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
+    MVMap<Long, MPModelObject> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL);
 
     for (AttributeDecl ad : model.getAttrDecls()) {
       final String attrName = ad.getIdentifier();
       if (attrName.equals("id")) {
         throw new ParseException("Can't define custom id property.", model);
       }
-
-      //create index for property
-      if (ad.isNative()) {
-        NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attrName + APPEND_INDEX);
-
-        Bind.secondaryKey(objectMap, attrIndex, new Fun.Function2<MPObject, Long, MPModelObject>() {
-          @Override
-          public MPObject run(Long key, MPModelObject value) {
-            return value.getVar(attrName);
-          }
-        });
-      } else {
-
-      }
-
     }
   }
 
@@ -87,20 +56,20 @@ public class FrostByte {
     MPModel model = obj.getModel();
     MPInteger id = obj.getId();
 
-    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
+    MVMap<Long, MPModelObject> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL);
 
-    if (id == null) {
-      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
-      Long key = keyinc.incrementAndGet();
-      id = new MPInteger(key);
-      obj.setVar("id", id);
-    }
+//    if (id == null) {
+//      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
+//      Long key = keyinc.incrementAndGet();
+//      id = new MPInteger(key);
+//      obj.setVar("id", id);
+//    }
 
     for (MPAttribute attr : model.getAttributes().values()) {
-//      if (attr.getName().equals("id")) {
-//        continue;
-//      }
-//
+      if (attr.getName().equals("id")) {
+        continue;
+      }
+
 //      if (attr.getType() == Type.REF) {
 //        MPModelObject mo = (MPModelObject) obj.getVar(attr.getName());
 //        obj.setVar(attr.getName(), mo.getReference());
@@ -140,7 +109,7 @@ public class FrostByte {
 //    return result;
 //  }
   public MPList select(String modelName, QueryPredicate predicate) throws EvalException {
-    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(modelName + APPEND_MODEL);
+    MVMap<Long, MPModelObject> objectMap = objectDB.openMap(modelName + APPEND_MODEL);
     MPList result = new MPList(10, null);
     for (MPModelObject obj : objectMap.values()) {
       if (predicate.call(obj)) {

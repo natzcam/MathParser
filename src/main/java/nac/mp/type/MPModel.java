@@ -47,6 +47,16 @@ public class MPModel extends MPObject implements Creator {
   public Map<String, MPAttribute> getAttributes() {
     return attributes;
   }
+//
+//  @Override
+//  public MPObject isEqual(MPObject right) {
+//    return new MPBoolean(((MPModel) right).getName().equals(getName()));
+//  }
+//
+//  @Override
+//  public MPObject notEqual(MPObject right) {
+//    return new MPBoolean(!((MPModel) right).getName().equals(getName()));
+//  }
 
   @Override
   public MPObject newInstance() throws EvalException {

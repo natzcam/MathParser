@@ -14,12 +14,11 @@ import nac.mp.ast.Scope;
 public class MPModelObject extends MPBaseObject {
 
   private final MPModel model;
-  private MPInteger id;
+//  private MPInteger id;
 
   public MPModelObject(Scope parent, MPModel creator) {
     super(parent, creator);
     this.model = creator;
-    this.id = null;
   }
 
   public MPModel getModel() {
@@ -27,11 +26,11 @@ public class MPModelObject extends MPBaseObject {
   }
 
   public MPInteger getId() {
-    return id;
+    return (MPInteger) getVar("id");
   }
 
   public void setId(MPInteger id) {
-    this.id = id;
+    setLocalVar("id", id);
   }
 
   public MPReference getReference() {
@@ -40,29 +39,28 @@ public class MPModelObject extends MPBaseObject {
 
   @Override
   public String toString() {
-    return "modelobject:" + model.getName() + ":" + id;
+    return "modelobject:" + model.getName() + ":" + getId();
   }
 
-  @Override
-  public MPObject isEqual(MPObject right) {
-    switch (right.getHint()) {
-      case MODEL_OBJECT:
-        MPModelObject mo = (MPModelObject) right;
-        return new MPBoolean(id.getInt() == mo.getId().getInt() && model == mo.getModel());
-    }
-    return new MPBoolean(false);
-  }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case MODEL_OBJECT:
-        MPModelObject mo = (MPModelObject) right;
-        return new MPBoolean(id.getInt() != mo.getId().getInt() || model != mo.getModel());
-    }
-    return new MPBoolean(false);
-  }
-
+//  @Override
+//  public MPObject isEqual(MPObject right) {
+//    switch (right.getHint()) {
+//      case MODEL_OBJECT:
+//        MPModelObject mo = (MPModelObject) right;
+//        return new MPBoolean(getId().isEqual(mo.getId()).getBoolean() && model.isEqual(mo.getModel()).getBoolean());
+//    }
+//    return new MPBoolean(false);
+//  }
+//
+//  @Override
+//  public MPObject notEqual(MPObject right) {
+//    switch (right.getHint()) {
+//      case MODEL_OBJECT:
+//        MPModelObject mo = (MPModelObject) right;
+//        return new MPBoolean(getId().notEqual(mo.getId()).getBoolean() || model.notEqual(mo.getModel()).getBoolean());
+//    }
+//    return new MPBoolean(false);
+//  }
   @Override
   public Hint getHint() {
     return Hint.MODEL_OBJECT;

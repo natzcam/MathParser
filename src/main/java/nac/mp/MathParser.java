@@ -82,7 +82,7 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
-  private final FrostByte fb = new FrostByte(true);
+  private final FrostByte fb = new FrostByte();
 
   public void eval(String path) throws ParseException, EvalException {
     eval(new File(path));

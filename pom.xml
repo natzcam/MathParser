@@ -55,9 +55,9 @@
       <version>2.1</version>
     </dependency>
     <dependency>
-      <groupId>org.mapdb</groupId>
-      <artifactId>mapdb</artifactId>
-      <version>1.0.6</version>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.182</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
