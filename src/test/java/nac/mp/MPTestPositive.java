@@ -64,7 +64,7 @@ public class MPTestPositive {
   public void testPositive() throws ParseException, EvalException {
     MathParser mp = new MathParser();
     try {
-      mp.eval(file);
+      mp.control(file);
     } finally {
       mp.cleanup();
     }

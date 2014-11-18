@@ -7,13 +7,12 @@ package nac.mp.type;
 
 import nac.mp.type.natv.MPBoolean;
 import nac.mp.ast.Scope;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *
  * @author user
  */
-public abstract class MPObject implements Scope {
+public abstract class MPObject implements Scope{
 
   protected final Creator creator;
   protected Scope parent;
@@ -30,11 +29,6 @@ public abstract class MPObject implements Scope {
   @Override
   public Scope getParent() {
     return parent;
-  }
-
-  @Override
-  public String toString() {
-    return ReflectionToStringBuilder.toString(this);
   }
 
   public abstract Type getType();

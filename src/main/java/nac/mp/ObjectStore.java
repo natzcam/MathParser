@@ -5,6 +5,7 @@
  */
 package nac.mp;
 
+import java.util.Collection;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObj;
@@ -17,6 +18,8 @@ import nac.mp.type.QueryPredicate;
 public interface ObjectStore {
 
   public void register(MPModel model) throws EvalException;
+
+  public Collection<MPModel> getModels();
 
   public void save(MPModelObj mpObj);
 

@@ -5,30 +5,29 @@
  */
 package nac.mp.store.frostbyte;
 
-import java.io.IOException;
 import nac.mp.EvalException;
 import nac.mp.MathParser;
 import nac.mp.ParseException;
-import nac.mp.Util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
  *
- * @author user
+ * @author camomon
  */
-public class Write {
+public class RegisterModel {
 
-  private static final Logger log = LogManager.getLogger(Write.class);
+  private static final Logger log = LogManager.getLogger(RegisterModel.class);
 
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.eval("src/main/resources/mp/write.mp");
+      mp.model("src/main/resources/mp/model.mp");
     } catch (EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
     } finally {
       mp.cleanup();
     }
+
   }
 }

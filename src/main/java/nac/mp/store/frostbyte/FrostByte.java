@@ -8,8 +8,11 @@ package nac.mp.store.frostbyte;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 import java.io.ByteArrayOutputStream;
+import java.util.Collection;
 import nac.mp.ObjectStore;
 import nac.mp.EvalException;
+import nac.mp.MathParser;
+import nac.mp.ParseException;
 import nac.mp.type.MPAttribute;
 import nac.mp.type.natv.MPInteger;
 import nac.mp.type.MPList;
@@ -29,32 +32,40 @@ import org.h2.mvstore.type.ObjectDataType;
 public class FrostByte implements ObjectStore {
 
   private static final Logger log = LogManager.getLogger(FrostByte.class);
+  private static final String FILE_MODEL = "data/model.data";
   private static final String FILE_OBJECT = "data/object.data";
   private static final String FILE_INDEX = "data/index.data";
   private static final String APPEND_MODEL = "_model";
   private static final String APPEND_SEQUENCE = "_sequence";
   private static final String APPEND_INDEX = "_index";
+  private final MVStore modelDB;
   private final MVStore objectDB;
   private final MVStore indexDB;
   private final Kryo kryo = new Kryo();
 
   public FrostByte() {
+    modelDB = MVStore.open(FILE_MODEL);
     objectDB = MVStore.open(FILE_OBJECT);
     indexDB = MVStore.open(FILE_INDEX);
   }
 
   @Override
   public void register(MPModel model) throws EvalException {
-//    MVMap.Builder<Long, MPModel> b = new MVMap.Builder<Long, MPModel>();
-//    b.keyType(new ObjectDataType()).valueType(new MPModelDataType());
-//
-//    MVMap<Long, MPModel> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL,);
-//    for (MPAttribute ad : model.getAttributes().values()) {
-//      final String attrName = ad.getName();
-//      if (attrName.equals("id")) {
-//        throw new EvalException("Can't define custom id property.", model);
-//      }
-//    }
+    MVMap<String, MPModel> modelMap = modelDB.openMap(APPEND_MODEL);
+    for (MPAttribute ad : model.getAttributes().values()) {
+      final String attrName = ad.getName();
+      if (attrName.equals("id")) {
+        throw new EvalException("Can't define custom id property.", model);
+      }
+    }
+    modelMap.put(model.getName(), model);
+    modelDB.commit();
+  }
+
+  @Override
+  public Collection<MPModel> getModels() {
+    MVMap<String, MPModel> modelMap = modelDB.openMap(APPEND_MODEL);
+    return modelMap.values();
   }
 
   private MVMap<Long, MPModelObj> getObjectMap(MPModel model) {
@@ -70,7 +81,6 @@ public class FrostByte implements ObjectStore {
     MPInteger id = obj.getId();
 
     MVMap<Long, MPModelObj> objectMap = getObjectMap(model);
-
 
     if (id == null) {
 //      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
@@ -100,9 +110,9 @@ public class FrostByte implements ObjectStore {
 
     objectMap.put(id.getInt(), obj);
     log.info("Save {}: {}", model.getName(), obj);
-
-    indexDB.commit();
-    objectDB.commit();
+//
+//    indexDB.commit();
+//    objectDB.commit();
   }
 
   @Override
@@ -119,8 +129,10 @@ public class FrostByte implements ObjectStore {
 
   @Override
   public void close() {
-    objectDB.closeImmediately();
-    indexDB.closeImmediately();
+    modelDB.close();
+    objectDB.close();
+    indexDB.close();
   }
+
 
 }

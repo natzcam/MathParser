@@ -1,33 +1,31 @@
-model Parent{
-  string name;
-  list:Child children;
-}
 
-model Child{
-  string name;
-}
-
-var p = new Parent();
-p.id = 1;
-p.name = "P1";
 var c = new Child();
 c.name = "natz";
-p.children.add(c);
-save p;
+c.id = 1;
+save c;
 
-p = new Parent();
-p.id = 2;
-p.name = "P2";
-//save to object db
-save p;
+var p1 = new Parent();
+p1.id = 1;
+p1.name = "P1";
+save p1;
 
+var p2 = new Parent();
+p2.id = 2;
+p2.name = "P2";
+save p2;
+
+print Parent.name;
 
 //select
-var resultList = select Parent where {
-  this.name == (select Parent where {this.name == "P1";})[0].name;
+var rp = select Parent where {
+  this.name == "P1";
 };
-var result = resultList[0];
-print result;
+print rp[0].children[0];
 
 var rc = select Child where {this.name == "natz";};
-print rc;
+print rc[0];
+
+print rp[0].children[0] == rc[0];
+
+
+

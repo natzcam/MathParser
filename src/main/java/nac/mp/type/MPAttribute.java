@@ -36,6 +36,10 @@ public class MPAttribute extends MPObject implements Creator {
     return name;
   }
 
+  public String getMetaType() {
+    return metaType;
+  }
+
   @Override
   public Type getType() {
     return Type.ATTRIBUTE;

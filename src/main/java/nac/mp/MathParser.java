@@ -64,6 +64,7 @@ import nac.mp.ast.statement.OneToManyDecl;
 import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.frostbyte.FrostByte;
+import nac.mp.type.MPModel;
 import nac.mp.type.MPObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,18 +85,17 @@ public class MathParser {
   private Token next = null;
   public static final ObjectStore objectStore = new FrostByte();
 
-  public void eval(String path) throws ParseException, EvalException {
-    eval(new File(path));
+  public void model(String path) throws ParseException, EvalException {
+    model(new File(path));
   }
 
-  public void eval(Path path) throws ParseException, EvalException {
-    eval(path.toFile());
+  public void model(Path path) throws ParseException, EvalException {
+    model(path.toFile());
   }
 
-  public void eval(File path) throws ParseException, EvalException {
-    log.info("Parsing " + path);
+  public void model(File path) throws ParseException, EvalException {
+    log.info("Parsing model " + path);
     tokenizer.setCurrentFile(path);
-
     try {
       next();
       while (next.type != TokenType.EOF) {
@@ -106,13 +106,41 @@ public class MathParser {
           case KW_REL:
             fileBlock.addStatement(relDecl());
             break;
-          default:
-            fileBlock.addStatement(statement());
         }
         next();
       }
-    } catch (ClassCastException cce) {
-      throw new ParseException("Expected type not found.", cce);
+    } catch (Throwable t) {
+      throw new ParseException("Expected type not found.", t);
+    }
+
+    //eval
+    fileBlock.eval(globalScope);
+  }
+
+  public void control(String path) throws ParseException, EvalException {
+    control(new File(path));
+  }
+
+  public void control(Path path) throws ParseException, EvalException {
+    control(path.toFile());
+  }
+
+  public void control(File path) throws ParseException, EvalException {
+    log.info("Parsing control" + path);
+    tokenizer.setCurrentFile(path);
+
+    for (MPModel model : objectStore.getModels()) {
+      globalScope.setLocalVar(model.getName(), model);
+    }
+
+    try {
+      next();
+      while (next.type != TokenType.EOF) {
+        fileBlock.addStatement(statement());
+        next();
+      }
+    } catch (Throwable t) {
+      throw new ParseException("Expected type not found.", t);
     }
 
     //eval
@@ -765,18 +793,6 @@ public class MathParser {
 
   public void cleanup() {
     objectStore.close();
-  }
-
-  public static void main(String[] args) {
-    MathParser mp = new MathParser();
-    try {
-      mp.eval("src/main/resources/mp/test.mp");
-    } catch (EvalException | ParseException ex) {
-      log.error("Parse/Eval failed", ex);
-    } finally {
-      mp.cleanup();
-    }
-
   }
 
 }
