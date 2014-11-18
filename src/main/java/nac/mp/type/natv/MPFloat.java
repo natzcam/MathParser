@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
+import nac.mp.type.Type;
 
 /**
  *
@@ -29,8 +30,8 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.FLOAT;
+  public Type getType() {
+    return Type.FLOAT;
   }
 
   @Override
@@ -40,95 +41,95 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
 
   @Override
   public MPObject plus(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPFloat(getFloat() + right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPFloat(getFloat() + right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " * " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " * " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject dash(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPFloat(getFloat() - right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPFloat(getFloat() - right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " * " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " * " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject star(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPFloat(getFloat() * right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPFloat(getFloat() * right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " * " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " * " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject slash(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPFloat(getFloat() / right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPFloat(getFloat() / right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " * " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " * " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject lt(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPBoolean(getFloat() < right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPBoolean(getFloat() < right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " * " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " * " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject lte(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPBoolean(getFloat() <= right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPBoolean(getFloat() <= right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " <= " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " <= " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject mte(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPBoolean(getFloat() >= right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPBoolean(getFloat() >= right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " >= " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " >= " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject mt(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPBoolean(getFloat() > right.getFloat());
-      case INTEGER:
+      case INT:
         return new MPBoolean(getFloat() > right.getInt());
     }
-    throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject isEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPBoolean(value == right.getFloat());
     }
@@ -137,7 +138,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
 
   @Override
   public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case FLOAT:
         return new MPBoolean(value != right.getFloat());
     }

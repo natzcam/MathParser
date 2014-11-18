@@ -37,14 +37,9 @@ public class MPModelObj extends MPBaseObj {
     return new MPReference(parent, creator, this);
   }
 
-  @Override
-  public String toString() {
-    return "modelobject:" + model.getName() + ":" + getId() + " : " + super.toString();
-  }
-
 //  @Override
 //  public MPObject isEqual(MPObject right) {
-//    switch (right.getHint()) {
+//    switch (right.getType()) {
 //      case MODEL_OBJECT:
 //        MPModelObj mo = (MPModelObj) right;
 //        return new MPBoolean(getId().isEqual(mo.getId()).getBoolean() && model.isEqual(mo.getModel()).getBoolean());
@@ -54,7 +49,7 @@ public class MPModelObj extends MPBaseObj {
 //
 //  @Override
 //  public MPObject notEqual(MPObject right) {
-//    switch (right.getHint()) {
+//    switch (right.getType()) {
 //      case MODEL_OBJECT:
 //        MPModelObj mo = (MPModelObj) right;
 //        return new MPBoolean(getId().notEqual(mo.getId()).getBoolean() || model.notEqual(mo.getModel()).getBoolean());
@@ -62,7 +57,7 @@ public class MPModelObj extends MPBaseObj {
 //    return new MPBoolean(false);
 //  }
   @Override
-  public Hint getHint() {
-    return Hint.MODEL_OBJECT;
+  public Type getType() {
+    return Type.MODEL_OBJECT;
   }
 }

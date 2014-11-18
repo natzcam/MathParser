@@ -35,13 +35,8 @@ public class MPReference extends MPObject {
   }
 
   @Override
-  public String toString() {
-    return "ref:" + modelName + ":" + id;
-  }
-
-  @Override
-  public Hint getHint() {
-    return Hint.REFERENCE;
+  public Type getType() {
+    return Type.REF;
   }
 
   @Override

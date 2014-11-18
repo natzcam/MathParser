@@ -71,6 +71,7 @@ public class FrostByte implements ObjectStore {
 
     MVMap<Long, MPModelObj> objectMap = getObjectMap(model);
 
+
     if (id == null) {
 //      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
 //      Long key = keyinc.incrementAndGet();

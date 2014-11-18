@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
-import nac.mp.ast.statement.ModelDecl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,41 +21,26 @@ import org.apache.logging.log4j.Logger;
 public class MPModel extends MPObject implements Creator {
 
   private static final Logger log = LogManager.getLogger(MPModel.class);
-  private final ModelDecl modelDecl;
+  private final String name;
   private final Map<String, MPAttribute> attributes = new LinkedHashMap<>();
 
-  public MPModel(Scope parent, ModelDecl modelDecl) {
+  public MPModel(Scope parent, String name) {
     super(parent, null);
-    this.modelDecl = modelDecl;
+    this.name = name;
   }
 
   public String getName() {
-    return modelDecl.getName();
+    return name;
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.MODEL;
-  }
-
-  @Override
-  public String toString() {
-    return "model:" + modelDecl.getName();
+  public Type getType() {
+    return Type.MODEL;
   }
 
   public Map<String, MPAttribute> getAttributes() {
     return attributes;
   }
-//
-//  @Override
-//  public MPObject isEqual(MPObject right) {
-//    return new MPBoolean(((MPModel) right).getName().equals(getName()));
-//  }
-//
-//  @Override
-//  public MPObject notEqual(MPObject right) {
-//    return new MPBoolean(!((MPModel) right).getName().equals(getName()));
-//  }
 
   @Override
   public MPObject newInstance() throws EvalException {

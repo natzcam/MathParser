@@ -25,13 +25,8 @@ public class MPBaseObj extends MPObject implements Scope {
   }
 
   @Override
-  public String toString() {
-    return "baseobject:" + vars.toString();
-  }
-
-  @Override
-  public Hint getHint() {
-    return Hint.BASE_OBJECT;
+  public Type getType() {
+    return Type.BASE_OBJECT;
   }
 
   @Override

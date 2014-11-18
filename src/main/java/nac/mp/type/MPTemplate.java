@@ -30,18 +30,17 @@ public class MPTemplate extends MPObject implements Creator {
     this.declarations = declarations;
   }
 
+  public String getName() {
+    return name;
+  }
+
   public List<Expression> getDeclarations() {
     return declarations;
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.TEMPLATE;
-  }
-
-  @Override
-  public String toString() {
-    return "template:" + name;
+  public Type getType() {
+    return Type.TEMPLATE;
   }
 
   @Override

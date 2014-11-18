@@ -7,11 +7,11 @@ package nac.mp.type.natv;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
+import nac.mp.type.Type;
 
 /**
  *
@@ -58,8 +58,8 @@ public class MPString extends MPObject implements Comparable<MPString> {
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.STRING;
+  public Type getType() {
+    return Type.STRING;
   }
 
   @Override
@@ -69,7 +69,7 @@ public class MPString extends MPObject implements Comparable<MPString> {
 
   @Override
   public MPObject isEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case STRING:
         return new MPBoolean(value.equals(right.getString()));
     }
@@ -78,7 +78,7 @@ public class MPString extends MPObject implements Comparable<MPString> {
 
   @Override
   public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case STRING:
         return new MPBoolean(!value.equals(right.getString()));
     }

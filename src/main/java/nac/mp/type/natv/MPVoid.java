@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
+import nac.mp.type.Type;
 
 /**
  * TODO:use 1 instance of void
@@ -27,8 +28,8 @@ public class MPVoid extends MPObject implements Comparable<MPObject> {
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.VOID;
+  public Type getType() {
+    return Type.VOID;
   }
 
   @Override
@@ -38,7 +39,7 @@ public class MPVoid extends MPObject implements Comparable<MPObject> {
 
   @Override
   public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case VOID:
         return new MPBoolean(false);
     }
@@ -47,7 +48,7 @@ public class MPVoid extends MPObject implements Comparable<MPObject> {
 
   @Override
   public MPObject isEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case VOID:
         return new MPBoolean(true);
     }

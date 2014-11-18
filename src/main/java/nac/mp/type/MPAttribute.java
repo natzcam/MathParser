@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
-import nac.mp.ast.statement.AttributeDecl;
-import nac.mp.ast.statement.AttributeDecl.Type;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,34 +21,33 @@ import org.apache.logging.log4j.Logger;
 public class MPAttribute extends MPObject implements Creator {
 
   private static final Logger log = LogManager.getLogger(MPAttribute.class);
-  private final AttributeDecl attrDecl;
+  private final Type type;
+  private final String metaType;
+  private final String name;
 
-  public MPAttribute(Scope parent, AttributeDecl attrDecl) {
+  public MPAttribute(Scope parent, Type type, String metaType, String name) {
     super(parent, null);
-    this.attrDecl = attrDecl;
+    this.type = type;
+    this.metaType = metaType;
+    this.name = name;
   }
 
   public String getName() {
-    return attrDecl.getIdentifier();
+    return name;
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.ATTRIBUTE;
-  }
-
-  @Override
-  public String toString() {
-    return "attr:" + attrDecl.getIdentifier();
-  }
-
   public Type getType() {
-    return attrDecl.getType();
+    return Type.ATTRIBUTE;
+  }
+
+  public Type getValueType() {
+    return type;
   }
 
   @Override
   public MPObject newInstance() throws EvalException {
-    switch (attrDecl.getType()) {
+    switch (type) {
       case STRING:
         return new MPVoid();
       case INT:

@@ -11,7 +11,7 @@ import nac.mp.ast.BasicScope;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
-import nac.mp.type.MPObject.Hint;
+import nac.mp.type.Type;
 
 /**
  *
@@ -31,7 +31,7 @@ public class WhileStatement implements Expression {
   public MPObject eval(Scope scope) throws EvalException {
     scope = new BasicScope(scope);
     MPObject condValue = cond.eval(scope);
-    if (condValue.getHint() != Hint.BOOLEAN) {
+    if (condValue.getType() != Type.BOOL) {
       throw new EvalException("Condition not boolean", scope, this);
     }
     while (condValue.getBoolean()) {

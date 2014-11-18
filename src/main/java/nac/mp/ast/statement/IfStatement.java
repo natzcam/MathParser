@@ -11,7 +11,7 @@ import nac.mp.ast.BasicScope;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
-import nac.mp.type.MPObject.Hint;
+import nac.mp.type.Type;
 
 /**
  *
@@ -35,7 +35,7 @@ public class IfStatement implements Expression {
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     MPObject result = cond.eval(scope);
-    if (result.getHint() == Hint.BOOLEAN) {
+    if (result.getType() == Type.BOOL) {
       if (result.getBoolean()) {
         scope = new BasicScope(scope);
         return ifBody.eval(scope);

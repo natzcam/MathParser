@@ -7,6 +7,7 @@ package nac.mp.type;
 
 import nac.mp.type.natv.MPBoolean;
 import nac.mp.ast.Scope;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  *
@@ -31,43 +32,31 @@ public abstract class MPObject implements Scope {
     return parent;
   }
 
-  public abstract Hint getHint();
-
-  public static enum Hint {
-
-    BOOLEAN,
-    INTEGER,
-    FLOAT,
-    STRING,
-    VOID,
-    FUNCTION,
-    BASE_OBJECT,
-    MODEL_OBJECT,
-    TEMPLATE,
-    LIST,
-    MODEL,
-    ATTRIBUTE,
-    REFERENCE;
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this);
   }
 
+  public abstract Type getType();
+
   public boolean getBoolean() {
-    throw new UnsupportedOperationException("No boolean representation: " + getHint());
+    throw new UnsupportedOperationException("No boolean representation: " + getType());
   }
 
   public long getInt() {
-    throw new UnsupportedOperationException("No int representation: " + getHint());
+    throw new UnsupportedOperationException("No int representation: " + getType());
   }
 
   public double getFloat() {
-    throw new UnsupportedOperationException("No float representation: " + getHint());
+    throw new UnsupportedOperationException("No float representation: " + getType());
   }
 
   public String getString() {
-    throw new UnsupportedOperationException("No string representation: " + getHint());
+    throw new UnsupportedOperationException("No string representation: " + getType());
   }
 
   public boolean isVoid() {
-    throw new UnsupportedOperationException("No isVoid representation: " + getHint());
+    throw new UnsupportedOperationException("No isVoid representation: " + getType());
   }
 
   public MPObject notEqual(MPObject right) {
@@ -79,46 +68,46 @@ public abstract class MPObject implements Scope {
   }
 
   public MPObject plus(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " + " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " + " + right.getType() + " not supported");
   }
 
   public MPObject dash(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " - " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " - " + right.getType() + " not supported");
   }
 
   public MPObject star(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " * " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " * " + right.getType() + " not supported");
   }
 
   public MPObject slash(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " / " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " / " + right.getType() + " not supported");
   }
 
   public MPObject lte(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " <= " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " <= " + right.getType() + " not supported");
   }
 
   public MPObject lt(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " < " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " < " + right.getType() + " not supported");
   }
 
   public MPObject mte(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " >= " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " >= " + right.getType() + " not supported");
   }
 
   public MPObject mt(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
   }
 
   public MPObject la(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " && " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " && " + right.getType() + " not supported");
   }
 
   public MPObject lo(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " || " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " || " + right.getType() + " not supported");
   }
 
   public MPObject pa(MPObject right) {
-    throw new UnsupportedOperationException(getHint() + " += " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " += " + right.getType() + " not supported");
   }
 }

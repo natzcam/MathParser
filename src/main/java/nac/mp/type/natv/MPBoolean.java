@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.type.MPObject;
+import nac.mp.type.Type;
 
 /**
  * TODO use 1 instance of True and False
@@ -30,8 +31,8 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.BOOLEAN;
+  public Type getType() {
+    return Type.BOOL;
   }
 
   @Override
@@ -45,8 +46,8 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
 
   @Override
   public MPObject isEqual(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
+    switch (right.getType()) {
+      case BOOL:
         return new MPBoolean(value == right.getBoolean());
     }
     return new MPBoolean(false);
@@ -54,8 +55,8 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
 
   @Override
   public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
+    switch (right.getType()) {
+      case BOOL:
         return new MPBoolean(value != right.getBoolean());
     }
     return new MPBoolean(false);
@@ -63,20 +64,20 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
 
   @Override
   public MPObject lo(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
+    switch (right.getType()) {
+      case BOOL:
         return new MPBoolean(value || right.getBoolean());
     }
-    throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject la(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
+    switch (right.getType()) {
+      case BOOL:
         return new MPBoolean(value && right.getBoolean());
     }
-    throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
+    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
   }
 
   @Override

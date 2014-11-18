@@ -42,7 +42,7 @@ public class MPList extends MPObject implements Comparable<MPList> {
 
   @Override
   public MPObject isEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case LIST:
         return this.listEquals((MPList) right);
     }
@@ -51,7 +51,7 @@ public class MPList extends MPObject implements Comparable<MPList> {
 
   @Override
   public MPObject notEqual(MPObject right) {
-    switch (right.getHint()) {
+    switch (right.getType()) {
       case LIST:
         return this.listEquals((MPList) right).inverse();
     }
@@ -108,13 +108,8 @@ public class MPList extends MPObject implements Comparable<MPList> {
   };
 
   @Override
-  public Hint getHint() {
-    return Hint.LIST;
-  }
-
-  @Override
-  public String toString() {
-    return "list:" + list.toString();
+  public Type getType() {
+    return Type.LIST;
   }
 
   @Override

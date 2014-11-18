@@ -8,7 +8,6 @@ package nac.mp;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObj;
-import nac.mp.type.MPObject;
 import nac.mp.type.QueryPredicate;
 
 /**

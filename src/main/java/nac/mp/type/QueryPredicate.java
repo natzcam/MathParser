@@ -39,7 +39,7 @@ public class QueryPredicate extends MPObject {
   }
 
   @Override
-  public Hint getHint() {
+  public Type getType() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

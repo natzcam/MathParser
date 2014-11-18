@@ -8,7 +8,7 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.MPObject.Hint;
+import nac.mp.type.Type;
 
 /**
  *
@@ -25,7 +25,7 @@ public class Assert implements Expression {
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     MPObject result = cond.eval(scope);
-    if (result.getHint() == Hint.BOOLEAN) {
+    if (result.getType() == Type.BOOL) {
       if (!result.getBoolean()) {
         throw new EvalException("Assertion failed.", scope, cond);
       }

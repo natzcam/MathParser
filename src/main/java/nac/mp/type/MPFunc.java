@@ -37,13 +37,8 @@ public class MPFunc extends MPObject {
   }
 
   @Override
-  public Hint getHint() {
-    return Hint.FUNCTION;
-  }
-
-  @Override
-  public String toString() {
-    return "func:" + this.hashCode();
+  public Type getType() {
+    return Type.FUNCTION;
   }
 
   public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
