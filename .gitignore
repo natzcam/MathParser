@@ -9,8 +9,11 @@
 /data/meta.data.p
 /data/meta.data
 /data/object.data.t
-/data/object.data
+/data/index.data
 /data/object.data.p
 /data/index.data.t
 /data/index.data.p
-/data/index.data
+/data/object.data
+/data/model.data
+/data/model.data.p
+/data/model.data.t

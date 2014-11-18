@@ -39,7 +39,6 @@ public class FrostByte implements ObjectStore {
   private final DB modelDB;
   private final DB objectDB;
   private final DB indexDB;
-  private final Kryo kryo = new Kryo();
 
   public FrostByte() {
     modelDB = DBMaker.newFileDB(new File(FILE_MODEL)).closeOnJvmShutdown().make();
@@ -50,8 +49,7 @@ public class FrostByte implements ObjectStore {
   @Override
   public void register(MPModel model) throws EvalException {
     BTreeMap<String, MPModel> modelMap = modelDB.getTreeMap(APPEND_MODEL);
-    for (MPAttribute ad : model.getAttributes().values()) {
-      final String attrName = ad.getName();
+    for (String attrName : model.getAttributes().keySet()) {
       if (attrName.equals("id")) {
         throw new EvalException("Can't define custom id property.", model);
       }
@@ -84,30 +82,10 @@ public class FrostByte implements ObjectStore {
       id = new MPInteger(key);
       obj.setVar("id", id);
     }
-    for (MPAttribute attr : model.getAttributes().values()) {
-      if (attr.getName().equals("id")) {
-        continue;
-      }
-
-//      if (attr.getType() == Type.REF) {
-//        MPModelObj mo = (MPModelObj) obj.getVar(attr.getName());
-//        obj.setVar(attr.getName(), mo.getReference());
-//      } else if (attr.getType() == Type.LIST) {
-//        MPList ml = (MPList) obj.getVar(attr.getName());
-//        List<MPReference> refList = new ArrayList<>();
-//        for (MPObject mo : ml.getList()) {
-//          MPModelObj mdo = (MPModelObj) mo;
-//          refList.add(mdo.getReference());
-//        }
-//        ml.getList().clear();
-//        ml.getList().addAll(refList);
-//      }
-    }
 
     objectMap.put(id.getInt(), obj);
     log.info("Save {}: {}", model.getName(), obj);
-//
-//    indexDB.commit();
+
     objectDB.commit();
   }
 

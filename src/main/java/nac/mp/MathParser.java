@@ -306,7 +306,7 @@ public class MathParser {
     }
     consume(TokenType.IDENTIFIER);
     String i = current.text;
-    AttributeDecl typedDecl = new AttributeDecl(t, mt, i);
+    AttributeDecl typedDecl = new AttributeDecl(t, mt, i, objectStore);
     consume(TokenType.SEMICOLON);
     return typedDecl;
   }

@@ -14,6 +14,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 
 /**
  *
@@ -21,28 +22,32 @@ import nac.mp.EvalException;
  */
 public class MPRefList extends MPObject implements Comparable<MPRefList> {
 
-  private boolean refMode = false;
-  private final List<MPModelObj> list;
+  private final List<MPReference> refList = new ArrayList<MPReference>();
+  private transient final List<MPModelObj> list;
+  private final ObjectStore objectStore;
 
-  public MPRefList(int capacity, List<MPModelObj> initialValues) {
+  public MPRefList(int capacity, List<MPModelObj> initialValues, ObjectStore objectStore) {
     super(null, null);
     list = new ArrayList<>(capacity);
     if (initialValues != null) {
       list.addAll(initialValues);
     }
+    this.objectStore = objectStore;
   }
 
-  public MPRefList(List<MPModelObj> initialValues) {
+  public MPRefList(List<MPModelObj> initialValues, ObjectStore objectStore) {
     super(null, null);
     list = new ArrayList<>();
     if (initialValues != null) {
       list.addAll(initialValues);
     }
+    this.objectStore = objectStore;
   }
 
-  public MPRefList() {
+  public MPRefList(ObjectStore objectStore) {
     super(null, null);
     list = new ArrayList<>();
+    this.objectStore = objectStore;
   }
 
   @Override
@@ -90,20 +95,12 @@ public class MPRefList extends MPObject implements Comparable<MPRefList> {
     return new MPBoolean(!(e1.hasNext() || e2.hasNext()));
   }
 
-  public MPObject get(int index) {
-    return list.get(index);
-  }
-
   public MPObject get(MPInteger index) {
     return list.get((int) index.getInt());
   }
 
   public void add(MPModelObj obj) {
     list.add(obj);
-  }
-
-  public List<MPModelObj> getList() {
-    return list;
   }
 
   private static final MPFunc ADD = new MPFunc(null, null) {
@@ -123,7 +120,7 @@ public class MPRefList extends MPObject implements Comparable<MPRefList> {
 
   @Override
   public Type getType() {
-    return Type.LIST;
+    return Type.REF_LIST;
   }
 
   @Override

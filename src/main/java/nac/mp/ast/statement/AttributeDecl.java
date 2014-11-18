@@ -6,6 +6,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
@@ -24,11 +25,13 @@ public class AttributeDecl implements Expression {
   private final Type type;
   private final String metaType;
   private final String identifier;
+  private final ObjectStore objectStore;
 
-  public AttributeDecl(String type, String metaType, String identifier) {
+  public AttributeDecl(String type, String metaType, String identifier, ObjectStore objectStore) {
     this.type = metaType == null ? Type.LIST : Type.REF_LIST;
     this.metaType = metaType;
     this.identifier = identifier;
+    this.objectStore = objectStore;
   }
 
   public String getIdentifier() {
@@ -45,7 +48,7 @@ public class AttributeDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPAttribute attr = new MPAttribute(scope, type, metaType, identifier);
+    MPAttribute attr = new MPAttribute(scope, type, metaType, identifier, objectStore);
     scope.declareLocalVar(identifier, attr);
     return null;
   }

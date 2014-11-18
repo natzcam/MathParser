@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +25,14 @@ public class MPAttribute extends MPObject implements Creator {
   private final Type type;
   private final String metaType;
   private final String name;
+  private final ObjectStore objectStore;
 
-  public MPAttribute(Scope parent, Type type, String metaType, String name) {
+  public MPAttribute(Scope parent, Type type, String metaType, String name, ObjectStore objectStore) {
     super(parent, null);
     this.type = type;
     this.metaType = metaType;
     this.name = name;
+    this.objectStore = objectStore;
   }
 
   public String getName() {
@@ -65,7 +68,7 @@ public class MPAttribute extends MPObject implements Creator {
       case REF:
         return new MPVoid();
       case REF_LIST:
-        return new MPRefList();
+        return new MPRefList(objectStore);
       default:
         return new MPVoid();
     }

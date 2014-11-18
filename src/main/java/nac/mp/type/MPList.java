@@ -89,20 +89,12 @@ public class MPList extends MPObject implements Comparable<MPList> {
     return new MPBoolean(!(e1.hasNext() || e2.hasNext()));
   }
 
-  public MPObject get(int index) {
-    return list.get(index);
-  }
-
   public MPObject get(MPInteger index) {
     return list.get((int) index.getInt());
   }
 
   public void add(MPObject obj) {
     list.add(obj);
-  }
-
-  public List<MPObject> getList() {
-    return list;
   }
 
   private static final MPFunc ADD = new MPFunc(null, null) {

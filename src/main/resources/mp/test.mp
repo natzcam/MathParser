@@ -1,4 +1,4 @@
-
+print Parent.children;
 print Parent.name;
 
 //select
