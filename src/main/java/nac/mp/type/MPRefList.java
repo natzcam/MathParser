@@ -19,11 +19,12 @@ import nac.mp.EvalException;
  *
  * @author camomon
  */
-public class MPList extends MPObject implements Comparable<MPList> {
+public class MPRefList extends MPObject implements Comparable<MPRefList> {
 
-  private final List<MPObject> list;
+  private boolean refMode = false;
+  private final List<MPModelObj> list;
 
-  public MPList(int capacity, List<MPObject> initialValues) {
+  public MPRefList(int capacity, List<MPModelObj> initialValues) {
     super(null, null);
     list = new ArrayList<>(capacity);
     if (initialValues != null) {
@@ -31,7 +32,7 @@ public class MPList extends MPObject implements Comparable<MPList> {
     }
   }
 
-  public MPList(List<MPObject> initialValues) {
+  public MPRefList(List<MPModelObj> initialValues) {
     super(null, null);
     list = new ArrayList<>();
     if (initialValues != null) {
@@ -39,7 +40,7 @@ public class MPList extends MPObject implements Comparable<MPList> {
     }
   }
 
-  public MPList() {
+  public MPRefList() {
     super(null, null);
     list = new ArrayList<>();
   }
@@ -57,7 +58,7 @@ public class MPList extends MPObject implements Comparable<MPList> {
   public MPObject isEqual(MPObject right) {
     switch (right.getType()) {
       case LIST:
-        return this.listEquals((MPList) right);
+        return this.listEquals((MPRefList) right);
     }
     return new MPBoolean(false);
   }
@@ -66,18 +67,18 @@ public class MPList extends MPObject implements Comparable<MPList> {
   public MPObject notEqual(MPObject right) {
     switch (right.getType()) {
       case LIST:
-        return this.listEquals((MPList) right).inverse();
+        return this.listEquals((MPRefList) right).inverse();
     }
     return new MPBoolean(false);
   }
 
-  private MPBoolean listEquals(MPList mpList) {
+  private MPBoolean listEquals(MPRefList mpList) {
     if (mpList == this) {
       return new MPBoolean(true);
     }
 
-    ListIterator<MPObject> e1 = list.listIterator();
-    ListIterator<MPObject> e2 = mpList.list.listIterator();
+    ListIterator<MPModelObj> e1 = list.listIterator();
+    ListIterator<MPModelObj> e2 = mpList.list.listIterator();
     while (e1.hasNext() && e2.hasNext()) {
       MPObject o1 = e1.next();
       MPObject o2 = e2.next();
@@ -97,11 +98,11 @@ public class MPList extends MPObject implements Comparable<MPList> {
     return list.get((int) index.getInt());
   }
 
-  public void add(MPObject obj) {
+  public void add(MPModelObj obj) {
     list.add(obj);
   }
 
-  public List<MPObject> getList() {
+  public List<MPModelObj> getList() {
     return list;
   }
 
@@ -109,8 +110,8 @@ public class MPList extends MPObject implements Comparable<MPList> {
 
     @Override
     public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
-      MPList thisList = (MPList) thisRef;
-      thisList.list.add(argsValues.get(0));
+      MPRefList thisList = (MPRefList) thisRef;
+      thisList.list.add((MPModelObj) argsValues.get(0));
       return null;
     }
 
@@ -126,7 +127,7 @@ public class MPList extends MPObject implements Comparable<MPList> {
   }
 
   @Override
-  public int compareTo(MPList o) {
+  public int compareTo(MPRefList o) {
     return 0;
   }
 

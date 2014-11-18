@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import nac.mp.EvalException;
-import nac.mp.MathParser;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
@@ -23,8 +23,10 @@ public class ModelDecl implements Expression {
 
   private final String name;
   private final Map<String, AttributeDecl> attrMap = new HashMap<>();
+  private final ObjectStore objectStore;
 
-  public ModelDecl(String name) {
+  public ModelDecl(ObjectStore objectStore, String name) {
+    this.objectStore = objectStore;
     this.name = name;
   }
 
@@ -51,7 +53,7 @@ public class ModelDecl implements Expression {
     for (AttributeDecl attributeDecl : attrMap.values()) {
       attributeDecl.eval(model);
     }
-    MathParser.objectStore.register(model);
+    objectStore.register(model);
     return null;
   }
 }

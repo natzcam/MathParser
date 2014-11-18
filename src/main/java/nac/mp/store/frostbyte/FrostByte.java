@@ -6,6 +6,7 @@
 package nac.mp.store.frostbyte;
 
 import com.esotericsoftware.kryo.Kryo;
+import java.io.File;
 import java.util.Collection;
 import nac.mp.ObjectStore;
 import nac.mp.EvalException;
@@ -17,8 +18,10 @@ import nac.mp.type.MPModelObj;
 import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.h2.mvstore.MVMap;
-import org.h2.mvstore.MVStore;
+import org.mapdb.Atomic;
+import org.mapdb.BTreeMap;
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
 
 /**
  *
@@ -33,20 +36,20 @@ public class FrostByte implements ObjectStore {
   private static final String APPEND_MODEL = "_model";
   private static final String APPEND_SEQUENCE = "_sequence";
   private static final String APPEND_INDEX = "_index";
-  private final MVStore modelDB;
-  private final MVStore objectDB;
-  private final MVStore indexDB;
+  private final DB modelDB;
+  private final DB objectDB;
+  private final DB indexDB;
   private final Kryo kryo = new Kryo();
 
   public FrostByte() {
-    modelDB = MVStore.open(FILE_MODEL);
-    objectDB = MVStore.open(FILE_OBJECT);
-    indexDB = MVStore.open(FILE_INDEX);
+    modelDB = DBMaker.newFileDB(new File(FILE_MODEL)).closeOnJvmShutdown().make();
+    objectDB = DBMaker.newFileDB(new File(FILE_OBJECT)).closeOnJvmShutdown().make();
+    indexDB = DBMaker.newFileDB(new File(FILE_INDEX)).closeOnJvmShutdown().make();
   }
 
   @Override
   public void register(MPModel model) throws EvalException {
-    MVMap<String, MPModel> modelMap = modelDB.openMap(APPEND_MODEL);
+    BTreeMap<String, MPModel> modelMap = modelDB.getTreeMap(APPEND_MODEL);
     for (MPAttribute ad : model.getAttributes().values()) {
       final String attrName = ad.getName();
       if (attrName.equals("id")) {
@@ -59,14 +62,12 @@ public class FrostByte implements ObjectStore {
 
   @Override
   public Collection<MPModel> getModels() {
-    MVMap<String, MPModel> modelMap = modelDB.openMap(APPEND_MODEL);
+    BTreeMap<String, MPModel> modelMap = modelDB.getTreeMap(APPEND_MODEL);
     return modelMap.values();
   }
 
-  private MVMap<Long, MPModelObj> getObjectMap(MPModel model) {
-//    MVMap.Builder<Long, MPModelObj> builder = new MVMap.Builder<>();
-//    builder.valueType(new MPModelObjDateType(kryo, model));
-    return objectDB.openMap(model.getName() + APPEND_MODEL);
+  private BTreeMap<Long, MPModelObj> getObjectMap(MPModel model) {
+    return objectDB.getTreeMap(model.getName() + APPEND_MODEL);
   }
 
   @Override
@@ -75,12 +76,12 @@ public class FrostByte implements ObjectStore {
     MPModel model = obj.getModel();
     MPInteger id = obj.getId();
 
-    MVMap<Long, MPModelObj> objectMap = getObjectMap(model);
+    BTreeMap<Long, MPModelObj> objectMap = getObjectMap(model);
 
     if (id == null) {
-//      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
-//      Long key = keyinc.incrementAndGet();
-      id = new MPInteger(System.currentTimeMillis());
+      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
+      Long key = keyinc.incrementAndGet();
+      id = new MPInteger(key);
       obj.setVar("id", id);
     }
     for (MPAttribute attr : model.getAttributes().values()) {
@@ -112,8 +113,8 @@ public class FrostByte implements ObjectStore {
 
   @Override
   public MPList select(MPModel model, QueryPredicate predicate) throws EvalException {
-    MVMap<Long, MPModelObj> objectMap = getObjectMap(model);
-    MPList result = new MPList(10, null);
+    BTreeMap<Long, MPModelObj> objectMap = getObjectMap(model);
+    MPList result = new MPList();
     for (MPModelObj obj : objectMap.values()) {
       if (predicate.call(obj)) {
         result.add(obj);

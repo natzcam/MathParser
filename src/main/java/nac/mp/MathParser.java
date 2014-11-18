@@ -83,7 +83,7 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
-  public static final ObjectStore objectStore = new FrostByte();
+  private final ObjectStore objectStore = new FrostByte();
 
   public void model(String path) throws ParseException, EvalException {
     model(new File(path));
@@ -212,7 +212,7 @@ public class MathParser {
         consume();
         Expression sve = expression();
         consume(TokenType.SEMICOLON);
-        return new Save(sve);
+        return new Save(objectStore, sve);
       case KW_PRINT:
         consume();
         Expression ex1 = expression();
@@ -385,7 +385,7 @@ public class MathParser {
     consume(TokenType.KW_MODEL);
     consume(TokenType.IDENTIFIER);
     String m = current.text;
-    ModelDecl md = new ModelDecl(m);
+    ModelDecl md = new ModelDecl(objectStore, m);
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
@@ -767,7 +767,7 @@ public class MathParser {
         Expression modelName = expression();
         consume(TokenType.KW_WHERE);
         WhereBlock wb = whereBlock();
-        return new SelectExpression(modelName, wb);
+        return new SelectExpression(objectStore, modelName, wb);
       default:
         throw new ParseException("Unexpected token '" + next + "'. Expression expected.", tokenizer, next);
     }

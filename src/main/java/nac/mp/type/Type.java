@@ -23,5 +23,6 @@ public enum Type {
   LIST,
   MODEL,
   ATTRIBUTE,
-  REF;
+  REF,
+  REF_LIST;
 }

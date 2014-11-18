@@ -6,6 +6,7 @@ package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
 import nac.mp.MathParser;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
@@ -24,14 +25,16 @@ public class SelectExpression implements Expression {
   private static final Logger log = LogManager.getLogger(SelectExpression.class);
   private final Expression modelName;
   private final WhereBlock whereBlock;
+  private final ObjectStore objectStore;
 
-  public SelectExpression(Expression modelName, WhereBlock whereBlock) {
+  public SelectExpression(ObjectStore objectStore, Expression modelName, WhereBlock whereBlock) {
     this.modelName = modelName;
     this.whereBlock = whereBlock;
+    this.objectStore = objectStore;
   }
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    return MathParser.objectStore.select((MPModel) modelName.eval(scope), new QueryPredicate(scope, whereBlock));
+    return objectStore.select((MPModel) modelName.eval(scope), new QueryPredicate(scope, whereBlock));
   }
 }
