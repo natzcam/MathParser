@@ -6,13 +6,9 @@
 package nac.mp.store.frostbyte;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
-import java.io.ByteArrayOutputStream;
 import java.util.Collection;
 import nac.mp.ObjectStore;
 import nac.mp.EvalException;
-import nac.mp.MathParser;
-import nac.mp.ParseException;
 import nac.mp.type.MPAttribute;
 import nac.mp.type.natv.MPInteger;
 import nac.mp.type.MPList;
@@ -23,7 +19,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
-import org.h2.mvstore.type.ObjectDataType;
 
 /**
  *
@@ -69,9 +64,9 @@ public class FrostByte implements ObjectStore {
   }
 
   private MVMap<Long, MPModelObj> getObjectMap(MPModel model) {
-    MVMap.Builder<Long, MPModelObj> builder = new MVMap.Builder<>();
-    builder.valueType(new MPModelObjDateType(model));
-    return objectDB.openMap(model.getName() + APPEND_MODEL, builder);
+//    MVMap.Builder<Long, MPModelObj> builder = new MVMap.Builder<>();
+//    builder.valueType(new MPModelObjDateType(kryo, model));
+    return objectDB.openMap(model.getName() + APPEND_MODEL);
   }
 
   @Override
@@ -112,7 +107,7 @@ public class FrostByte implements ObjectStore {
     log.info("Save {}: {}", model.getName(), obj);
 //
 //    indexDB.commit();
-//    objectDB.commit();
+    objectDB.commit();
   }
 
   @Override
@@ -133,6 +128,5 @@ public class FrostByte implements ObjectStore {
     objectDB.close();
     indexDB.close();
   }
-
 
 }

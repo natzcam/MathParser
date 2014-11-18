@@ -15,14 +15,14 @@ import org.apache.logging.log4j.Logger;
  *
  * @author camomon
  */
-public class RunControl {
+public class RunWrite {
 
-  private static final Logger log = LogManager.getLogger(RunControl.class);
+  private static final Logger log = LogManager.getLogger(RunWrite.class);
 
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.control("src/main/resources/mp/test.mp");
+      mp.control("src/main/resources/mp/write.mp");
     } catch (EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
     } finally {

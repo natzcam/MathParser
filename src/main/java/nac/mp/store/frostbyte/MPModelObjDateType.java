@@ -5,6 +5,7 @@
  */
 package nac.mp.store.frostbyte;
 
+import com.esotericsoftware.kryo.Kryo;
 import java.nio.ByteBuffer;
 import nac.mp.type.MPModel;
 import org.h2.mvstore.DataUtils;
@@ -18,8 +19,10 @@ import org.h2.mvstore.type.DataType;
 class MPModelObjDateType implements DataType {
 
   private MPModel model;
+  private Kryo kryo;
 
-  public MPModelObjDateType(MPModel model) {
+  public MPModelObjDateType(Kryo kryo, MPModel model) {
+    this.kryo = kryo;
     this.model = model;
   }
 
