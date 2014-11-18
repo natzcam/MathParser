@@ -64,6 +64,8 @@ public class MPAttribute extends MPObject implements Creator {
         return new MPList();
       case REF:
         return new MPVoid();
+      case REF_LIST:
+        return new MPRefList();
       default:
         return new MPVoid();
     }
