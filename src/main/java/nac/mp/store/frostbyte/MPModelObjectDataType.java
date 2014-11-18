@@ -5,7 +5,13 @@
  */
 package nac.mp.store.frostbyte;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import nac.mp.type.MPModelObject;
+import org.h2.mvstore.DataUtils;
 import org.h2.mvstore.WriteBuffer;
 import org.h2.mvstore.type.DataType;
 
@@ -15,37 +21,57 @@ import org.h2.mvstore.type.DataType;
  */
 class MPModelObjectDataType implements DataType {
 
-  public MPModelObjectDataType() {
+  private final Kryo kryo;
+
+  public MPModelObjectDataType(Kryo kryo) {
+    this.kryo = kryo;
   }
 
   @Override
-  public int compare(Object a, Object b) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public int compare(Object aObj, Object bObj) {
+    return 0;
   }
 
   @Override
   public int getMemory(Object obj) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return 10000;
   }
 
   @Override
   public void write(WriteBuffer buff, Object obj) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    try (Output output = new Output(os)) {
+      kryo.writeObject(output, obj);
+      output.flush();
+    }
+    byte[] data = os.toByteArray();
+    buff.putVarInt(data.length);
+    buff.put(data);
+
   }
 
   @Override
   public void write(WriteBuffer buff, Object[] obj, int len, boolean key) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    for (int i = 0; i < len; i++) {
+      write(buff, obj[i]);
+    }
   }
 
   @Override
   public Object read(ByteBuffer buff) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    int len = DataUtils.readVarInt(buff);
+    System.out.println("test:  =" + len);
+    byte[] data = DataUtils.newBytes(len);
+    buff.get(data);
+    Input input = new Input(data);
+    return kryo.readObject(input, MPModelObject.class);
   }
 
   @Override
   public void read(ByteBuffer buff, Object[] obj, int len, boolean key) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    for (int i = 0; i < len; i++) {
+      obj[i] = read(buff);
+    }
   }
 
 }

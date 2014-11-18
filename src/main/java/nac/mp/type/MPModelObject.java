@@ -14,7 +14,6 @@ import nac.mp.ast.Scope;
 public class MPModelObject extends MPBaseObject {
 
   private final MPModel model;
-//  private MPInteger id;
 
   public MPModelObject(Scope parent, MPModel creator) {
     super(parent, creator);
@@ -39,7 +38,7 @@ public class MPModelObject extends MPBaseObject {
 
   @Override
   public String toString() {
-    return "modelobject:" + model.getName() + ":" + getId();
+    return "modelobject:" + model.getName() + ":" + getId() + " : " + super.toString();
   }
 
 //  @Override

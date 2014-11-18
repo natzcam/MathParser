@@ -59,7 +59,7 @@ public class FrostByte implements ObjectStore {
 
   private MVMap<Long, MPModelObject> getObjectMap(MPModel model) {
     MVMap.Builder<Long, MPModelObject> builder = new MVMap.Builder<>();
-    builder.keyType(new ObjectDataType()).valueType(new MPModelObjectDataType());
+    builder.valueType(new MPModelObjectDataType(kryo));
     return objectDB.openMap(model.getName() + APPEND_MODEL, builder);
   }
 
@@ -71,12 +71,12 @@ public class FrostByte implements ObjectStore {
 
     MVMap<Long, MPModelObject> objectMap = getObjectMap(model);
 
-//    if (id == null) {
+    if (id == null) {
 //      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
 //      Long key = keyinc.incrementAndGet();
-//      id = new MPInteger(key);
-//      obj.setVar("id", id);
-//    }
+      id = new MPInteger(System.currentTimeMillis());
+      obj.setVar("id", id);
+    }
     for (MPAttribute attr : model.getAttributes().values()) {
       if (attr.getName().equals("id")) {
         continue;
@@ -104,31 +104,15 @@ public class FrostByte implements ObjectStore {
     objectDB.commit();
   }
 
-//  public MPModelObject getById(MPModel model, MPInteger id) {
-//    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
-//    return objectMap.get(id.getInt());
-//  }
-//
-//  public List<MPModelObject> getByIndexedAttr(MPModel model, String attr, MPObject value) {
-//    BTreeMap<Long, MPModelObject> objectMap = objectDB.getTreeMap(model.getName() + APPEND_MODEL);
-//    NavigableSet<Fun.Tuple2<MPObject, Long>> attrIndex = indexDB.getTreeSet(model.getName() + "_" + attr + APPEND_INDEX);
-//
-//    Iterable<Long> ids = Fun.filter(attrIndex, value);
-//    List<MPModelObject> result = new ArrayList<>();
-//    for (Long lid : ids) {
-//      result.add(objectMap.get(lid));
-//    }
-//    return result;
-//  }
   @Override
   public MPList select(MPModel model, QueryPredicate predicate) throws EvalException {
-    MVMap<Long, byte[]> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL);
+    MVMap<Long, MPModelObject> objectMap = getObjectMap(model);
     MPList result = new MPList(10, null);
-//    for (MPModelObject obj : objectMap.values()) {
-//      if (predicate.call(obj)) {
-//        result.add(obj);
-//      }
-//    }
+    for (MPModelObject obj : objectMap.values()) {
+      if (predicate.call(obj)) {
+        result.add(obj);
+      }
+    }
     return result;
   }
 
