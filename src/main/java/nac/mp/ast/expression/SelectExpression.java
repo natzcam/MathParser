@@ -5,11 +5,12 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
+import nac.mp.MathParser;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
-import nac.mp.store.frostbyte.FrostByte;
+import nac.mp.type.MPModel;
 import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,19 +20,18 @@ import org.apache.logging.log4j.Logger;
  * @author nathaniel
  */
 public class SelectExpression implements Expression {
-private static final Logger log = LogManager.getLogger(SelectExpression.class);
-  private final String modelName;
-  private final WhereBlock whereBlock;
-  private final FrostByte fb;
 
-  public SelectExpression(FrostByte fb, String modelName, WhereBlock whereBlock) {
+  private static final Logger log = LogManager.getLogger(SelectExpression.class);
+  private final Expression modelName;
+  private final WhereBlock whereBlock;
+
+  public SelectExpression(Expression modelName, WhereBlock whereBlock) {
     this.modelName = modelName;
-    this.fb = fb;
     this.whereBlock = whereBlock;
   }
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    return fb.select(modelName, new QueryPredicate(scope, whereBlock));
+    return MathParser.objectStore.select((MPModel) modelName.eval(scope), new QueryPredicate(scope, whereBlock));
   }
 }

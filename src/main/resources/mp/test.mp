@@ -1,51 +1,33 @@
-object zz{
-    func test(){
-      return func(w){
-        print w;
-      };
-    }
-
+model Parent{
+  string name;
+  list:Child children;
 }
 
-
-
-zz.test()("hello");
-
-var x = "11000";
-print x.toInt();
-
-var y = "122.00";
-print y.toFloat();
-
-template Subject{
-  var name;
-  var teacher;
-  var students;
+model Child{
+  string name;
 }
 
-template Teacher{
-  var name;
-  func __init__(name){
-    this.name = name;
-  }
-}
+var p = new Parent();
+p.id = 1;
+p.name = "P1";
+var c = new Child();
+c.name = "natz";
+p.children.add(c);
+save p;
 
-template Student{
-  var subjects;
-}
+p = new Parent();
+p.id = 2;
+p.name = "P2";
+//save to object db
+save p;
 
-var t = new Teacher("test");
-print t.name;
-//persist t;
 
-//var t = get Teacher with id = 1;
-//print t.id;
-//print t.name;
+//select
+var resultList = select Parent where {
+  this.name == (select Parent where {this.name == "P1";})[0].name;
+};
+var result = resultList[0];
+print result;
 
-//hey"test"
-
-/*
-ladjsflajdsf lcjaldsf print
-lajdsl dflkdjfdlk 
-sldkjflds k dkfjkd /5234/
-*/
+var rc = select Child where {this.name == "natz";};
+print rc;

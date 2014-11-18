@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import nac.mp.EvalException;
+import nac.mp.MathParser;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
-import nac.mp.store.frostbyte.FrostByte;
 import nac.mp.type.MPModel;
 
 /**
@@ -43,7 +43,7 @@ public class ModelDecl implements Expression {
   public String getName() {
     return name;
   }
-  
+
   @Override
   public MPObject eval(Scope scope) throws EvalException {
     MPModel model = new MPModel(scope, this);
@@ -51,6 +51,7 @@ public class ModelDecl implements Expression {
     for (AttributeDecl attributeDecl : attrMap.values()) {
       attributeDecl.eval(model);
     }
+    MathParser.objectStore.register(model);
     return null;
   }
 }

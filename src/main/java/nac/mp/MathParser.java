@@ -72,7 +72,7 @@ import org.apache.logging.log4j.Logger;
  * TODO: assoc Token to AST nodes to improve debug TODO: Declarations into
  * MPOBjects TODO: review use of expression(); TODO: comments2 does not work
  * TODO: separate expression per type TODO: remove while(true) TODO: escape
- * quotes
+ * quotes TODO: file name in exceptions
  */
 public class MathParser {
 
@@ -82,7 +82,7 @@ public class MathParser {
   private final Block fileBlock = new Block();
   private Token current = null;
   private Token next = null;
-  private final FrostByte fb = new FrostByte();
+  public static final ObjectStore objectStore = new FrostByte();
 
   public void eval(String path) throws ParseException, EvalException {
     eval(new File(path));
@@ -121,10 +121,6 @@ public class MathParser {
 
   public MPObject getGlobal(String key) {
     return globalScope.getVar(key);
-  }
-
-  public FrostByte getFb() {
-    return fb;
   }
 
   public Tokenizer getTokenizer() {
@@ -188,7 +184,7 @@ public class MathParser {
         consume();
         Expression sve = expression();
         consume(TokenType.SEMICOLON);
-        return new Save(fb, sve);
+        return new Save(sve);
       case KW_PRINT:
         consume();
         Expression ex1 = expression();
@@ -369,7 +365,6 @@ public class MathParser {
       next();
     }
     consume();
-    fb.register(md);
     return md;
   }
 
@@ -741,11 +736,10 @@ public class MathParser {
         return le;
       case KW_SELECT:
         consume(TokenType.KW_SELECT);
-        consume(TokenType.IDENTIFIER);
-        String modelName = current.text;
+        Expression modelName = expression();
         consume(TokenType.KW_WHERE);
         WhereBlock wb = whereBlock();
-        return new SelectExpression(fb, modelName, wb);
+        return new SelectExpression(modelName, wb);
       default:
         throw new ParseException("Unexpected token '" + next + "'. Expression expected.", tokenizer, next);
     }
@@ -769,13 +763,20 @@ public class MathParser {
     return bl;
   }
 
+  public void cleanup() {
+    objectStore.close();
+  }
+
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
       mp.eval("src/main/resources/mp/test.mp");
     } catch (EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
+    } finally {
+      mp.cleanup();
     }
+
   }
 
 }

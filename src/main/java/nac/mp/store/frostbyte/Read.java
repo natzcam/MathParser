@@ -27,6 +27,8 @@ public class Read {
       mp.eval("src/main/resources/mp/read.mp");
     } catch (EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
+    } finally {
+      mp.cleanup();
     }
   }
 }

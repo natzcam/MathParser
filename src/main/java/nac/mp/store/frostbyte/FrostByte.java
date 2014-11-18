@@ -5,10 +5,11 @@
  */
 package nac.mp.store.frostbyte;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Output;
+import java.io.ByteArrayOutputStream;
+import nac.mp.ObjectStore;
 import nac.mp.EvalException;
-import nac.mp.ParseException;
-import nac.mp.ast.statement.AttributeDecl;
-import nac.mp.ast.statement.ModelDecl;
 import nac.mp.type.MPAttribute;
 import nac.mp.type.MPInteger;
 import nac.mp.type.MPList;
@@ -19,12 +20,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
+import org.h2.mvstore.type.ObjectDataType;
 
 /**
  *
  * @author user
  */
-public class FrostByte {
+public class FrostByte implements ObjectStore {
 
   private static final Logger log = LogManager.getLogger(FrostByte.class);
   private static final String FILE_OBJECT = "data/object.data";
@@ -34,29 +36,40 @@ public class FrostByte {
   private static final String APPEND_INDEX = "_index";
   private final MVStore objectDB;
   private final MVStore indexDB;
+  private final Kryo kryo = new Kryo();
 
   public FrostByte() {
     objectDB = MVStore.open(FILE_OBJECT);
     indexDB = MVStore.open(FILE_INDEX);
   }
 
-  public void register(ModelDecl model) throws ParseException {
-    MVMap<Long, MPModelObject> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL);
-
-    for (AttributeDecl ad : model.getAttrDecls()) {
-      final String attrName = ad.getIdentifier();
-      if (attrName.equals("id")) {
-        throw new ParseException("Can't define custom id property.", model);
-      }
-    }
+  @Override
+  public void register(MPModel model) throws EvalException {
+//    MVMap.Builder<Long, MPModel> b = new MVMap.Builder<Long, MPModel>();
+//    b.keyType(new ObjectDataType()).valueType(new MPModelDataType());
+//
+//    MVMap<Long, MPModel> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL,);
+//    for (MPAttribute ad : model.getAttributes().values()) {
+//      final String attrName = ad.getName();
+//      if (attrName.equals("id")) {
+//        throw new EvalException("Can't define custom id property.", model);
+//      }
+//    }
   }
 
+  private MVMap<Long, MPModelObject> getObjectMap(MPModel model) {
+    MVMap.Builder<Long, MPModelObject> builder = new MVMap.Builder<>();
+    builder.keyType(new ObjectDataType()).valueType(new MPModelObjectDataType());
+    return objectDB.openMap(model.getName() + APPEND_MODEL, builder);
+  }
+
+  @Override
   public void save(MPModelObject obj) {
 
     MPModel model = obj.getModel();
     MPInteger id = obj.getId();
 
-    MVMap<Long, MPModelObject> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL);
+    MVMap<Long, MPModelObject> objectMap = getObjectMap(model);
 
 //    if (id == null) {
 //      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
@@ -64,7 +77,6 @@ public class FrostByte {
 //      id = new MPInteger(key);
 //      obj.setVar("id", id);
 //    }
-
     for (MPAttribute attr : model.getAttributes().values()) {
       if (attr.getName().equals("id")) {
         continue;
@@ -108,20 +120,22 @@ public class FrostByte {
 //    }
 //    return result;
 //  }
-  public MPList select(String modelName, QueryPredicate predicate) throws EvalException {
-    MVMap<Long, MPModelObject> objectMap = objectDB.openMap(modelName + APPEND_MODEL);
+  @Override
+  public MPList select(MPModel model, QueryPredicate predicate) throws EvalException {
+    MVMap<Long, byte[]> objectMap = objectDB.openMap(model.getName() + APPEND_MODEL);
     MPList result = new MPList(10, null);
-    for (MPModelObject obj : objectMap.values()) {
-      if (predicate.call(obj)) {
-        result.add(obj);
-      }
-    }
+//    for (MPModelObject obj : objectMap.values()) {
+//      if (predicate.call(obj)) {
+//        result.add(obj);
+//      }
+//    }
     return result;
   }
 
+  @Override
   public void close() {
-    objectDB.close();
-    indexDB.close();
+    objectDB.closeImmediately();
+    indexDB.closeImmediately();
   }
 
 }

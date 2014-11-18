@@ -63,6 +63,10 @@ public class MPTestPositive {
   @Test
   public void testPositive() throws ParseException, EvalException {
     MathParser mp = new MathParser();
-    mp.eval(file);
+    try {
+      mp.eval(file);
+    } finally {
+      mp.cleanup();
+    }
   }
 }
