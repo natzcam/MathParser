@@ -11,10 +11,10 @@ import java.io.ByteArrayOutputStream;
 import nac.mp.ObjectStore;
 import nac.mp.EvalException;
 import nac.mp.type.MPAttribute;
-import nac.mp.type.MPInteger;
+import nac.mp.type.natv.MPInteger;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
-import nac.mp.type.MPModelObject;
+import nac.mp.type.MPModelObj;
 import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,19 +57,19 @@ public class FrostByte implements ObjectStore {
 //    }
   }
 
-  private MVMap<Long, MPModelObject> getObjectMap(MPModel model) {
-    MVMap.Builder<Long, MPModelObject> builder = new MVMap.Builder<>();
-    builder.valueType(new MPModelObjectDataType(kryo));
+  private MVMap<Long, MPModelObj> getObjectMap(MPModel model) {
+    MVMap.Builder<Long, MPModelObj> builder = new MVMap.Builder<>();
+    builder.valueType(new MPModelObjDateType(model));
     return objectDB.openMap(model.getName() + APPEND_MODEL, builder);
   }
 
   @Override
-  public void save(MPModelObject obj) {
+  public void save(MPModelObj obj) {
 
     MPModel model = obj.getModel();
     MPInteger id = obj.getId();
 
-    MVMap<Long, MPModelObject> objectMap = getObjectMap(model);
+    MVMap<Long, MPModelObj> objectMap = getObjectMap(model);
 
     if (id == null) {
 //      Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
@@ -83,13 +83,13 @@ public class FrostByte implements ObjectStore {
       }
 
 //      if (attr.getType() == Type.REF) {
-//        MPModelObject mo = (MPModelObject) obj.getVar(attr.getName());
+//        MPModelObj mo = (MPModelObj) obj.getVar(attr.getName());
 //        obj.setVar(attr.getName(), mo.getReference());
 //      } else if (attr.getType() == Type.LIST) {
 //        MPList ml = (MPList) obj.getVar(attr.getName());
 //        List<MPReference> refList = new ArrayList<>();
 //        for (MPObject mo : ml.getList()) {
-//          MPModelObject mdo = (MPModelObject) mo;
+//          MPModelObj mdo = (MPModelObj) mo;
 //          refList.add(mdo.getReference());
 //        }
 //        ml.getList().clear();
@@ -106,9 +106,9 @@ public class FrostByte implements ObjectStore {
 
   @Override
   public MPList select(MPModel model, QueryPredicate predicate) throws EvalException {
-    MVMap<Long, MPModelObject> objectMap = getObjectMap(model);
+    MVMap<Long, MPModelObj> objectMap = getObjectMap(model);
     MPList result = new MPList(10, null);
-    for (MPModelObject obj : objectMap.values()) {
+    for (MPModelObj obj : objectMap.values()) {
       if (predicate.call(obj)) {
         result.add(obj);
       }

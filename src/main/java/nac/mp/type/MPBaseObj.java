@@ -16,11 +16,11 @@ import nac.mp.ast.Scope;
  *
  * @author user
  */
-public class MPBaseObject extends MPObject implements Scope {
+public class MPBaseObj extends MPObject implements Scope {
 
   private final Map<String, MPObject> vars = new HashMap<>();
 
-  public MPBaseObject(Scope parent, Creator creator) {
+  public MPBaseObj(Scope parent, Creator creator) {
     super(parent, creator);
   }
 

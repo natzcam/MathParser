@@ -9,7 +9,7 @@ import nac.mp.EvalException;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.MPVoid;
+import nac.mp.type.natv.MPVoid;
 
 /**
  *

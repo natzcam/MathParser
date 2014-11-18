@@ -5,6 +5,8 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.natv.MPInteger;
+import nac.mp.type.natv.MPBoolean;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

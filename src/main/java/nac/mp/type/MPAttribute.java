@@ -5,6 +5,7 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.natv.MPVoid;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;

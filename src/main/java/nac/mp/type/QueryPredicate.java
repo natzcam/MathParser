@@ -5,6 +5,7 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.natv.MPBoolean;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;

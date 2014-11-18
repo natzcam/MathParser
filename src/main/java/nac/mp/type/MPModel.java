@@ -60,7 +60,7 @@ public class MPModel extends MPObject implements Creator {
 
   @Override
   public MPObject newInstance() throws EvalException {
-    MPObject obj = new MPModelObject(parent, this);
+    MPObject obj = new MPModelObj(parent, this);
     for (MPAttribute attr : attributes.values()) {
       obj.declareLocalVar(attr.getName(), attr.newInstance());
     }

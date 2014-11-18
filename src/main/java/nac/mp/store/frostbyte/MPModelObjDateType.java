@@ -5,12 +5,12 @@
  */
 package nac.mp.store.frostbyte;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
-import nac.mp.type.MPModelObject;
+import nac.mp.type.MPModel;
+import nac.mp.type.MPModelObj;
 import org.h2.mvstore.DataUtils;
 import org.h2.mvstore.WriteBuffer;
 import org.h2.mvstore.type.DataType;
@@ -19,12 +19,12 @@ import org.h2.mvstore.type.DataType;
  *
  * @author user
  */
-class MPModelObjectDataType implements DataType {
+class MPModelObjDateType implements DataType {
 
-  private final Kryo kryo;
+  private MPModel model;
 
-  public MPModelObjectDataType(Kryo kryo) {
-    this.kryo = kryo;
+  public MPModelObjDateType(MPModel model) {
+    this.model = model;
   }
 
   @Override
@@ -39,14 +39,6 @@ class MPModelObjectDataType implements DataType {
 
   @Override
   public void write(WriteBuffer buff, Object obj) {
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
-    try (Output output = new Output(os)) {
-      kryo.writeObject(output, obj);
-      output.flush();
-    }
-    byte[] data = os.toByteArray();
-    buff.putVarInt(data.length);
-    buff.put(data);
 
   }
 
@@ -60,11 +52,8 @@ class MPModelObjectDataType implements DataType {
   @Override
   public Object read(ByteBuffer buff) {
     int len = DataUtils.readVarInt(buff);
-    System.out.println("test:  =" + len);
     byte[] data = DataUtils.newBytes(len);
-    buff.get(data);
-    Input input = new Input(data);
-    return kryo.readObject(input, MPModelObject.class);
+    return null;
   }
 
   @Override

@@ -5,17 +5,18 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.natv.MPInteger;
 import nac.mp.ast.Scope;
 
 /**
  *
  * @author user
  */
-public class MPModelObject extends MPBaseObject {
+public class MPModelObj extends MPBaseObj {
 
   private final MPModel model;
 
-  public MPModelObject(Scope parent, MPModel creator) {
+  public MPModelObj(Scope parent, MPModel creator) {
     super(parent, creator);
     this.model = creator;
   }
@@ -45,7 +46,7 @@ public class MPModelObject extends MPBaseObject {
 //  public MPObject isEqual(MPObject right) {
 //    switch (right.getHint()) {
 //      case MODEL_OBJECT:
-//        MPModelObject mo = (MPModelObject) right;
+//        MPModelObj mo = (MPModelObj) right;
 //        return new MPBoolean(getId().isEqual(mo.getId()).getBoolean() && model.isEqual(mo.getModel()).getBoolean());
 //    }
 //    return new MPBoolean(false);
@@ -55,7 +56,7 @@ public class MPModelObject extends MPBaseObject {
 //  public MPObject notEqual(MPObject right) {
 //    switch (right.getHint()) {
 //      case MODEL_OBJECT:
-//        MPModelObject mo = (MPModelObject) right;
+//        MPModelObj mo = (MPModelObj) right;
 //        return new MPBoolean(getId().notEqual(mo.getId()).getBoolean() || model.notEqual(mo.getModel()).getBoolean());
 //    }
 //    return new MPBoolean(false);

@@ -2,85 +2,61 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.natv;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.type.MPObject;
 
 /**
- * TODO use 1 instance of True and False
+ * TODO:use 1 instance of void
  *
  * @author user
  */
-public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
+public class MPVoid extends MPObject implements Comparable<MPObject> {
 
-  private final boolean value;
-
-  public MPBoolean(boolean value) {
+  public MPVoid() {
     super(null, null);
-    this.value = value;
   }
 
   @Override
-  public boolean getBoolean() {
-    return value;
+  public boolean isVoid() {
+    return true;
   }
 
   @Override
   public Hint getHint() {
-    return Hint.BOOLEAN;
+    return Hint.VOID;
   }
 
   @Override
   public String toString() {
-    return Boolean.toString(value);
-  }
-
-  public MPBoolean inverse() {
-    return new MPBoolean(!value);
-  }
-
-  @Override
-  public MPObject isEqual(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
-        return new MPBoolean(value == right.getBoolean());
-    }
-    return new MPBoolean(false);
+    return "<void>";
   }
 
   @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getHint()) {
-      case BOOLEAN:
-        return new MPBoolean(value != right.getBoolean());
+      case VOID:
+        return new MPBoolean(false);
+    }
+    return new MPBoolean(true);
+  }
+
+  @Override
+  public MPObject isEqual(MPObject right) {
+    switch (right.getHint()) {
+      case VOID:
+        return new MPBoolean(true);
     }
     return new MPBoolean(false);
   }
 
   @Override
-  public MPObject lo(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
-        return new MPBoolean(value || right.getBoolean());
-    }
-    throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
-  }
-
-  @Override
-  public MPObject la(MPObject right) {
-    switch (right.getHint()) {
-      case BOOLEAN:
-        return new MPBoolean(value && right.getBoolean());
-    }
-    throw new UnsupportedOperationException(getHint() + " > " + right.getHint() + " not supported");
-  }
-
-  @Override
-  public int compareTo(MPBoolean o) {
-    return (this.value == o.value) ? 0 : (this.value ? 1 : -1);
+  public int compareTo(MPObject o) {
+    return -1;
   }
 
   @Override

@@ -7,7 +7,7 @@ package nac.mp;
 
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
-import nac.mp.type.MPModelObject;
+import nac.mp.type.MPModelObj;
 import nac.mp.type.MPObject;
 import nac.mp.type.QueryPredicate;
 
@@ -19,7 +19,7 @@ public interface ObjectStore {
 
   public void register(MPModel model) throws EvalException;
 
-  public void save(MPModelObject mpObj);
+  public void save(MPModelObj mpObj);
 
   public MPList select(MPModel model, QueryPredicate predicate) throws EvalException;
 

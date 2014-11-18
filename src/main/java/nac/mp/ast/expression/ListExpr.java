@@ -8,7 +8,7 @@ package nac.mp.ast.expression;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
-import nac.mp.type.MPInteger;
+import nac.mp.type.natv.MPInteger;
 import nac.mp.type.MPList;
 import nac.mp.type.MPObject;
 

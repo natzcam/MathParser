@@ -9,7 +9,7 @@ import nac.mp.MathParser;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.MPModelObject;
+import nac.mp.type.MPModelObj;
 
 /**
  *
@@ -25,7 +25,7 @@ public class Save implements Expression {
 
   @Override
   public MPObject eval(Scope scope) throws EvalException {
-    MPModelObject obj = (MPModelObject) expression.eval(scope);
+    MPModelObj obj = (MPModelObj) expression.eval(scope);
     MathParser.objectStore.save(obj);
     return null;
   }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.natv;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.type.MPFunc;
+import nac.mp.type.MPObject;
 
 /**
  *

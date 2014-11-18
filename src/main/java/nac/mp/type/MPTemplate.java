@@ -46,7 +46,7 @@ public class MPTemplate extends MPObject implements Creator {
 
   @Override
   public MPObject newInstance() throws EvalException {
-    MPObject obj = new MPBaseObject(parent, this);
+    MPObject obj = new MPBaseObj(parent, this);
     if (extParent != null) {
       for (Expression d : extParent.declarations) {
         d.eval(obj);

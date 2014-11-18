@@ -5,6 +5,7 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.natv.MPBoolean;
 import nac.mp.ast.Scope;
 
 /**
