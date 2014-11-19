@@ -93,6 +93,10 @@ public class MPList extends MPObject implements Comparable<MPList> {
     return list.get((int) index.getInt());
   }
 
+  public MPObject set(MPInteger index, MPObject elem) {
+    return list.set((int) index.getInt(), elem);
+  }
+
   public void add(MPObject obj) {
     list.add(obj);
   }
@@ -102,7 +106,7 @@ public class MPList extends MPObject implements Comparable<MPList> {
     @Override
     public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
       MPList thisList = (MPList) thisRef;
-      thisList.list.add(argsValues.get(0));
+      thisList.add(argsValues.get(0));
       return null;
     }
 

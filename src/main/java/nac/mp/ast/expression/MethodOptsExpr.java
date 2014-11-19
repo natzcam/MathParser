@@ -20,11 +20,11 @@ import nac.mp.type.MPObject;
  */
 public class MethodOptsExpr implements Expression {
 
-  private final MemberExpr expression;
+  private final Expression expression;
   private final List<Expression> args = new ArrayList<>();
   private final Map<String, Expression> opts = new HashMap<>();
 
-  public MethodOptsExpr(MemberExpr expression) {
+  public MethodOptsExpr(Expression expression) {
     this.expression = expression;
   }
 
@@ -47,6 +47,6 @@ public class MethodOptsExpr implements Expression {
     for (String key : opts.keySet()) {
       optsValues.put(key, opts.get(key).eval(scope));
     }
-    return expression.methodCall(scope, argValues, optsValues);
+    return ((MemberExpr) expression).methodCall(scope, argValues, optsValues);
   }
 }

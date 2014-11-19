@@ -8,6 +8,7 @@ package nac.mp.ast.expression;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
+import nac.mp.ast.LValue;
 import nac.mp.type.natv.MPInteger;
 import nac.mp.type.MPList;
 import nac.mp.type.MPObject;
@@ -16,7 +17,7 @@ import nac.mp.type.MPObject;
  *
  * @author user
  */
-public class ListExpr implements Expression {
+public class ListExpr extends LValue {
 
   private final Expression expression;
   private Expression index;
@@ -33,6 +34,12 @@ public class ListExpr implements Expression {
   public MPObject eval(Scope scope) throws EvalException {
     MPList list = (MPList) expression.eval(scope);
     return list.get((MPInteger) index.eval(scope));
+  }
+
+  @Override
+  public void setValue(Scope scope, MPObject value) throws EvalException {
+    MPList list = (MPList) expression.eval(scope);
+    list.set((MPInteger) index.eval(scope), value);
   }
 
 }

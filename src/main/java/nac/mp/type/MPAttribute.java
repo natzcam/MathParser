@@ -25,7 +25,7 @@ public class MPAttribute extends MPObject implements Creator {
   private final Type type;
   private final String metaType;
   private final String name;
-  private final ObjectStore objectStore;
+  transient private final ObjectStore objectStore;
 
   public MPAttribute(Scope parent, Type type, String metaType, String name, ObjectStore objectStore) {
     super(parent, null);
