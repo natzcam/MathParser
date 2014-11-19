@@ -7,11 +7,10 @@ package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPAttribute;
-import nac.mp.type.MPModel;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

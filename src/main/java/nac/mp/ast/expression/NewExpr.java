@@ -7,11 +7,11 @@ package nac.mp.ast.expression;
 
 import java.util.ArrayList;
 import java.util.List;
-import nac.mp.type.Creator;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
+import nac.mp.ast.Scope;
+import nac.mp.type.Creator;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
 

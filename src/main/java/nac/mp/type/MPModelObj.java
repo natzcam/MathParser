@@ -5,8 +5,8 @@
  */
 package nac.mp.type;
 
-import nac.mp.type.natv.MPInteger;
 import nac.mp.ast.Scope;
+import nac.mp.type.natv.MPInteger;
 
 /**
  *

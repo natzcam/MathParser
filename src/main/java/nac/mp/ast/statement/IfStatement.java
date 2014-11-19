@@ -7,11 +7,11 @@ package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.MPObject;
 import nac.mp.ast.BasicScope;
-import nac.mp.ast.Scope;
 import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
+import nac.mp.ast.Scope;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
 /**

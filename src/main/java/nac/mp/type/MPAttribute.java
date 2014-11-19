@@ -5,12 +5,12 @@
  */
 package nac.mp.type;
 
-import nac.mp.type.natv.MPVoid;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ast.Scope;
+import nac.mp.type.natv.MPVoid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -7,14 +7,14 @@ package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.ast.LValue;
-import nac.mp.type.natv.MPInteger;
+import nac.mp.ast.Scope;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModelObj;
 import nac.mp.type.MPObject;
 import nac.mp.type.MPRefList;
+import nac.mp.type.natv.MPInteger;
 
 /**
  *

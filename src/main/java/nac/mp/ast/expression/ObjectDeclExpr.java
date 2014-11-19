@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
+import nac.mp.ast.Scope;
 import nac.mp.type.MPBaseObj;
 import nac.mp.type.MPObject;
 
