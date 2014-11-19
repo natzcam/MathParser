@@ -297,11 +297,12 @@ public class MathParser {
   private AttributeDecl attributeDecl() throws ParseException {
     consume(TokenType.IDENTIFIER);
     String t = current.text;
-    Expression mt = null;
+    String mt = null;
     next();
     if (next.type == TokenType.COLON) {
       consume(TokenType.COLON);
-      mt = expression();
+      consume(TokenType.IDENTIFIER);
+      mt = current.text;
     }
     consume(TokenType.IDENTIFIER);
     String i = current.text;

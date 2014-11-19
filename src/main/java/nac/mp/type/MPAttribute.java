@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
-import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,10 +22,10 @@ public class MPAttribute extends MPObject {
 
   private static final Logger log = LogManager.getLogger(MPAttribute.class);
   private final Type type;
-  private final MPModel metaType;
+  private final String metaType;
   private final String name;
 
-  public MPAttribute(Scope parent, Type type, MPModel metaType, String name) {
+  public MPAttribute(Scope parent, Type type, String metaType, String name) {
     super(parent, null);
     this.type = type;
     this.metaType = metaType;
@@ -37,7 +36,7 @@ public class MPAttribute extends MPObject {
     return name;
   }
 
-  public MPModel getMetaType() {
+  public String getMetaType() {
     return metaType;
   }
 

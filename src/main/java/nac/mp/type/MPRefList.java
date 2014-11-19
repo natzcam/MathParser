@@ -20,11 +20,11 @@ import nac.mp.ObjectStore;
  */
 public class MPRefList extends MPObject {
 
-  private final MPModel model;
-  private List<MPModelObj> list = new ArrayList<>();
+  private final String model;
+  transient private List<MPModelObj> list = new ArrayList<>();
   private final List<Long> refList = new ArrayList<>();
 
-  public MPRefList(MPModel model) {
+  public MPRefList(String model) {
     super(null, null);
     this.model = model;
   }
@@ -38,17 +38,17 @@ public class MPRefList extends MPObject {
     return null;
   }
 
-  public MPModel getModel() {
+  public String getModel() {
     return model;
   }
 
-//  private void fetch() {
-//    list = objectStore.select(this);
-//  }
+  private void fetch(ObjectStore store) {
+    list = store.select(this);
+  }
 
-  public MPModelObj get(MPInteger index) {
+  public MPModelObj get(MPInteger index, ObjectStore store) {
     if (list == null || list.size() < refList.size()) {
-//      fetch();
+      fetch(store);
       System.out.println("FEETCH");
     }
     return list.get((int) index.getInt());

@@ -68,6 +68,10 @@ public class FrostByte implements ObjectStore {
   private BTreeMap<Long, MPModelObj> getObjectMap(MPModel model) {
     return objectDB.getTreeMap(model.getName() + APPEND_MODEL);
   }
+  
+  private BTreeMap<Long, MPModelObj> getObjectMap(String name) {
+    return objectDB.getTreeMap(name + APPEND_MODEL);
+  }
 
   @Override
   public void save(MPModelObj obj) {

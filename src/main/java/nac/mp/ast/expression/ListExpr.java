@@ -37,7 +37,7 @@ public class ListExpr extends LValue {
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     MPObject obj = expression.eval(scope, store);
     if (obj instanceof MPRefList) {
-      return ((MPRefList) obj).get((MPInteger) index.eval(scope, store));
+      return ((MPRefList) obj).get((MPInteger) index.eval(scope, store), store);
     } else if (obj instanceof MPList) {
       return ((MPList) obj).get((MPInteger) index.eval(scope, store));
     }

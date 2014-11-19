@@ -24,10 +24,10 @@ public class AttributeDecl implements Expression {
 
   private static final Logger log = LogManager.getLogger(AttributeDecl.class);
   private final Type type;
-  private final Expression metaType;
+  private final String metaType;
   private final String identifier;
 
-  public AttributeDecl(String type, Expression metaType, String identifier) {
+  public AttributeDecl(String type, String metaType, String identifier) {
     this.type = metaType == null ? Type.LIST : Type.REF_LIST;
     this.metaType = metaType;
     this.identifier = identifier;
@@ -37,7 +37,7 @@ public class AttributeDecl implements Expression {
     return identifier;
   }
 
-  public Expression getMetaType() {
+  public String getMetaType() {
     return metaType;
   }
 
@@ -47,11 +47,8 @@ public class AttributeDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
-    MPModel model = null;
-    if (metaType != null) {
-      model = (MPModel) metaType.eval(scope, store);
-    }
-    MPAttribute attr = new MPAttribute(scope, type, model, identifier);
+   
+    MPAttribute attr = new MPAttribute(scope, type, metaType, identifier);
     scope.declareLocalVar(identifier, attr);
     return null;
   }
