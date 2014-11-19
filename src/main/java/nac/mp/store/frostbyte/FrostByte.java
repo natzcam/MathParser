@@ -5,16 +5,17 @@
  */
 package nac.mp.store.frostbyte;
 
-import com.esotericsoftware.kryo.Kryo;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import nac.mp.ObjectStore;
 import nac.mp.EvalException;
-import nac.mp.type.MPAttribute;
 import nac.mp.type.natv.MPInteger;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObj;
+import nac.mp.type.MPRefList;
 import nac.mp.type.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -106,6 +107,16 @@ public class FrostByte implements ObjectStore {
     modelDB.close();
     objectDB.close();
     indexDB.close();
+  }
+
+  @Override
+  public List<MPModelObj> select(MPRefList refList) {
+    BTreeMap<Long, MPModelObj> objectMap = getObjectMap(refList.getModel());
+    List<MPModelObj> result = new ArrayList<>();
+    for (Long id : refList.getRefList()) {
+      result.add(objectMap.get(id));
+    }
+    return result;
   }
 
 }

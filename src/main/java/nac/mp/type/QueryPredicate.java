@@ -20,7 +20,7 @@ import nac.mp.ast.WhereBlock;
  */
 public class QueryPredicate extends MPObject {
 
-  private final WhereBlock body;
+  transient private final WhereBlock body;
 
   public QueryPredicate(Scope parent, WhereBlock body) {
     super(parent, null);

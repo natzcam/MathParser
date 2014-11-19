@@ -5,35 +5,124 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.natv.MPInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 
 /**
  *
  * @author camomon
  */
-public class MPRefList extends MPList {
+public class MPRefList extends MPObject {
 
-  private final List<MPReference> refList = new ArrayList<MPReference>();
+  private final MPModel model;
+  transient private List<MPModelObj> list = new ArrayList<>();
+  private final List<Long> refList = new ArrayList<>();
   transient private final ObjectStore objectStore;
 
-  public MPRefList(int capacity, List<MPObject> initialValues, ObjectStore objectStore) {
-    super(capacity, initialValues);
-    this.objectStore = objectStore;
-  }
-
-  public MPRefList(List<MPObject> initialValues, ObjectStore objectStore) {
-    super(initialValues);
-    this.objectStore = objectStore;
-  }
-
-  public MPRefList(ObjectStore objectStore) {
+  public MPRefList(MPModel model, ObjectStore objectStore) {
+    super(null, null);
+    this.model = model;
     this.objectStore = objectStore;
   }
 
   @Override
-  public Type getType() {
-    return Type.REF_LIST;
+  public MPObject getVar(String name) {
+    switch (name) {
+      case "add":
+        return ADD;
+    }
+    return null;
   }
+
+  public MPModel getModel() {
+    return model;
+  }
+
+  private void fetch() {
+    list = objectStore.select(this);
+  }
+
+  public MPModelObj get(MPInteger index) {
+    if (list == null || list.size() < refList.size()) {
+      fetch();
+      System.out.println("FEETCH");
+    }
+    return list.get((int) index.getInt());
+  }
+
+  public void set(MPInteger index, MPModelObj elem) {
+    list.set((int) index.getInt(), elem);
+    refList.set((int) index.getInt(), elem.getIdLong());
+  }
+
+  public void add(MPModelObj obj) {
+    list.add(obj);
+    refList.add(obj.getIdLong());
+  }
+
+  public List<Long> getRefList() {
+    return refList;
+  }
+
+  private static final MPFunc ADD = new MPFunc(null, null) {
+
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
+      MPRefList thisList = (MPRefList) thisRef;
+      thisList.add((MPModelObj) argsValues.get(0));
+      return null;
+    }
+
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
+      return call(thisRef, argsValues);
+    }
+  };
+
+  @Override
+  public Type getType() {
+    return Type.LIST;
+  }
+
+  @Override
+  public void setLocalVar(String name, MPObject value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setLocalVars(Map<String, MPObject> vars) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Set<String> getLocalVarKeys() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Collection<MPObject> getLocalVarValues() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean containsVar(String name) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setVar(String name, MPObject value) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
 }

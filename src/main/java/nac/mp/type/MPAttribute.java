@@ -19,15 +19,15 @@ import org.apache.logging.log4j.Logger;
  *
  * @author camomon
  */
-public class MPAttribute extends MPObject implements Creator {
+public class MPAttribute extends MPObject {
 
   private static final Logger log = LogManager.getLogger(MPAttribute.class);
   private final Type type;
-  private final String metaType;
+  private final MPModel metaType;
   private final String name;
   transient private final ObjectStore objectStore;
 
-  public MPAttribute(Scope parent, Type type, String metaType, String name, ObjectStore objectStore) {
+  public MPAttribute(Scope parent, Type type, MPModel metaType, String name, ObjectStore objectStore) {
     super(parent, null);
     this.type = type;
     this.metaType = metaType;
@@ -39,7 +39,7 @@ public class MPAttribute extends MPObject implements Creator {
     return name;
   }
 
-  public String getMetaType() {
+  public MPModel getMetaType() {
     return metaType;
   }
 
@@ -52,8 +52,7 @@ public class MPAttribute extends MPObject implements Creator {
     return type;
   }
 
-  @Override
-  public MPObject newInstance() throws EvalException {
+  public MPObject newInstance(MPModelObj modObj) throws EvalException {
     switch (type) {
       case STRING:
         return new MPVoid();
@@ -68,7 +67,7 @@ public class MPAttribute extends MPObject implements Creator {
       case REF:
         return new MPVoid();
       case REF_LIST:
-        return new MPRefList(objectStore);
+        return new MPRefList(metaType, objectStore);
       default:
         return new MPVoid();
     }

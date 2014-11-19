@@ -20,7 +20,7 @@ import nac.mp.ast.Block;
  */
 public class MPFunc extends MPObject {
 
-  protected final Block body;
+  transient protected final Block body;
   protected final List<String> formalArgs = new ArrayList<>();
 
   public MPFunc(Scope parent, Block body) {
@@ -72,7 +72,7 @@ public class MPFunc extends MPObject {
     newScope.setLocalVar("this", thisRef);
     return body.eval(newScope);
   }
-  
+
   @Override
   public void setLocalVar(String name, MPObject value) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

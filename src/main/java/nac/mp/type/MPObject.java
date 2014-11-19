@@ -12,10 +12,10 @@ import nac.mp.ast.Scope;
  *
  * @author user
  */
-public abstract class MPObject implements Scope{
+public abstract class MPObject implements Scope {
 
-  protected final Creator creator;
-  protected Scope parent;
+  transient protected final Creator creator;
+  transient protected Scope parent;
 
   public MPObject(Scope parent, Creator creator) {
     this.creator = creator;

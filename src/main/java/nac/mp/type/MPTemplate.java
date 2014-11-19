@@ -21,7 +21,7 @@ public class MPTemplate extends MPObject implements Creator {
 
   private final MPTemplate extParent;
   private final String name;
-  private final List<Expression> declarations;
+  transient private final List<Expression> declarations;
 
   public MPTemplate(Scope parent, String name, MPTemplate extParent, List<Expression> declarations) {
     super(parent, null);

@@ -19,7 +19,7 @@ import nac.mp.EvalException;
  *
  * @author camomon
  */
-public class MPList extends MPObject implements Comparable<MPList> {
+public class MPList extends MPObject {
 
   private final List<MPObject> list;
 
@@ -53,48 +53,12 @@ public class MPList extends MPObject implements Comparable<MPList> {
     return null;
   }
 
-  @Override
-  public MPObject isEqual(MPObject right) {
-    switch (right.getType()) {
-      case LIST:
-        return this.listEquals((MPList) right);
-    }
-    return new MPBoolean(false);
-  }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getType()) {
-      case LIST:
-        return this.listEquals((MPList) right).inverse();
-    }
-    return new MPBoolean(false);
-  }
-
-  private MPBoolean listEquals(MPList mpList) {
-    if (mpList == this) {
-      return new MPBoolean(true);
-    }
-
-    ListIterator<MPObject> e1 = list.listIterator();
-    ListIterator<MPObject> e2 = mpList.list.listIterator();
-    while (e1.hasNext() && e2.hasNext()) {
-      MPObject o1 = e1.next();
-      MPObject o2 = e2.next();
-
-      if (!(o1 == null ? o2 == null : o1.isEqual(o2).getBoolean())) {
-        return new MPBoolean(false);
-      }
-    }
-    return new MPBoolean(!(e1.hasNext() || e2.hasNext()));
-  }
-
   public MPObject get(MPInteger index) {
     return list.get((int) index.getInt());
   }
 
-  public MPObject set(MPInteger index, MPObject elem) {
-    return list.set((int) index.getInt(), elem);
+  public void set(MPInteger index, MPObject elem) {
+    list.set((int) index.getInt(), elem);
   }
 
   public void add(MPObject obj) {
@@ -119,11 +83,6 @@ public class MPList extends MPObject implements Comparable<MPList> {
   @Override
   public Type getType() {
     return Type.LIST;
-  }
-
-  @Override
-  public int compareTo(MPList o) {
-    return 0;
   }
 
   @Override

@@ -15,8 +15,3 @@ assert 2.1 >= 1.1;
 assert 1.1 >= 1.1;
 assert 1 != 2;
 assert "natz" == "natz";
-assert "natz" != "not natz";
-assert ["test", "test"] == ["test", "test"];
-assert [1, 2] == [1, 2];
-assert ["test", "test"] != ["tests", "test"];
-assert [1, 2] != [1];

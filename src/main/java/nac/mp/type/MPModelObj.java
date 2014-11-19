@@ -28,6 +28,10 @@ public class MPModelObj extends MPBaseObj {
   public MPInteger getId() {
     return (MPInteger) getVar("id");
   }
+  
+   public Long getIdLong() {
+    return ((MPInteger) getVar("id")).getInt();
+  }
 
   public void setId(MPInteger id) {
     setLocalVar("id", id);
