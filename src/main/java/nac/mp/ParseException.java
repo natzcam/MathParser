@@ -16,6 +16,12 @@ public class ParseException extends Exception {
 
   private static int vicinity = 50;
 
+  private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
+    String tv = tokenizer.getCurrentLine();
+    return "[line " + t.line + "] " + tv.substring(t.start - vicinity < 0 ? 0 : t.start,
+            t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
+  }
+
   public ParseException(String message, Tokenizer tokenizer, Token t) {
     super(message + ":" + System.lineSeparator() + printTokenVicinity(tokenizer, t));
   }
@@ -26,12 +32,6 @@ public class ParseException extends Exception {
 
   public ParseException(String message, Throwable cause) {
     super(cause);
-  }
-
-  private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
-    String tv = tokenizer.getCurrentLine();
-    return "[line " + t.line + "] " + tv.substring(t.start - vicinity < 0 ? 0 : t.start,
-            t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
   }
 
 }

@@ -20,8 +20,8 @@ public class OneToManyDecl implements Expression {
 
   private final Expression left;
   private final Expression right;
-  private boolean bidi = false;
-  private boolean forward = true;
+  private final boolean bidi = false;
+  private final boolean forward = true;
 
   public OneToManyDecl(Expression left, Expression right) throws ParseException {
     this.left = left;
