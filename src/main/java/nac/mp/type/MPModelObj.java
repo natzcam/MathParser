@@ -30,7 +30,7 @@ public class MPModelObj extends MPBaseObj {
   }
   
    public Long getIdLong() {
-    return ((MPInteger) getVar("id")).getInt();
+    return getVar("id").getInt();
   }
 
   public void setId(MPInteger id) {

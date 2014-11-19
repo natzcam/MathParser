@@ -37,11 +37,6 @@ public class Tokenizer {
   private Matcher matcher = null;
   private State state = State.NON_COMMENT;
 
-  public static enum State {
-
-    NON_COMMENT,
-    COMMENT;
-  }
 
   public String getCurrentLine() {
     return currentLine;
@@ -131,5 +126,10 @@ public class Tokenizer {
       result = moveRight();
     }
     return result;
+  }
+
+  public static enum State {
+
+    NON_COMMENT, COMMENT
   }
 }

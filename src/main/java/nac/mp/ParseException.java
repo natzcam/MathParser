@@ -20,18 +20,18 @@ public class ParseException extends Exception {
     super(message + ":" + System.lineSeparator() + printTokenVicinity(tokenizer, t));
   }
 
-  private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
-    String tv = tokenizer.getCurrentLine();
-    return "[line " + t.line + "] " + tv.substring(t.start - vicinity < 0 ? 0 : t.start,
-            t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
-  }
-
   public ParseException(String message, ModelDecl model) {
     super(message + ":" + System.lineSeparator() + ToStringBuilder.reflectionToString(model));
   }
 
   public ParseException(String message, Throwable cause) {
     super(cause);
+  }
+
+  private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
+    String tv = tokenizer.getCurrentLine();
+    return "[line " + t.line + "] " + tv.substring(t.start - vicinity < 0 ? 0 : t.start,
+            t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
   }
 
 }

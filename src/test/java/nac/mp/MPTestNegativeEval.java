@@ -28,11 +28,6 @@ import org.junit.runners.Parameterized.Parameters;
 public class MPTestNegativeEval {
 
   private static final String NEGATIVE_EVAL_DIR = "src/test/mp/negative/eval";
-  private final Path file;
-
-  public MPTestNegativeEval(Path file) {
-    this.file = file;
-  }
 
   @Parameters
   public static Collection<Object[]> data() throws IOException {
@@ -56,6 +51,11 @@ public class MPTestNegativeEval {
     }
     return data;
   }
+  private final Path file;
+
+  public MPTestNegativeEval(Path file) {
+    this.file = file;
+  }
 
   @Test(expected = EvalException.class)
   public void testNegativeEval() throws ParseException, EvalException {
@@ -66,4 +66,5 @@ public class MPTestNegativeEval {
       mp.cleanup();
     }
   }
+
 }

@@ -20,7 +20,6 @@ import nac.mp.type.Type;
  */
 public class MPString extends MPObject implements Comparable<MPString> {
 
-  private final String value;
 
   private static final MPFunc TO_INT = new MPFunc(null, null) {
 
@@ -47,6 +46,7 @@ public class MPString extends MPObject implements Comparable<MPString> {
       return call(thisRef, argsValues, store);
     }
   };
+  private final String value;
 
   public MPString(String value) {
     super(null, null);

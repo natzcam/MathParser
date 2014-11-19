@@ -18,7 +18,6 @@ public class TestMethodHandle {
     MethodHandle findSetter = MethodHandles.lookup().findSetter(Test.class, "hey", String.class);
     Test test = new Test();
     findSetter.invokeExact(test, "Hello world");
-    System.out.println("test" + test.hey);
   }
   
   public static class Test{

@@ -595,7 +595,7 @@ public class MathParser {
 
             if (optsMap.size() > 0) {
               if (left instanceof MemberExpr) {
-                MethodOptsExpr mex1 = new MethodOptsExpr((MemberExpr) left);
+                MethodOptsExpr mex1 = new MethodOptsExpr((Expression) left);
                 mex1.getArgs().addAll(expList);
                 mex1.getOpts().putAll(optsMap);
                 left = mex1;

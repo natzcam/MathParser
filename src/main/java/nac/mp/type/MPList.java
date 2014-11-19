@@ -19,6 +19,20 @@ import nac.mp.type.natv.MPInteger;
  * @author camomon
  */
 public class MPList extends MPObject {
+  private static final MPFunc ADD = new MPFunc(null, null) {
+    
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
+      MPList thisList = (MPList) thisRef;
+      thisList.add(argsValues.get(0));
+      return null;
+    }
+    
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+      return call(thisRef, argsValues, store);
+    }
+  };
 
   private final List<MPObject> list;
 
@@ -64,20 +78,6 @@ public class MPList extends MPObject {
     list.add(obj);
   }
 
-  private static final MPFunc ADD = new MPFunc(null, null) {
-
-    @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
-      MPList thisList = (MPList) thisRef;
-      thisList.add(argsValues.get(0));
-      return null;
-    }
-
-    @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
-      return call(thisRef, argsValues, store);
-    }
-  };
 
   @Override
   public Type getType() {

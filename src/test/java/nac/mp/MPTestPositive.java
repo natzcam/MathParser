@@ -31,11 +31,6 @@ public class MPTestPositive {
 
   private static final Logger log = LogManager.getLogger(MPTestPositive.class);
   private static final String POSITIVE_DIR = "src/test/mp/positive";
-  private final Path file;
-
-  public MPTestPositive(Path file) {
-    this.file = file;
-  }
 
   @Parameters
   public static Collection<Object[]> data() throws IOException {
@@ -59,6 +54,11 @@ public class MPTestPositive {
     }
     return data;
   }
+  private final Path file;
+
+  public MPTestPositive(Path file) {
+    this.file = file;
+  }
 
   @Test
   public void testPositive() throws ParseException, EvalException {
@@ -69,4 +69,5 @@ public class MPTestPositive {
       mp.cleanup();
     }
   }
+
 }

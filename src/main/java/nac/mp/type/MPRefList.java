@@ -19,6 +19,20 @@ import nac.mp.type.natv.MPInteger;
  * @author camomon
  */
 public class MPRefList extends MPObject {
+  private static final MPFunc ADD = new MPFunc(null, null) {
+    
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
+      MPRefList thisList = (MPRefList) thisRef;
+      thisList.add((MPModelObj) argsValues.get(0));
+      return null;
+    }
+    
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+      return call(thisRef, argsValues, store);
+    }
+  };
 
   private final String model;
   transient private List<MPModelObj> list = new ArrayList<>();
@@ -49,7 +63,6 @@ public class MPRefList extends MPObject {
   public MPModelObj get(MPInteger index, ObjectStore store) {
     if (list == null || list.size() < refList.size()) {
       fetch(store);
-      System.out.println("FEETCH");
     }
     return list.get((int) index.getInt());
   }
@@ -68,20 +81,6 @@ public class MPRefList extends MPObject {
     return refList;
   }
 
-  private static final MPFunc ADD = new MPFunc(null, null) {
-
-    @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
-      MPRefList thisList = (MPRefList) thisRef;
-      thisList.add((MPModelObj) argsValues.get(0));
-      return null;
-    }
-
-    @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
-      return call(thisRef, argsValues, store);
-    }
-  };
 
   @Override
   public Type getType() {
