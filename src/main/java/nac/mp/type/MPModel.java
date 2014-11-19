@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +44,7 @@ public class MPModel extends MPObject implements Creator {
   }
   
   @Override
-  public MPObject newInstance() throws EvalException {
+  public MPObject newInstance(ObjectStore store) throws EvalException {
     MPModelObj obj = new MPModelObj(parent, this);
     for (String attrName : attributes.keySet()) {
       obj.declareLocalVar(attrName, attributes.get(attrName).newInstance(obj));

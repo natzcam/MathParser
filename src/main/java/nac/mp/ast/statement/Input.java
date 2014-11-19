@@ -6,6 +6,7 @@ package nac.mp.ast.statement;
 
 import java.util.Scanner;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
@@ -25,7 +26,7 @@ public class Input implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     if (scope.containsVar(identifier)) {
       scope.setVar(identifier, new MPString(scanner.nextLine()));
     } else {

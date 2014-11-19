@@ -95,7 +95,7 @@ public class FrostByte implements ObjectStore {
     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(model);
     MPList result = new MPList();
     for (MPModelObj obj : objectMap.values()) {
-      if (predicate.call(obj)) {
+      if (predicate.call(obj, this)) {
         result.add(obj);
       }
     }

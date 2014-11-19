@@ -5,13 +5,11 @@
  */
 package nac.mp.ast.statement;
 
-import java.util.Map;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ParseException;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.ast.expression.MemberExpr;
-import nac.mp.ast.expression.VarExpr;
 import nac.mp.type.MPObject;
 
 /**
@@ -82,7 +80,7 @@ public class OneToManyDecl implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     return null;
   }
 }

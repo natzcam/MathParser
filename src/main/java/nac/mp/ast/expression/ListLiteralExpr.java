@@ -7,6 +7,7 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
@@ -31,14 +32,14 @@ public class ListLiteralExpr implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     List<MPObject> initValues = new ArrayList<>();
 
     for (Expression elemExpr : elems) {
-      initValues.add(elemExpr.eval(scope));
+      initValues.add(elemExpr.eval(scope, store));
     }
     if (initSize != null) {
-      MPInteger initS = (MPInteger) initSize.eval(scope);
+      MPInteger initS = (MPInteger) initSize.eval(scope, store);
       return new MPList((int) initS.getInt(), initValues);
     } else {
       return new MPList(initValues.size(), initValues);

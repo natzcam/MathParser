@@ -8,6 +8,7 @@ import nac.mp.ast.Block;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
@@ -31,7 +32,7 @@ public class FunctionDeclExpr implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     MPFunc func = new MPFunc(scope, body);
     func.getFormalArgs().addAll(argNames);
     return func;

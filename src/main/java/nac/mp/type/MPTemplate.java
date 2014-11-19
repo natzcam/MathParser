@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
 
@@ -21,7 +22,7 @@ public class MPTemplate extends MPObject implements Creator {
 
   private final MPTemplate extParent;
   private final String name;
-  transient private final List<Expression> declarations;
+   private final List<Expression> declarations;
 
   public MPTemplate(Scope parent, String name, MPTemplate extParent, List<Expression> declarations) {
     super(parent, null);
@@ -44,15 +45,15 @@ public class MPTemplate extends MPObject implements Creator {
   }
 
   @Override
-  public MPObject newInstance() throws EvalException {
+  public MPObject newInstance(ObjectStore store) throws EvalException {
     MPObject obj = new MPBaseObj(parent, this);
     if (extParent != null) {
       for (Expression d : extParent.declarations) {
-        d.eval(obj);
+        d.eval(obj, store);
       }
     }
     for (Expression d : declarations) {
-      d.eval(obj);
+      d.eval(obj, store);
     }
     return obj;
   }

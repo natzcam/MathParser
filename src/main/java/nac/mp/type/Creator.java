@@ -7,6 +7,8 @@
 package nac.mp.type;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
+import nac.mp.ast.Scope;
 
 /**
  *
@@ -14,6 +16,6 @@ import nac.mp.EvalException;
  */
 public interface Creator {
 
-  MPObject newInstance() throws EvalException;
+  MPObject newInstance(ObjectStore store) throws EvalException;
   
 }

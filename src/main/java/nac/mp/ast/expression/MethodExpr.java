@@ -7,9 +7,9 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
 
 /**
@@ -30,12 +30,12 @@ public class MethodExpr implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
 
     List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
-      argValues.add(exp.eval(scope));
+      argValues.add(exp.eval(scope, store));
     }
-    return expression.methodCall(scope, argValues);
+    return expression.methodCall(scope, argValues, store);
   }
 }

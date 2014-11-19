@@ -6,6 +6,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.BasicScope;
 import nac.mp.ast.Scope;
@@ -28,18 +29,18 @@ public class WhileStatement implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     scope = new BasicScope(scope);
-    MPObject condValue = cond.eval(scope);
+    MPObject condValue = cond.eval(scope, store);
     if (condValue.getType() != Type.BOOL) {
       throw new EvalException("Condition not boolean", scope, this);
     }
     while (condValue.getBoolean()) {
-      MPObject result = body.eval(scope);
+      MPObject result = body.eval(scope, store);
       if (result != null) {
         return result;
       }
-      condValue = cond.eval(scope);
+      condValue = cond.eval(scope, store);
     }
     return null;
   }

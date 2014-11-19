@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.BasicScope;
 import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
@@ -20,7 +21,7 @@ import nac.mp.ast.WhereBlock;
  */
 public class QueryPredicate extends MPObject {
 
-  transient private final WhereBlock body;
+  private final WhereBlock body;
 
   public QueryPredicate(Scope parent, WhereBlock body) {
     super(parent, null);
@@ -31,10 +32,10 @@ public class QueryPredicate extends MPObject {
     return body;
   }
 
-  public boolean call(MPObject thisObj) throws EvalException {
+  public boolean call(MPObject thisObj, ObjectStore store) throws EvalException {
     Scope newScope = new BasicScope(parent);
     newScope.setLocalVar("this", thisObj);
-    MPBoolean b = (MPBoolean) body.eval(newScope);
+    MPBoolean b = (MPBoolean) body.eval(newScope, store);
     return b.getBoolean();
   }
 

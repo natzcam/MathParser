@@ -25,16 +25,14 @@ public class SelectExpression implements Expression {
   private static final Logger log = LogManager.getLogger(SelectExpression.class);
   private final Expression modelName;
   private final WhereBlock whereBlock;
-  private final ObjectStore objectStore;
 
-  public SelectExpression(ObjectStore objectStore, Expression modelName, WhereBlock whereBlock) {
+  public SelectExpression(Expression modelName, WhereBlock whereBlock) {
     this.modelName = modelName;
     this.whereBlock = whereBlock;
-    this.objectStore = objectStore;
   }
-
+  
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    return objectStore.select((MPModel) modelName.eval(scope), new QueryPredicate(scope, whereBlock));
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    return store.select((MPModel) modelName.eval(scope, store), new QueryPredicate(scope, whereBlock));
   }
 }

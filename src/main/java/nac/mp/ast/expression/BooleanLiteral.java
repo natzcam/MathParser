@@ -4,6 +4,7 @@
  */
 package nac.mp.ast.expression;
 
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
@@ -22,7 +23,7 @@ public class BooleanLiteral implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) {
+  public MPObject eval(Scope scope, ObjectStore store) {
     return value;
   }
 }

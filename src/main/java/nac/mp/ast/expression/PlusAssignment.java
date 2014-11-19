@@ -5,6 +5,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ParseException;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
@@ -29,8 +30,8 @@ public class PlusAssignment implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    leftValue.setValue(scope, rightValue.eval(scope));
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    leftValue.setValue(scope, rightValue.eval(scope, store), store);
     return null;
   }
 }

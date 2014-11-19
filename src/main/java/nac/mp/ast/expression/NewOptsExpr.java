@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import nac.mp.type.Creator;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPFunc;
@@ -39,23 +40,23 @@ public class NewOptsExpr implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    Creator creator = (Creator) expression.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    Creator creator = (Creator) expression.eval(scope, store);
     MPObject c;
 
     List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
-      argValues.add(exp.eval(scope));
+      argValues.add(exp.eval(scope, store));
     }
     Map<String, MPObject> optsValues = new HashMap<>();
     for (String key : opts.keySet()) {
-      optsValues.put(key, opts.get(key).eval(scope));
+      optsValues.put(key, opts.get(key).eval(scope, store));
     }
 
-    c = creator.newInstance();
+    c = creator.newInstance(store);
     MPFunc ctor = (MPFunc) c.getVar("__init__");
     if (ctor != null) {
-      ctor.call(c, argValues, optsValues);
+      ctor.call(c, argValues, optsValues, store);
     }
     return c;
   }

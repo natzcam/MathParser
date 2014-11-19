@@ -6,6 +6,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
@@ -24,11 +25,11 @@ public class Return implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     if (expression == null) {
       return new MPVoid();
     } else {
-      return expression.eval(scope);
+      return expression.eval(scope, store);
     }
   }
 }

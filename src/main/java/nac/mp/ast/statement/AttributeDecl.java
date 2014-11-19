@@ -26,13 +26,11 @@ public class AttributeDecl implements Expression {
   private final Type type;
   private final Expression metaType;
   private final String identifier;
-  private final ObjectStore objectStore;
 
-  public AttributeDecl(String type, Expression metaType, String identifier, ObjectStore objectStore) {
+  public AttributeDecl(String type, Expression metaType, String identifier) {
     this.type = metaType == null ? Type.LIST : Type.REF_LIST;
     this.metaType = metaType;
     this.identifier = identifier;
-    this.objectStore = objectStore;
   }
 
   public String getIdentifier() {
@@ -48,12 +46,12 @@ public class AttributeDecl implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     MPModel model = null;
     if (metaType != null) {
-      model = (MPModel) metaType.eval(scope);
+      model = (MPModel) metaType.eval(scope, store);
     }
-    MPAttribute attr = new MPAttribute(scope, type, model, identifier, objectStore);
+    MPAttribute attr = new MPAttribute(scope, type, model, identifier);
     scope.declareLocalVar(identifier, attr);
     return null;
   }

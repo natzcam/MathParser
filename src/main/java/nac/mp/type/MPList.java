@@ -6,14 +6,13 @@
 package nac.mp.type;
 
 import nac.mp.type.natv.MPInteger;
-import nac.mp.type.natv.MPBoolean;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 
 /**
  *
@@ -68,15 +67,15 @@ public class MPList extends MPObject {
   private static final MPFunc ADD = new MPFunc(null, null) {
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
       MPList thisList = (MPList) thisRef;
       thisList.add(argsValues.get(0));
       return null;
     }
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
-      return call(thisRef, argsValues);
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+      return call(thisRef, argsValues, store);
     }
   };
 

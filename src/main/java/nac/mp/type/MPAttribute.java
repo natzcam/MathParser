@@ -25,14 +25,12 @@ public class MPAttribute extends MPObject {
   private final Type type;
   private final MPModel metaType;
   private final String name;
-  transient private final ObjectStore objectStore;
 
-  public MPAttribute(Scope parent, Type type, MPModel metaType, String name, ObjectStore objectStore) {
+  public MPAttribute(Scope parent, Type type, MPModel metaType, String name) {
     super(parent, null);
     this.type = type;
     this.metaType = metaType;
     this.name = name;
-    this.objectStore = objectStore;
   }
 
   public String getName() {
@@ -67,7 +65,7 @@ public class MPAttribute extends MPObject {
       case REF:
         return new MPVoid();
       case REF_LIST:
-        return new MPRefList(metaType, objectStore);
+        return new MPRefList(metaType);
       default:
         return new MPVoid();
     }

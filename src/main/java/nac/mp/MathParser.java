@@ -114,7 +114,7 @@ public class MathParser {
     }
 
     //eval
-    fileBlock.eval(globalScope);
+    fileBlock.eval(globalScope, objectStore);
   }
 
   public void control(String path) throws ParseException, EvalException {
@@ -144,7 +144,7 @@ public class MathParser {
     }
 
     //eval
-    fileBlock.eval(globalScope);
+    fileBlock.eval(globalScope, objectStore);
   }
 
   public MPObject getGlobal(String key) {
@@ -212,7 +212,7 @@ public class MathParser {
         consume();
         Expression sve = expression();
         consume(TokenType.SEMICOLON);
-        return new Save(objectStore, sve);
+        return new Save(sve);
       case KW_PRINT:
         consume();
         Expression ex1 = expression();
@@ -305,7 +305,7 @@ public class MathParser {
     }
     consume(TokenType.IDENTIFIER);
     String i = current.text;
-    AttributeDecl typedDecl = new AttributeDecl(t, mt, i, objectStore);
+    AttributeDecl typedDecl = new AttributeDecl(t, mt, i);
     consume(TokenType.SEMICOLON);
     return typedDecl;
   }
@@ -384,7 +384,7 @@ public class MathParser {
     consume(TokenType.KW_MODEL);
     consume(TokenType.IDENTIFIER);
     String m = current.text;
-    ModelDecl md = new ModelDecl(objectStore, m);
+    ModelDecl md = new ModelDecl(m);
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
@@ -766,7 +766,7 @@ public class MathParser {
         Expression modelName = expression();
         consume(TokenType.KW_WHERE);
         WhereBlock wb = whereBlock();
-        return new SelectExpression(objectStore, modelName, wb);
+        return new SelectExpression(modelName, wb);
       default:
         throw new ParseException("Unexpected token '" + next + "'. Expression expected.", tokenizer, next);
     }

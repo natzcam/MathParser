@@ -5,7 +5,6 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
-import nac.mp.MathParser;
 import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
@@ -19,17 +18,15 @@ import nac.mp.type.MPModelObj;
 public class Save implements Expression {
 
   private final Expression expression;
-  private final ObjectStore objectStore;
 
-  public Save(ObjectStore objectStore, Expression expression) {
-    this.objectStore = objectStore;
+  public Save(Expression expression) {
     this.expression = expression;
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    MPModelObj obj = (MPModelObj) expression.eval(scope);
-    objectStore.save(obj);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    MPModelObj obj = (MPModelObj) expression.eval(scope, store);
+    store.save(obj);
     return null;
   }
 }

@@ -23,10 +23,8 @@ public class ModelDecl implements Expression {
 
   private final String name;
   private final Map<String, AttributeDecl> attrMap = new HashMap<>();
-  private final ObjectStore objectStore;
 
-  public ModelDecl(ObjectStore objectStore, String name) {
-    this.objectStore = objectStore;
+  public ModelDecl(String name) {
     this.name = name;
   }
 
@@ -47,13 +45,13 @@ public class ModelDecl implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     MPModel model = new MPModel(scope, name);
     scope.declareLocalVar(name, model);
     for (AttributeDecl attributeDecl : attrMap.values()) {
-      attributeDecl.eval(model);
+      attributeDecl.eval(model, store);
     }
-    objectStore.register(model);
+    store.register(model);
     return null;
   }
 }

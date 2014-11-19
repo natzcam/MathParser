@@ -7,6 +7,7 @@ package nac.mp.ast.expression;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.type.MPBaseObj;
@@ -25,11 +26,11 @@ public class ObjectDeclExpr implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
 
     MPObject obj = new MPBaseObj(scope, null);
     for (Expression d : declarations) {
-      d.eval(obj);
+      d.eval(obj, store);
     }
     return obj;
   }

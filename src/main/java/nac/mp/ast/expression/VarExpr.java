@@ -6,6 +6,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.LValue;
 import nac.mp.type.MPObject;
@@ -27,12 +28,12 @@ public class VarExpr extends LValue {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     return scope.getVar(id);
   }
 
   @Override
-  public void setValue(Scope scope, MPObject value) throws EvalException {
+  public void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException {
     scope.setVar(id, value);
   }
 }

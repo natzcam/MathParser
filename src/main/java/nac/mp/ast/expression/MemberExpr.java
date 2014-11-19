@@ -7,6 +7,7 @@ package nac.mp.ast.expression;
 import java.util.List;
 import java.util.Map;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
@@ -36,26 +37,26 @@ public class MemberExpr extends LValue {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    MPObject lo = (MPObject) left.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    MPObject lo = (MPObject) left.eval(scope, store);
     return lo.getVar(id);
   }
 
-  public MPObject methodCall(Scope scope, List<MPObject> argsValues) throws EvalException {
-    MPObject lo = (MPObject) left.eval(scope);
+  public MPObject methodCall(Scope scope, List<MPObject> argsValues, ObjectStore store) throws EvalException {
+    MPObject lo = (MPObject) left.eval(scope, store);
     MPFunc func = (MPFunc) lo.getVar(id);
-    return func.call(lo, argsValues);
+    return func.call(lo, argsValues, store);
   }
 
-  public MPObject methodCall(Scope scope, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
-    MPObject lo = (MPObject) left.eval(scope);
+  public MPObject methodCall(Scope scope, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+    MPObject lo = (MPObject) left.eval(scope, store);
     MPFunc func = (MPFunc) lo.getVar(id);
-    return func.call(lo, argsValues);
+    return func.call(lo, argsValues, store);
   }
 
   @Override
-  public void setValue(Scope scope, MPObject value) throws EvalException {
-    MPObject lo = (MPObject) left.eval(scope);
+  public void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException {
+    MPObject lo = (MPObject) left.eval(scope, store);
     lo.setVar(id, value);
   }
 }

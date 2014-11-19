@@ -5,10 +5,10 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Scope;
 import nac.mp.ast.BinaryExpression;
-import nac.mp.type.natv.MPBoolean;
 
 /**
  *
@@ -17,9 +17,9 @@ import nac.mp.type.natv.MPBoolean;
 public class EqualExpr extends BinaryExpression {
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    MPObject leftValue = left.eval(scope);
-    MPObject rightValue = right.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    MPObject leftValue = left.eval(scope, store);
+    MPObject rightValue = right.eval(scope, store);
     return leftValue.isEqual(rightValue);
   }
 

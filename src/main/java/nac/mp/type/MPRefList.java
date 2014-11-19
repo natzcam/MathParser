@@ -21,14 +21,12 @@ import nac.mp.ObjectStore;
 public class MPRefList extends MPObject {
 
   private final MPModel model;
-  transient private List<MPModelObj> list = new ArrayList<>();
+  private List<MPModelObj> list = new ArrayList<>();
   private final List<Long> refList = new ArrayList<>();
-  transient private final ObjectStore objectStore;
 
-  public MPRefList(MPModel model, ObjectStore objectStore) {
+  public MPRefList(MPModel model) {
     super(null, null);
     this.model = model;
-    this.objectStore = objectStore;
   }
 
   @Override
@@ -44,13 +42,13 @@ public class MPRefList extends MPObject {
     return model;
   }
 
-  private void fetch() {
-    list = objectStore.select(this);
-  }
+//  private void fetch() {
+//    list = objectStore.select(this);
+//  }
 
   public MPModelObj get(MPInteger index) {
     if (list == null || list.size() < refList.size()) {
-      fetch();
+//      fetch();
       System.out.println("FEETCH");
     }
     return list.get((int) index.getInt());
@@ -73,15 +71,15 @@ public class MPRefList extends MPObject {
   private static final MPFunc ADD = new MPFunc(null, null) {
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
       MPRefList thisList = (MPRefList) thisRef;
       thisList.add((MPModelObj) argsValues.get(0));
       return null;
     }
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
-      return call(thisRef, argsValues);
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+      return call(thisRef, argsValues, store);
     }
   };
 

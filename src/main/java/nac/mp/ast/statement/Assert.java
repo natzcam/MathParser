@@ -5,6 +5,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
@@ -23,8 +24,8 @@ public class Assert implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    MPObject result = cond.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    MPObject result = cond.eval(scope, store);
     if (result.getType() == Type.BOOL) {
       if (!result.getBoolean()) {
         throw new EvalException("Assertion failed.", scope, cond);

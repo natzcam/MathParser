@@ -6,6 +6,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPObject;
@@ -23,7 +24,7 @@ public class Parenthesis implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    return expression.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    return expression.eval(scope, store);
   }
 }

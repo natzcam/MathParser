@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import nac.mp.EvalException;
-import nac.mp.type.MPObject;
-import nac.mp.ast.Expression;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPFunc;
@@ -41,17 +40,17 @@ public class FunctionOptsExpr implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    MPFunc func = (MPFunc) expression.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    MPFunc func = (MPFunc) expression.eval(scope, store);
 
     List<MPObject> argValues = new ArrayList<>();
     for (Expression exp : args) {
-      argValues.add(exp.eval(scope));
+      argValues.add(exp.eval(scope, store));
     }
     Map<String, MPObject> optsValues = new HashMap<>();
     for (String key : opts.keySet()) {
-      optsValues.put(key, opts.get(key).eval(scope));
+      optsValues.put(key, opts.get(key).eval(scope, store));
     }
-    return func.call(null, argValues, optsValues);
+    return func.call(null, argValues, optsValues, store);
   }
 }

@@ -5,6 +5,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
@@ -25,8 +26,8 @@ public class Print implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    log.info(expression.eval(scope));
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    log.info(expression.eval(scope, store));
     return null;
   }
 }

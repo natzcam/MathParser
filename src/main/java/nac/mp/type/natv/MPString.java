@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPFunc;
 import nac.mp.type.MPObject;
 import nac.mp.type.Type;
@@ -24,26 +25,26 @@ public class MPString extends MPObject implements Comparable<MPString> {
   private static final MPFunc TO_INT = new MPFunc(null, null) {
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
       return new MPInteger(Long.parseLong(thisRef.getString()));
     }
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
-      return call(thisRef, argsValues);
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+      return call(thisRef, argsValues, store);
     }
   };
 
   private static final MPFunc TO_FLOAT = new MPFunc(null, null) {
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
       return new MPFloat(Float.parseFloat(thisRef.getString()));
     }
 
     @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
-      return call(thisRef, argsValues);
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+      return call(thisRef, argsValues, store);
     }
   };
 

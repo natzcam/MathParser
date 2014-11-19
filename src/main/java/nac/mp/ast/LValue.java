@@ -6,6 +6,7 @@
 package nac.mp.ast;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 
 /**
@@ -14,5 +15,5 @@ import nac.mp.type.MPObject;
  */
 public abstract class LValue implements Expression {
 
-  public abstract void setValue(Scope scope, MPObject value) throws EvalException;
+  public abstract void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException;
 }

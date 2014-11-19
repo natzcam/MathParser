@@ -14,8 +14,8 @@ import nac.mp.ast.Scope;
  */
 public abstract class MPObject implements Scope {
 
-  transient protected final Creator creator;
-  transient protected Scope parent;
+  protected final Creator creator;
+  protected Scope parent;
 
   public MPObject(Scope parent, Creator creator) {
     this.creator = creator;

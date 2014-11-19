@@ -8,6 +8,7 @@ package nac.mp.ast;
 import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 
 /**
@@ -23,15 +24,15 @@ public class WhereBlock implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     MPObject ret = null;
     
     if (statements.size() == 1) {
-      return statements.get(0).eval(scope);
+      return statements.get(0).eval(scope, store);
     }
 
     for (Expression s : statements) {
-      ret = s.eval(scope);
+      ret = s.eval(scope, store);
       if (ret != null) {
         break;
       }

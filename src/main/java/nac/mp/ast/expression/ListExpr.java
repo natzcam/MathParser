@@ -6,6 +6,7 @@
 package nac.mp.ast.expression;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
 import nac.mp.ast.LValue;
@@ -33,23 +34,23 @@ public class ListExpr extends LValue {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    MPObject obj = expression.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    MPObject obj = expression.eval(scope, store);
     if (obj instanceof MPRefList) {
-      return ((MPRefList) obj).get((MPInteger) index.eval(scope));
+      return ((MPRefList) obj).get((MPInteger) index.eval(scope, store));
     } else if (obj instanceof MPList) {
-      return ((MPList) obj).get((MPInteger) index.eval(scope));
+      return ((MPList) obj).get((MPInteger) index.eval(scope, store));
     }
     return null;
   }
 
   @Override
-  public void setValue(Scope scope, MPObject value) throws EvalException {
-    MPObject obj = expression.eval(scope);
+  public void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException {
+    MPObject obj = expression.eval(scope, store);
     if (obj instanceof MPRefList) {
-      ((MPRefList) obj).set((MPInteger) index.eval(scope), (MPModelObj) value);
+      ((MPRefList) obj).set((MPInteger) index.eval(scope, store), (MPModelObj) value);
     } else if (obj instanceof MPList) {
-      ((MPList) obj).set((MPInteger) index.eval(scope), value);
+      ((MPList) obj).set((MPInteger) index.eval(scope, store), value);
     }
   }
 

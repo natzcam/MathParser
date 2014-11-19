@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.BasicScope;
 import nac.mp.ast.Scope;
 import nac.mp.ast.Block;
@@ -20,7 +21,7 @@ import nac.mp.ast.Block;
  */
 public class MPFunc extends MPObject {
 
-  transient protected final Block body;
+  protected final Block body;
   protected final List<String> formalArgs = new ArrayList<>();
 
   public MPFunc(Scope parent, Block body) {
@@ -41,7 +42,7 @@ public class MPFunc extends MPObject {
     return Type.FUNCTION;
   }
 
-  public MPObject call(MPObject thisRef, List<MPObject> argsValues) throws EvalException {
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
       throw new EvalException("Argument mismatch: " + this, this);
     }
@@ -50,10 +51,10 @@ public class MPFunc extends MPObject {
       newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
     }
     newScope.setLocalVar("this", thisRef);
-    return body.eval(newScope);
+    return body.eval(newScope, store);
   }
 
-  public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues) throws EvalException {
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
       throw new EvalException("Argument mismatch: " + this, this);
     }
@@ -70,7 +71,7 @@ public class MPFunc extends MPObject {
 
     newScope.setLocalVar("opts", opts);
     newScope.setLocalVar("this", thisRef);
-    return body.eval(newScope);
+    return body.eval(newScope, store);
   }
 
   @Override

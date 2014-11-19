@@ -6,6 +6,7 @@
 package nac.mp.ast.statement;
 
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.ast.BasicScope;
 import nac.mp.ast.Scope;
@@ -33,16 +34,16 @@ public class IfStatement implements Expression {
   }
 
   @Override
-  public MPObject eval(Scope scope) throws EvalException {
-    MPObject result = cond.eval(scope);
+  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+    MPObject result = cond.eval(scope, store);
     if (result.getType() == Type.BOOL) {
       if (result.getBoolean()) {
         scope = new BasicScope(scope);
-        return ifBody.eval(scope);
+        return ifBody.eval(scope, store);
       } else {
         if (elseBody != null) {
           scope = new BasicScope(scope);
-          return elseBody.eval(scope);
+          return elseBody.eval(scope, store);
         }
       }
     } else {
