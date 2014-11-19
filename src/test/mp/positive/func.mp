@@ -1,5 +1,6 @@
 var mami = "mami";
 
+//declare function
 func simplef(){
   assert mami == "mami";
 }

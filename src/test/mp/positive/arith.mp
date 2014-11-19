@@ -17,5 +17,5 @@ assert d == 6;
 
 var y = 0;
 y = a + b - c * d / 2;
-//result should be 3;
+//result should be 0;
 assert y == 0;
