@@ -11,6 +11,7 @@ var rc = select Child where {this.name == "natz";};
 print rc[0];
 
 print rp[0].children[0] == rc[0];
+print rc.parent;
 
 
 

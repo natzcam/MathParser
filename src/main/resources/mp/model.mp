@@ -5,4 +5,5 @@ model Parent{
 
 model Child{
   string name;
+  ref:Parent parent;
 }
