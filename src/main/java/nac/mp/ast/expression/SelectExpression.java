@@ -10,8 +10,8 @@ import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
 import nac.mp.type.MPModel;
-import nac.mp.type.MPObject;
-import nac.mp.type.QueryPredicate;
+import nac.mp.type.instance.MPObject;
+import nac.mp.type.instance.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

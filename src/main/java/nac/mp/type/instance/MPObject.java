@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.instance;
 
 import nac.mp.ast.Scope;
-import nac.mp.type.natv.MPBoolean;
+import nac.mp.type.Creator;
+import nac.mp.type.Type;
+import nac.mp.type.instance.MPBoolean;
 
 /**
  *

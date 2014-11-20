@@ -5,13 +5,17 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.instance.MPList;
+import nac.mp.type.instance.MPObject;
+import nac.mp.type.instance.MPModelObj;
+import nac.mp.type.instance.MPRefList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
-import nac.mp.type.natv.MPVoid;
+import nac.mp.type.instance.MPVoid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -11,8 +11,8 @@ import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.LValue;
 import nac.mp.ast.Scope;
-import nac.mp.type.MPFunc;
-import nac.mp.type.MPObject;
+import nac.mp.type.instance.MPFunc;
+import nac.mp.type.instance.MPObject;
 
 /**
  *

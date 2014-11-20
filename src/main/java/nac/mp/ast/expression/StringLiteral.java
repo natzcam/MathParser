@@ -7,8 +7,8 @@ package nac.mp.ast.expression;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.MPObject;
-import nac.mp.type.natv.MPString;
+import nac.mp.type.instance.MPObject;
+import nac.mp.type.instance.MPString;
 
 /**
  *

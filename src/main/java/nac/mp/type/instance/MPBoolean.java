@@ -2,76 +2,87 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.instance;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.ast.BasicScope;
-import nac.mp.ast.Block;
-import nac.mp.ast.Scope;
+import nac.mp.type.Type;
 
 /**
+ * TODO use 1 instance of True and False
  *
- * @author nathaniel
+ * @author user
  */
-public class MPFunc extends MPObject {
+public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
 
-  protected final Block body;
-  protected final List<String> formalArgs = new ArrayList<>();
+  private final boolean value;
 
-  public MPFunc(Scope parent, Block body) {
-    super(parent, null);
-    this.body = body;
+  public MPBoolean(boolean value) {
+    super(null, null);
+    this.value = value;
   }
 
-  public Block getBody() {
-    return body;
-  }
-
-  public List<String> getFormalArgs() {
-    return formalArgs;
+  @Override
+  public boolean getBoolean() {
+    return value;
   }
 
   @Override
   public Type getType() {
-    return Type.FUNCTION;
+    return Type.BOOL;
   }
 
-  public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
-    if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this, this);
-    }
-    Scope newScope = new BasicScope(parent);
-    for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
-    }
-    newScope.setLocalVar("this", thisRef);
-    return body.eval(newScope, store);
+  @Override
+  public String toString() {
+    return Boolean.toString(value);
   }
 
-  public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
-    if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this, this);
-    }
+  public MPBoolean inverse() {
+    return new MPBoolean(!value);
+  }
 
-    Scope newScope = new BasicScope(parent);
-    for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
+  @Override
+  public MPObject isEqual(MPObject right) {
+    switch (right.getType()) {
+      case BOOL:
+        return new MPBoolean(value == right.getBoolean());
     }
+    return new MPBoolean(false);
+  }
 
-    MPObject opts = new MPBaseObj(parent, null);
-    for (String key : optsValues.keySet()) {
-      opts.setLocalVar(key, optsValues.get(key));
+  @Override
+  public MPObject notEqual(MPObject right) {
+    switch (right.getType()) {
+      case BOOL:
+        return new MPBoolean(value != right.getBoolean());
     }
+    return new MPBoolean(false);
+  }
 
-    newScope.setLocalVar("opts", opts);
-    newScope.setLocalVar("this", thisRef);
-    return body.eval(newScope, store);
+  @Override
+  public MPObject lo(MPObject right) {
+    switch (right.getType()) {
+      case BOOL:
+        return new MPBoolean(value || right.getBoolean());
+    }
+    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
+  }
+
+  @Override
+  public MPObject la(MPObject right) {
+    switch (right.getType()) {
+      case BOOL:
+        return new MPBoolean(value && right.getBoolean());
+    }
+    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
+  }
+
+  @Override
+  public int compareTo(MPBoolean o) {
+    return (this.value == o.value) ? 0 : (this.value ? 1 : -1);
   }
 
   @Override
@@ -113,4 +124,5 @@ public class MPFunc extends MPObject {
   public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+
 }

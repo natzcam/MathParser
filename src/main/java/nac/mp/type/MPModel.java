@@ -5,6 +5,8 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.instance.MPObject;
+import nac.mp.type.instance.MPModelObj;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;

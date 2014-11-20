@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.instance;
 
 import java.util.Collection;
 import java.util.Map;
@@ -11,6 +11,8 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
+import nac.mp.type.Creator;
+import nac.mp.type.Type;
 
 /**
  *
@@ -55,7 +57,6 @@ public class MPRef extends MPObject {
   @Override
   public boolean containsVar(String name, ObjectStore store) {
     if (mpModelObj == null) {
-      System.out.println("fetch obj");
       mpModelObj = store.dereference(this);
     }
     return mpModelObj.containsVar(name, store);
@@ -64,7 +65,6 @@ public class MPRef extends MPObject {
   @Override
   public MPObject getVar(String name, ObjectStore store) {
     if (mpModelObj == null) {
-      System.out.println("fetch obj");
       mpModelObj = store.dereference(this);
     }
     return mpModelObj.getVar(name, store);
@@ -88,7 +88,6 @@ public class MPRef extends MPObject {
   @Override
   public void setVar(String name, MPObject value, ObjectStore store) throws EvalException {
     if (mpModelObj == null) {
-      System.out.println("fetch obj");
       mpModelObj = store.dereference(this);
     }
     mpModelObj.setVar(name, value, store);

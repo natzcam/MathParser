@@ -2,14 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type.natv;
+package nac.mp.type.instance;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
 /**

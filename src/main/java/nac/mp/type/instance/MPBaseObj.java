@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.instance;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +12,8 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
+import nac.mp.type.Creator;
+import nac.mp.type.Type;
 
 /**
  *

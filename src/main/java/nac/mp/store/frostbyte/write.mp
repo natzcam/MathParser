@@ -1,4 +1,4 @@
-
+print Child;
 var c = new Child();
 c.name = "natz";
 c.id = 1;

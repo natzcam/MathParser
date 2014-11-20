@@ -1,18 +1,43 @@
-print Parent.children;
-print Parent.name;
+object zz{
+  func test(){
+    return func(w){
+      print w;
+    };
+  }
 
-//select
-var rp = select Parent where {
-  this.name == "P1";
-};
-print rp[0].children[0];
-
-var rc = select Child where {this.name == "natz";};
-print rc[0];
-
-print rp[0].children[0] == rc[0];
-print rc[0].parent;
-print rc[0].parent.name;
+}
 
 
 
+zz.test()("hello");
+
+var x = "11000";
+print x.toInt();
+
+var y = "122.00";
+print y.toFloat();
+
+template Subject{
+  var name;
+  var teacher;
+  var students;
+}
+
+template Teacher{
+  var name;
+  func __init__(name){
+    this.name = name;
+  }
+}
+
+template Student{
+  var subjects;
+}
+
+var t = new Teacher("test");
+print t.name;
+//persist t;
+
+//var t = get Teacher with id = 1;
+//print t.id;
+//print t.name;

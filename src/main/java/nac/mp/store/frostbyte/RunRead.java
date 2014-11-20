@@ -22,7 +22,7 @@ public class RunRead {
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.control("src/main/resources/mp/test.mp");
+      mp.control("src/main/java/nac/mp/store/frostbyte/read.mp");
     } catch (EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
     } finally {

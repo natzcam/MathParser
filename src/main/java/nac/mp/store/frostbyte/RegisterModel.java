@@ -22,7 +22,7 @@ public class RegisterModel {
   public static void main(String[] args) {
     MathParser mp = new MathParser();
     try {
-      mp.model("src/main/resources/mp/model.mp");
+      mp.model("src/main/java/nac/mp/store/frostbyte/model.mp");
     } catch (EvalException | ParseException ex) {
       log.error("Parse/Eval failed", ex);
     } finally {

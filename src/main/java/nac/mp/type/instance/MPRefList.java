@@ -1,31 +1,33 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type.natv;
+package nac.mp.type.instance;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.MPFunc;
-import nac.mp.type.MPObject;
 import nac.mp.type.Type;
+import nac.mp.type.instance.MPInteger;
 
 /**
  *
- * @author user
+ * @author camomon
  */
-public class MPString extends MPObject implements Comparable<MPString> {
+public class MPRefList extends MPObject {
 
-
-  private static final MPFunc TO_INT = new MPFunc(null, null) {
+  private static final MPFunc ADD = new MPFunc(null, null) {
 
     @Override
     public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
-      return new MPInteger(Long.parseLong(thisRef.getString()));
+      MPRefList thisList = (MPRefList) thisRef;
+      thisList.add((MPModelObj) argsValues.get(0));
+      return null;
     }
 
     @Override
@@ -34,66 +36,56 @@ public class MPString extends MPObject implements Comparable<MPString> {
     }
   };
 
-  private static final MPFunc TO_FLOAT = new MPFunc(null, null) {
+  private final String model;
+  transient private List<MPModelObj> list = new ArrayList<>();
+  private final List<Long> refList = new ArrayList<>();
 
-    @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
-      return new MPFloat(Float.parseFloat(thisRef.getString()));
-    }
-
-    @Override
-    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
-      return call(thisRef, argsValues, store);
-    }
-  };
-  private final String value;
-
-  public MPString(String value) {
+  public MPRefList(String model) {
     super(null, null);
-    this.value = value;
+    this.model = model;
   }
 
   @Override
-  public String getString() {
-    return value;
+  public MPObject getVar(String name, ObjectStore store) {
+    switch (name) {
+      case "add":
+        return ADD;
+    }
+    return null;
+  }
+
+  public String getModel() {
+    return model;
+  }
+
+  private void fetch(ObjectStore store) {
+    list = store.select(this);
+  }
+
+  public MPModelObj get(MPInteger index, ObjectStore store) {
+    if (list == null || list.size() < refList.size()) {
+      fetch(store);
+    }
+    return list.get((int) index.getInt());
+  }
+
+  public void set(MPInteger index, MPModelObj elem) {
+    list.set((int) index.getInt(), elem);
+    refList.set((int) index.getInt(), elem.getIdLong());
+  }
+
+  public void add(MPModelObj obj) {
+    list.add(obj);
+    refList.add(obj.getIdLong());
+  }
+
+  public List<Long> getRefList() {
+    return refList;
   }
 
   @Override
   public Type getType() {
-    return Type.STRING;
-  }
-
-  @Override
-  public String toString() {
-    return value;
-  }
-
-  @Override
-  public MPObject isEqual(MPObject right) {
-    switch (right.getType()) {
-      case STRING:
-        return new MPBoolean(value.equals(right.getString()));
-    }
-    return new MPBoolean(false);
-  }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getType()) {
-      case STRING:
-        return new MPBoolean(!value.equals(right.getString()));
-    }
-    return new MPBoolean(false);
-  }
-
-  @Override
-  public MPObject plus(MPObject right) {
-    return new MPString(value + right.toString());
-  }
-
-  @Override
-  public int compareTo(MPString o) {
-    return value.compareTo(o.value);
+    return Type.LIST;
   }
 
   @Override
@@ -127,18 +119,8 @@ public class MPString extends MPObject implements Comparable<MPString> {
   }
 
   @Override
-  public MPObject getVar(String name, ObjectStore store) {
-    switch (name) {
-      case "toInt":
-        return TO_INT;
-      case "toFloat":
-        return TO_FLOAT;
-    }
-    return null;
-  }
-
-  @Override
   public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+
 }

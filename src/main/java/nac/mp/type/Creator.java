@@ -8,6 +8,7 @@ package nac.mp.type;
 
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
+import nac.mp.type.instance.MPObject;
 
 /**
  *

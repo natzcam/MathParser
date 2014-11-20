@@ -1,9 +1,9 @@
 object zz{
-func test(){
-  return func(w){
-    print w;
-  };
-}
+  func test(){
+    return func(w){
+      print w;
+    };
+  }
 
 }
 

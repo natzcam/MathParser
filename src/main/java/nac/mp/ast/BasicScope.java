@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.MPObject;
+import nac.mp.type.instance.MPObject;
 
 /**
  *

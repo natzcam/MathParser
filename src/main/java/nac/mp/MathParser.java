@@ -65,7 +65,7 @@ import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.frostbyte.FrostByte;
 import nac.mp.type.MPModel;
-import nac.mp.type.MPObject;
+import nac.mp.type.instance.MPObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -106,6 +106,9 @@ public class MathParser {
           case KW_REL:
             fileBlock.addStatement(relDecl());
             break;
+          default:
+            consume(TokenType.EOF);
+            break;
         }
         next();
       }
@@ -128,7 +131,7 @@ public class MathParser {
   public void control(File path) throws ParseException, EvalException {
     log.info("Parsing control" + path);
     tokenizer.setCurrentFile(path);
-
+    
     for (MPModel model : objectStore.getModels()) {
       globalScope.declareLocalVar(model.getName(), model);
     }
@@ -139,6 +142,7 @@ public class MathParser {
         fileBlock.addStatement(statement());
         next();
       }
+      consume(TokenType.EOF);
     } catch (Throwable t) {
       throw new ParseException("Expected type not found.", t);
     }
@@ -174,17 +178,6 @@ public class MathParser {
     } else {
       throw new ParseException("Unexpected token " + e + ". " + t + " expected", tokenizer, e);
     }
-  }
-
-  private void consume(TokenType... t) throws ParseException {
-    Token e = tokenizer.lookahead(1);
-    for (TokenType t1 : t) {
-      if (e.type == t1) {
-        current = tokenizer.consume();
-        return;
-      }
-    }
-    throw new ParseException("Unexpected token " + e + ". " + Arrays.toString(t) + " expected", tokenizer, e);
   }
 
   private Block block() throws ParseException {
@@ -793,6 +786,18 @@ public class MathParser {
 
   public void cleanup() {
     objectStore.close();
+  }
+
+  public static void main(String[] args) {
+    MathParser mp = new MathParser();
+    try {
+      mp.control("src/main/resources/mp/test.mp");
+    } catch (EvalException | ParseException ex) {
+      log.error("Parse/Eval failed", ex);
+    } finally {
+      mp.cleanup();
+    }
+
   }
 
 }

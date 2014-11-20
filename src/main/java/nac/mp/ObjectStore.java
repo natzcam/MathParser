@@ -7,12 +7,12 @@ package nac.mp;
 
 import java.util.Collection;
 import java.util.List;
-import nac.mp.type.MPList;
+import nac.mp.type.instance.MPList;
 import nac.mp.type.MPModel;
-import nac.mp.type.MPModelObj;
-import nac.mp.type.MPRef;
-import nac.mp.type.MPRefList;
-import nac.mp.type.QueryPredicate;
+import nac.mp.type.instance.MPModelObj;
+import nac.mp.type.instance.MPRef;
+import nac.mp.type.instance.MPRefList;
+import nac.mp.type.instance.QueryPredicate;
 
 /**
  *

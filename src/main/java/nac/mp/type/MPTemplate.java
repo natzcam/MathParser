@@ -5,6 +5,8 @@
  */
 package nac.mp.type;
 
+import nac.mp.type.instance.MPObject;
+import nac.mp.type.instance.MPBaseObj;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

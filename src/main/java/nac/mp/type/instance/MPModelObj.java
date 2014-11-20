@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.instance;
 
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
-import nac.mp.type.natv.MPInteger;
+import nac.mp.type.MPAttribute;
+import nac.mp.type.MPModel;
+import nac.mp.type.Type;
+import nac.mp.type.instance.MPInteger;
 
 /**
  *

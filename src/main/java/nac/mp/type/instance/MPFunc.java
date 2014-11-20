@@ -2,88 +2,77 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type.natv;
+package nac.mp.type.instance;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.MPObject;
+import nac.mp.ast.BasicScope;
+import nac.mp.ast.Block;
+import nac.mp.ast.Scope;
 import nac.mp.type.Type;
 
 /**
- * TODO use 1 instance of True and False
  *
- * @author user
+ * @author nathaniel
  */
-public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
+public class MPFunc extends MPObject {
 
-  private final boolean value;
+  protected final Block body;
+  protected final List<String> formalArgs = new ArrayList<>();
 
-  public MPBoolean(boolean value) {
-    super(null, null);
-    this.value = value;
+  public MPFunc(Scope parent, Block body) {
+    super(parent, null);
+    this.body = body;
   }
 
-  @Override
-  public boolean getBoolean() {
-    return value;
+  public Block getBody() {
+    return body;
+  }
+
+  public List<String> getFormalArgs() {
+    return formalArgs;
   }
 
   @Override
   public Type getType() {
-    return Type.BOOL;
+    return Type.FUNCTION;
   }
 
-  @Override
-  public String toString() {
-    return Boolean.toString(value);
-  }
-
-  public MPBoolean inverse() {
-    return new MPBoolean(!value);
-  }
-
-  @Override
-  public MPObject isEqual(MPObject right) {
-    switch (right.getType()) {
-      case BOOL:
-        return new MPBoolean(value == right.getBoolean());
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
+    if (formalArgs.size() != argsValues.size()) {
+      throw new EvalException("Argument mismatch: " + this, this);
     }
-    return new MPBoolean(false);
-  }
-
-  @Override
-  public MPObject notEqual(MPObject right) {
-    switch (right.getType()) {
-      case BOOL:
-        return new MPBoolean(value != right.getBoolean());
+    Scope newScope = new BasicScope(parent);
+    for (int i = 0; i < formalArgs.size(); i++) {
+      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
     }
-    return new MPBoolean(false);
+    newScope.setLocalVar("this", thisRef);
+    return body.eval(newScope, store);
   }
 
-  @Override
-  public MPObject lo(MPObject right) {
-    switch (right.getType()) {
-      case BOOL:
-        return new MPBoolean(value || right.getBoolean());
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+    if (formalArgs.size() != argsValues.size()) {
+      throw new EvalException("Argument mismatch: " + this, this);
     }
-    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
-  }
 
-  @Override
-  public MPObject la(MPObject right) {
-    switch (right.getType()) {
-      case BOOL:
-        return new MPBoolean(value && right.getBoolean());
+    Scope newScope = new BasicScope(parent);
+    for (int i = 0; i < formalArgs.size(); i++) {
+      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
     }
-    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
-  }
 
-  @Override
-  public int compareTo(MPBoolean o) {
-    return (this.value == o.value) ? 0 : (this.value ? 1 : -1);
+    MPObject opts = new MPBaseObj(parent, null);
+    for (String key : optsValues.keySet()) {
+      opts.setLocalVar(key, optsValues.get(key));
+    }
+
+    newScope.setLocalVar("opts", opts);
+    newScope.setLocalVar("this", thisRef);
+    return body.eval(newScope, store);
   }
 
   @Override
@@ -125,5 +114,4 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
   public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-
 }

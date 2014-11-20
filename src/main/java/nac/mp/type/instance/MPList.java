@@ -3,45 +3,86 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package nac.mp.type;
+package nac.mp.type.instance;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.ast.BasicScope;
-import nac.mp.ast.Scope;
-import nac.mp.ast.WhereBlock;
-import nac.mp.type.natv.MPBoolean;
+import nac.mp.type.Type;
+import nac.mp.type.instance.MPInteger;
 
 /**
  *
  * @author camomon
  */
-public class QueryPredicate extends MPObject {
+public class MPList extends MPObject {
+  private static final MPFunc ADD = new MPFunc(null, null) {
+    
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
+      MPList thisList = (MPList) thisRef;
+      thisList.add(argsValues.get(0));
+      return null;
+    }
+    
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+      return call(thisRef, argsValues, store);
+    }
+  };
 
-  private final WhereBlock body;
+  private final List<MPObject> list;
 
-  public QueryPredicate(Scope parent, WhereBlock body) {
-    super(parent, null);
-    this.body = body;
+  public MPList(int capacity, List<MPObject> initialValues) {
+    super(null, null);
+    list = new ArrayList<>(capacity);
+    if (initialValues != null) {
+      list.addAll(initialValues);
+    }
   }
 
-  public WhereBlock getWhereBlock() {
-    return body;
+  public MPList(List<MPObject> initialValues) {
+    super(null, null);
+    list = new ArrayList<>();
+    if (initialValues != null) {
+      list.addAll(initialValues);
+    }
   }
 
-  public boolean call(MPObject thisObj, ObjectStore store) throws EvalException {
-    Scope newScope = new BasicScope(parent);
-    newScope.setLocalVar("this", thisObj);
-    MPBoolean b = (MPBoolean) body.eval(newScope, store);
-    return b.getBoolean();
+  public MPList() {
+    super(null, null);
+    list = new ArrayList<>();
   }
 
   @Override
+  public MPObject getVar(String name, ObjectStore store) {
+    switch (name) {
+      case "add":
+        return ADD;
+    }
+    return null;
+  }
+
+  public MPObject get(MPInteger index) {
+    return list.get((int) index.getInt());
+  }
+
+  public void set(MPInteger index, MPObject elem) {
+    list.set((int) index.getInt(), elem);
+  }
+
+  public void add(MPObject obj) {
+    list.add(obj);
+  }
+
+
+  @Override
   public Type getType() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return Type.LIST;
   }
 
   @Override
@@ -75,12 +116,8 @@ public class QueryPredicate extends MPObject {
   }
 
   @Override
-  public MPObject getVar(String name, ObjectStore store) {
+  public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
-  @Override
-  public void setVar(String name, MPObject value, ObjectStore store) throws EvalException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 }
