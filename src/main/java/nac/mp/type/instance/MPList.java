@@ -13,22 +13,22 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.type.Type;
-import nac.mp.type.instance.MPInteger;
 
 /**
  *
  * @author camomon
  */
 public class MPList extends MPObject {
+
   private static final MPFunc ADD = new MPFunc(null, null) {
-    
+
     @Override
     public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
       MPList thisList = (MPList) thisRef;
       thisList.add(argsValues.get(0));
       return null;
     }
-    
+
     @Override
     public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
       return call(thisRef, argsValues, store);
@@ -79,10 +79,14 @@ public class MPList extends MPObject {
     list.add(obj);
   }
 
-
   @Override
   public Type getType() {
     return Type.LIST;
+  }
+
+  @Override
+  public String toString() {
+    return getType() + ":" + list;
   }
 
   @Override

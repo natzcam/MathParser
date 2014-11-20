@@ -37,7 +37,6 @@ public class Tokenizer {
   private Matcher matcher = null;
   private State state = State.NON_COMMENT;
 
-
   public String getCurrentLine() {
     return currentLine;
   }
@@ -52,6 +51,10 @@ public class Tokenizer {
     currentLine = null;
     matcher = null;
     state = State.NON_COMMENT;
+  }
+
+  public File getCurrentFile() {
+    return currentFile;
   }
 
   public Token lookahead(int l) throws ParseException {
@@ -82,6 +85,7 @@ public class Tokenizer {
       try {
         currentLine = reader.readLine();
       } catch (IOException ex) {
+        Util.closeQuietly(reader);
         throw new ParseException("Error reading file.", ex);
       }
       if (currentLine == null) {

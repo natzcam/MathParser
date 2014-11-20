@@ -24,7 +24,7 @@ public class MPTemplate extends MPObject implements Creator {
 
   private final MPTemplate extParent;
   private final String name;
-   private final List<Expression> declarations;
+  private final List<Expression> declarations;
 
   public MPTemplate(Scope parent, String name, MPTemplate extParent, List<Expression> declarations) {
     super(parent, null);
@@ -98,5 +98,10 @@ public class MPTemplate extends MPObject implements Creator {
   @Override
   public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public String toString() {
+    return getType() + ":" + name;
   }
 }

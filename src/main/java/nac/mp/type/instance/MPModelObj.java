@@ -7,10 +7,8 @@ package nac.mp.type.instance;
 
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
-import nac.mp.type.MPAttribute;
 import nac.mp.type.MPModel;
 import nac.mp.type.Type;
-import nac.mp.type.instance.MPInteger;
 
 /**
  *
@@ -23,18 +21,6 @@ public class MPModelObj extends MPBaseObj {
   public MPModelObj(Scope parent, MPModel creator) {
     super(parent, creator);
     this.model = creator;
-
-    for (MPAttribute attr : model.getAttributes().values()) {
-      if (attr.getType() == Type.REF) {
-//todo
-      }
-    }
-  }
-
-  private static interface AttrListener {
-
-    public void attrChanged(MPAttribute attr);
-
   }
 
   public MPModel getModel() {
@@ -70,4 +56,10 @@ public class MPModelObj extends MPBaseObj {
   public Type getType() {
     return Type.MODEL_OBJECT;
   }
+
+  @Override
+  public String toString() {
+    return getType() + ":" + model + "," + vars;
+  }
+
 }

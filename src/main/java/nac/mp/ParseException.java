@@ -18,20 +18,41 @@ public class ParseException extends Exception {
 
   private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
     String tv = tokenizer.getCurrentLine();
-    return "[line " + t.line + "] " + tv.substring(t.start - vicinity < 0 ? 0 : t.start,
+    String ln = "[line " + t.line + "] ";
+    String line = tv.substring(t.start - vicinity < 0 ? 0 : t.start,
             t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
+    StringBuilder buf = new StringBuilder(tv.length());
+    buf.append(System.lineSeparator());
+    for (int i = 0; i < ln.length(); i++) {
+      buf.append(" ");
+    }
+    for (int i = 0; i < line.length(); i++) {
+      if (t.start == i) {
+        buf.append("^");
+      } else if (t.end == i) {
+        buf.append("^");
+      } else {
+        buf.append(" ");
+      }
+
+    }
+    return ln + line + buf.toString();
   }
 
-  public ParseException(String message, Tokenizer tokenizer, Token t) {
-    super(message + ":" + System.lineSeparator() + printTokenVicinity(tokenizer, t));
+  public ParseException(String message, Tokenizer tokenizer, Token found) {
+    super(message + ": " + tokenizer.getCurrentFile() + System.lineSeparator()
+            + found + " found:" + System.lineSeparator()
+            + printTokenVicinity(tokenizer, found));
   }
 
-  public ParseException(String message, ModelDecl model) {
-    super(message + ":" + System.lineSeparator() + ToStringBuilder.reflectionToString(model));
+  public ParseException(String message, Tokenizer tokenizer, TokenType expected, Token found) {
+    super(message + ": " + tokenizer.getCurrentFile() + System.lineSeparator()
+            + expected + " expected: " + found + " found:" + System.lineSeparator()
+            + printTokenVicinity(tokenizer, found));
   }
 
   public ParseException(String message, Throwable cause) {
-    super(cause);
+    super(message, cause);
   }
 
 }

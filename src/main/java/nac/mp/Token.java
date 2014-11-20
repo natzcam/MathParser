@@ -27,6 +27,6 @@ public class Token {
 
   @Override
   public String toString() {
-    return type + " \"" + text + "\" " + line + "(" + start + ":" + end + ")";
+    return type + " \"" + text + "\"";
   }
 }

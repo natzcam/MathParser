@@ -50,6 +50,11 @@ public class MPAttribute extends MPObject {
     return Type.ATTRIBUTE;
   }
 
+  @Override
+  public String toString() {
+    return getType() + ":" + type + "," + metaType + "," + name;
+  }
+
   public Type getValueType() {
     return type;
   }

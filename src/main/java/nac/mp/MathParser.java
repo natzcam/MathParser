@@ -70,10 +70,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * TODO: assoc Token to AST nodes to improve debug TODO: Declarations into
- * MPOBjects TODO: review use of expression(); TODO: comments2 does not work
- * TODO: separate expression per type TODO: remove while(true) TODO: escape
- * quotes TODO: file name in exceptions
+ * TODO: assoc Token to AST nodes to improve debug TODO: TODO: review use of
+ * expression(); TODO: separate expression per type TODO: escape quotes TODO:
+ * file name in exceptions
  */
 public class MathParser {
 
@@ -112,8 +111,8 @@ public class MathParser {
         }
         next();
       }
-    } catch (Throwable t) {
-      throw new ParseException("Expected type not found.", t);
+    } catch (ClassCastException cce) {
+      throw new ParseException("Expected type not found.", cce);
     }
 
     //eval
@@ -131,7 +130,7 @@ public class MathParser {
   public void control(File path) throws ParseException, EvalException {
     log.info("Parsing control" + path);
     tokenizer.setCurrentFile(path);
-    
+
     for (MPModel model : objectStore.getModels()) {
       globalScope.declareLocalVar(model.getName(), model);
     }
@@ -143,8 +142,8 @@ public class MathParser {
         next();
       }
       consume(TokenType.EOF);
-    } catch (Throwable t) {
-      throw new ParseException("Expected type not found.", t);
+    } catch (ClassCastException cce) {
+      throw new ParseException("Expected type not found.", cce);
     }
 
     //eval
@@ -176,7 +175,7 @@ public class MathParser {
     if (e.type == t) {
       current = tokenizer.consume();
     } else {
-      throw new ParseException("Unexpected token " + e + ". " + t + " expected", tokenizer, e);
+      throw new ParseException("Unexpected token", tokenizer, t, e);
     }
   }
 
@@ -283,7 +282,7 @@ public class MathParser {
       case KW_TEMPLATE:
         return classDecl();
       default:
-        throw new ParseException("Unexpected token " + next + ". Declaration expected.", tokenizer, next);
+        throw new ParseException("Declaration expected", tokenizer, next);
     }
   }
 
@@ -333,7 +332,7 @@ public class MathParser {
         consume(TokenType.COMMA);
       }
     }
-    consume(TokenType.RPAREN);
+    consume();
     Block b = block();
     fd.setBody(b);
     return fd;
@@ -618,6 +617,7 @@ public class MathParser {
   }
 
   private void argsProc(List<Expression> expList, Map<String, Expression> optsMap) throws ParseException {
+
     next();
     if (next.type != TokenType.RPAREN && next.type != TokenType.SEMICOLON) {
       while (true) {
@@ -718,7 +718,7 @@ public class MathParser {
             consume(TokenType.COMMA);
           }
         }
-        consume(TokenType.RPAREN);
+        consume();
         Block b = block();
         fdx.setBody(b);
         return fdx;
@@ -747,7 +747,7 @@ public class MathParser {
             consume(TokenType.COMMA);
           }
         }
-        consume(TokenType.RBRACKET);
+        consume();
         next();
         if (next.type == TokenType.LPAREN) {
           consume();
@@ -762,7 +762,7 @@ public class MathParser {
         WhereBlock wb = whereBlock();
         return new SelectExpression(modelName, wb);
       default:
-        throw new ParseException("Unexpected token '" + next + "'. Expression expected.", tokenizer, next);
+        throw new ParseException("Expression expected", tokenizer, next);
     }
   }
 

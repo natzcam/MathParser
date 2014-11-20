@@ -93,4 +93,9 @@ public class MPRef extends MPObject {
     mpModelObj.setVar(name, value, store);
   }
 
+  @Override
+  public String toString() {
+    return getType() + ":" + modelName + "," + id;
+  }
+
 }

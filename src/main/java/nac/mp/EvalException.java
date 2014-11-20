@@ -15,10 +15,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class EvalException extends Exception {
 
   public EvalException(String message, Scope scope, Expression expression) {
-    super(message + ":" + System.lineSeparator() + ToStringBuilder.reflectionToString(scope) + System.lineSeparator() + ToStringBuilder.reflectionToString(expression));
+    super(message + ":" + System.lineSeparator() + scope + System.lineSeparator() + ToStringBuilder.reflectionToString(expression));
   }
 
   public EvalException(String message, Scope scope) {
-    super(message + ":" + System.lineSeparator() + ToStringBuilder.reflectionToString(scope));
+    super(message + ":" + System.lineSeparator() + scope);
   }
 }

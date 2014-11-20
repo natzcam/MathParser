@@ -13,7 +13,6 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.type.Type;
-import nac.mp.type.instance.MPInteger;
 
 /**
  *
@@ -56,6 +55,11 @@ public class MPRefList extends MPObject {
 
   public String getModel() {
     return model;
+  }
+
+  @Override
+  public String toString() {
+    return getType() + ":" + model + "," + refList;
   }
 
   private void fetch(ObjectStore store) {

@@ -84,4 +84,9 @@ public class MPBaseObj extends MPObject implements Scope {
     this.vars.putAll(vars);
   }
 
+  @Override
+  public String toString() {
+    return getType() + ":" + vars;
+  }
+
 }

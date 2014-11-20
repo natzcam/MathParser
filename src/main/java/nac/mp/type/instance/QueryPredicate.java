@@ -14,7 +14,6 @@ import nac.mp.ast.BasicScope;
 import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
 import nac.mp.type.Type;
-import nac.mp.type.instance.MPBoolean;
 
 /**
  *
