@@ -10,6 +10,7 @@ import java.util.List;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObj;
+import nac.mp.type.MPRef;
 import nac.mp.type.MPRefList;
 import nac.mp.type.QueryPredicate;
 
@@ -28,6 +29,8 @@ public interface ObjectStore {
   public MPList select(MPModel model, QueryPredicate predicate) throws EvalException;
 
   public List<MPModelObj> select(MPRefList refList);
+  
+  public MPModelObj dereference(MPRef ref);
 
   public void close();
 }

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 
 /**
@@ -18,7 +19,7 @@ import nac.mp.ast.Scope;
  */
 public class MPBaseObj extends MPObject implements Scope {
 
-  private final Map<String, MPObject> vars = new HashMap<>();
+  protected final Map<String, MPObject> vars = new HashMap<>();
 
   public MPBaseObj(Scope parent, Creator creator) {
     super(parent, creator);
@@ -44,24 +45,24 @@ public class MPBaseObj extends MPObject implements Scope {
   }
 
   @Override
-  public boolean containsVar(String name) {
+  public boolean containsVar(String name, ObjectStore store) {
     if (vars.containsKey(name)) {
       return true;
     } else {
-      return parent != null && parent.containsVar(name);
+      return parent != null && parent.containsVar(name, store);
     }
   }
 
   @Override
-  public void setVar(String name, MPObject value) {
+  public void setVar(String name, MPObject value, ObjectStore store) {
     vars.put(name, value);
   }
 
   @Override
-  public MPObject getVar(String name) {
+  public MPObject getVar(String name, ObjectStore store) {
     MPObject result = vars.get(name);
     if (result == null && parent != null) {
-      result = parent.getVar(name);
+      result = parent.getVar(name, store);
     }
     return result;
   }

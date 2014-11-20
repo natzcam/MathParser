@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.natv.MPVoid;
 import org.apache.logging.log4j.LogManager;
@@ -63,7 +64,7 @@ public class MPAttribute extends MPObject {
         return new MPList();
       case REF:
         return new MPVoid();
-      case REF_LIST:
+      case REFLIST:
         return new MPRefList(metaType);
       default:
         return new MPVoid();
@@ -96,17 +97,17 @@ public class MPAttribute extends MPObject {
   }
 
   @Override
-  public boolean containsVar(String name) {
+  public boolean containsVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public MPObject getVar(String name) {
+  public MPObject getVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public void setVar(String name, MPObject value) {
+  public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

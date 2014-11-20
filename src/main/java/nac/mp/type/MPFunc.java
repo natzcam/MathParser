@@ -100,17 +100,17 @@ public class MPFunc extends MPObject {
   }
 
   @Override
-  public boolean containsVar(String name) {
+  public boolean containsVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public MPObject getVar(String name) {
+  public MPObject getVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public void setVar(String name, MPObject value) {
+  public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

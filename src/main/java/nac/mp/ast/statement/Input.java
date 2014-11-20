@@ -27,8 +27,8 @@ public class Input implements Expression {
 
   @Override
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
-    if (scope.containsVar(identifier)) {
-      scope.setVar(identifier, new MPString(scanner.nextLine()));
+    if (scope.containsVar(identifier, store)) {
+      scope.setVar(identifier, new MPString(scanner.nextLine()), store);
     } else {
       scope.declareLocalVar(identifier, new MPString(scanner.nextLine()));
     }

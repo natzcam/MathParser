@@ -70,17 +70,17 @@ public class QueryPredicate extends MPObject {
   }
 
   @Override
-  public boolean containsVar(String name) {
+  public boolean containsVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public MPObject getVar(String name) {
+  public MPObject getVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public void setVar(String name, MPObject value) throws EvalException {
+  public void setVar(String name, MPObject value, ObjectStore store) throws EvalException {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

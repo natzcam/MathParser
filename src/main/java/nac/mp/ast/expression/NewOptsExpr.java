@@ -54,7 +54,7 @@ public class NewOptsExpr implements Expression {
     }
 
     c = creator.newInstance(store);
-    MPFunc ctor = (MPFunc) c.getVar("__init__");
+    MPFunc ctor = (MPFunc) c.getVar("__init__", store);
     if (ctor != null) {
       ctor.call(c, argValues, optsValues, store);
     }

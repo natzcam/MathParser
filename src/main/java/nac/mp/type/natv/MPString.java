@@ -122,12 +122,12 @@ public class MPString extends MPObject implements Comparable<MPString> {
   }
 
   @Override
-  public boolean containsVar(String name) {
+  public boolean containsVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public MPObject getVar(String name) {
+  public MPObject getVar(String name, ObjectStore store) {
     switch (name) {
       case "toInt":
         return TO_INT;
@@ -138,7 +138,7 @@ public class MPString extends MPObject implements Comparable<MPString> {
   }
 
   @Override
-  public void setVar(String name, MPObject value) {
+  public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

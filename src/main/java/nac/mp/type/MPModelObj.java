@@ -5,6 +5,7 @@
  */
 package nac.mp.type;
 
+import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.natv.MPInteger;
 
@@ -19,6 +20,18 @@ public class MPModelObj extends MPBaseObj {
   public MPModelObj(Scope parent, MPModel creator) {
     super(parent, creator);
     this.model = creator;
+
+    for (MPAttribute attr : model.getAttributes().values()) {
+      if (attr.getType() == Type.REF) {
+//todo
+      }
+    }
+  }
+
+  private static interface AttrListener {
+
+    public void attrChanged(MPAttribute attr);
+
   }
 
   public MPModel getModel() {
@@ -26,40 +39,30 @@ public class MPModelObj extends MPBaseObj {
   }
 
   public MPInteger getId() {
-    return (MPInteger) getVar("id");
+    return (MPInteger) vars.get("id");
   }
-  
-   public Long getIdLong() {
-    return getVar("id").getInt();
+
+  public Long getIdLong() {
+    return vars.get("id").getInt();
   }
 
   public void setId(MPInteger id) {
-    setLocalVar("id", id);
+    vars.put("id", id);
   }
 
-  public MPReference getReference() {
-    return new MPReference(parent, creator, this);
+  public MPRef getReference() {
+    return new MPRef(parent, creator, this);
   }
 
-//  @Override
-//  public MPObject isEqual(MPObject right) {
-//    switch (right.getType()) {
-//      case MODEL_OBJECT:
-//        MPModelObj mo = (MPModelObj) right;
-//        return new MPBoolean(getId().isEqual(mo.getId()).getBoolean() && model.isEqual(mo.getModel()).getBoolean());
-//    }
-//    return new MPBoolean(false);
-//  }
-//
-//  @Override
-//  public MPObject notEqual(MPObject right) {
-//    switch (right.getType()) {
-//      case MODEL_OBJECT:
-//        MPModelObj mo = (MPModelObj) right;
-//        return new MPBoolean(getId().notEqual(mo.getId()).getBoolean() || model.notEqual(mo.getModel()).getBoolean());
-//    }
-//    return new MPBoolean(false);
-//  }
+  @Override
+  public void setVar(String name, MPObject value, ObjectStore store) {
+    if (value instanceof MPModelObj) {
+      vars.put(name, ((MPModelObj) value).getReference());
+    } else {
+      vars.put(name, value);
+    }
+  }
+
   @Override
   public Type getType() {
     return Type.MODEL_OBJECT;

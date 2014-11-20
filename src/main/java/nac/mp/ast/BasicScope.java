@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 
 /**
@@ -60,20 +61,20 @@ public class BasicScope implements Scope {
   }
 
   @Override
-  public boolean containsVar(String name) {
+  public boolean containsVar(String name, ObjectStore store) {
     if (vars.containsKey(name)) {
       return true;
     } else {
-      return parent != null && parent.containsVar(name);
+      return parent != null && parent.containsVar(name, store);
     }
   }
 
   @Override
-  public void setVar(String name, MPObject value) throws EvalException {
+  public void setVar(String name, MPObject value, ObjectStore store) throws EvalException {
     if (vars.containsKey(name)) {
       vars.put(name, value);
     } else if (parent != null) {
-      parent.setVar(name, value);
+      parent.setVar(name, value, store);
     } else {
       throw new EvalException("Var not declared: " + name, value);
     }
@@ -85,10 +86,10 @@ public class BasicScope implements Scope {
   }
 
   @Override
-  public MPObject getVar(String name) {
+  public MPObject getVar(String name, ObjectStore store) {
     MPObject result = vars.get(name);
     if (result == null && parent != null) {
-      result = parent.getVar(name);
+      result = parent.getVar(name, store);
     }
     return result;
   }

@@ -1,6 +1,6 @@
 model Parent{
   string name;
-  list:Child children;
+  reflist:Child children;
 }
 
 model Child{

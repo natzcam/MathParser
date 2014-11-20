@@ -29,11 +29,11 @@ public class VarExpr extends LValue {
 
   @Override
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
-    return scope.getVar(id);
+    return scope.getVar(id, store);
   }
 
   @Override
   public void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException {
-    scope.setVar(id, value);
+    scope.setVar(id, value, store);
   }
 }

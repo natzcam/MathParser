@@ -10,13 +10,14 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
+import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 
 /**
  *
  * @author user
  */
-public interface Scope extends Serializable{
+public interface Scope extends Serializable {
 
   public void declareLocalVar(String name, MPObject defaultValue) throws EvalException;
 
@@ -26,14 +27,14 @@ public interface Scope extends Serializable{
 
   public Scope getParent();
 
-  public boolean containsVar(String name);
+  public boolean containsVar(String name, ObjectStore store);
 
-  public MPObject getVar(String name);
+  public MPObject getVar(String name, ObjectStore store);
 
   public void setLocalVar(String name, MPObject value);
 
   public void setLocalVars(Map<String, MPObject> vars);
 
-  public void setVar(String name, MPObject value) throws EvalException;
+  public void setVar(String name, MPObject value, ObjectStore store) throws EvalException;
 
 }

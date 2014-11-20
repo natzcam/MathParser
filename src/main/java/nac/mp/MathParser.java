@@ -130,7 +130,7 @@ public class MathParser {
     tokenizer.setCurrentFile(path);
 
     for (MPModel model : objectStore.getModels()) {
-      globalScope.setLocalVar(model.getName(), model);
+      globalScope.declareLocalVar(model.getName(), model);
     }
 
     try {
@@ -148,7 +148,7 @@ public class MathParser {
   }
 
   public MPObject getGlobal(String key) {
-    return globalScope.getVar(key);
+    return globalScope.getVar(key, objectStore);
   }
 
   public Tokenizer getTokenizer() {

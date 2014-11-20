@@ -39,24 +39,24 @@ public class MemberExpr extends LValue {
   @Override
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     MPObject lo = left.eval(scope, store);
-    return lo.getVar(id);
+    return lo.getVar(id, store);
   }
 
   public MPObject methodCall(Scope scope, List<MPObject> argsValues, ObjectStore store) throws EvalException {
     MPObject lo = left.eval(scope, store);
-    MPFunc func = (MPFunc) lo.getVar(id);
+    MPFunc func = (MPFunc) lo.getVar(id, store);
     return func.call(lo, argsValues, store);
   }
 
   public MPObject methodCall(Scope scope, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
     MPObject lo = left.eval(scope, store);
-    MPFunc func = (MPFunc) lo.getVar(id);
+    MPFunc func = (MPFunc) lo.getVar(id, store);
     return func.call(lo, argsValues, store);
   }
 
   @Override
   public void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException {
     MPObject lo = left.eval(scope, store);
-    lo.setVar(id, value);
+    lo.setVar(id, value, store);
   }
 }

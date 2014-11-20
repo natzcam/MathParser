@@ -27,7 +27,7 @@ public class AttributeDecl implements Expression {
   private final String identifier;
 
   public AttributeDecl(String type, String metaType, String identifier) {
-    this.type = metaType == null ? Type.LIST : Type.REF_LIST;
+    this.type = Type.valueOf(type.toUpperCase());
     this.metaType = metaType;
     this.identifier = identifier;
   }
@@ -46,7 +46,7 @@ public class AttributeDecl implements Expression {
 
   @Override
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
-   
+
     MPAttribute attr = new MPAttribute(scope, type, metaType, identifier);
     scope.declareLocalVar(identifier, attr);
     return null;

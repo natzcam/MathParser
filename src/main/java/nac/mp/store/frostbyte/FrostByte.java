@@ -14,6 +14,7 @@ import nac.mp.ObjectStore;
 import nac.mp.type.MPList;
 import nac.mp.type.MPModel;
 import nac.mp.type.MPModelObj;
+import nac.mp.type.MPRef;
 import nac.mp.type.MPRefList;
 import nac.mp.type.QueryPredicate;
 import nac.mp.type.natv.MPInteger;
@@ -68,7 +69,7 @@ public class FrostByte implements ObjectStore {
   private BTreeMap<Long, MPModelObj> getObjectMap(MPModel model) {
     return objectDB.getTreeMap(model.getName() + APPEND_MODEL);
   }
-  
+
   private BTreeMap<Long, MPModelObj> getObjectMap(String name) {
     return objectDB.getTreeMap(name + APPEND_MODEL);
   }
@@ -85,7 +86,7 @@ public class FrostByte implements ObjectStore {
       Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
       Long key = keyinc.incrementAndGet();
       id = new MPInteger(key);
-      obj.setVar("id", id);
+      obj.setLocalVar("id", id);
     }
 
     objectMap.put(id.getInt(), obj);
@@ -121,6 +122,12 @@ public class FrostByte implements ObjectStore {
       result.add(objectMap.get(id));
     }
     return result;
+  }
+
+  @Override
+  public MPModelObj dereference(MPRef ref) {
+     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(ref.getModelName());
+     return objectMap.get(ref.getId());
   }
 
 }

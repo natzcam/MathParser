@@ -11,7 +11,9 @@ p1.id = 1;
 p1.name = "P1";
 p1.children.add(c);
 save p1;
+
 c.parent = p1;
+save c;
 
 var p2 = new Parent();
 p2.id = 2;

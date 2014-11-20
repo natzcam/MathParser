@@ -12,6 +12,7 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
+import nac.mp.ast.statement.AttributeDecl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +48,8 @@ public class MPModel extends MPObject implements Creator {
   public MPObject newInstance(ObjectStore store) throws EvalException {
     MPModelObj obj = new MPModelObj(parent, this);
     for (String attrName : attributes.keySet()) {
-      obj.declareLocalVar(attrName, attributes.get(attrName).newInstance(obj));
+      MPAttribute attr = attributes.get(attrName);
+      obj.declareLocalVar(attrName, attr.newInstance(obj));
     }
     return obj;
   }
@@ -78,17 +80,17 @@ public class MPModel extends MPObject implements Creator {
   }
   
   @Override
-  public boolean containsVar(String name) {
+  public boolean containsVar(String name, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
   @Override
-  public MPObject getVar(String name) {
+  public MPObject getVar(String name, ObjectStore store) {
     return attributes.get(name);
   }
   
   @Override
-  public void setVar(String name, MPObject value) {
+  public void setVar(String name, MPObject value, ObjectStore store) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }
