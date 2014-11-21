@@ -8,22 +8,22 @@ package nac.mp.ast.statement;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.BasicScope;
-import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.Type;
+import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author natz
  */
-public class WhileStatement implements Expression {
+public class WhileStatement extends TokenAwareExpression {
 
   private final Expression cond;
-  private final Block body;
+  private final Expression body;
 
-  public WhileStatement(Expression cond, Block body) {
+  public WhileStatement(Expression cond, Expression body) {
     this.cond = cond;
     this.body = body;
   }

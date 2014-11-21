@@ -5,15 +5,15 @@
 package nac.mp.ast.statement;
 
 import nac.mp.ObjectStore;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author nathaniel
  */
-public class Exit implements Expression {
+public class Exit extends TokenAwareExpression {
 
   @Override
   public MPObject eval(Scope scope, ObjectStore store) {

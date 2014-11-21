@@ -6,16 +6,16 @@
 package nac.mp.ast.expression;
 
 import nac.mp.ObjectStore;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPFloat;
+import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author natz
  */
-public class FloatLiteral implements Expression {
+public class FloatLiteral extends TokenAwareExpression {
 
   private final MPFloat value;
 

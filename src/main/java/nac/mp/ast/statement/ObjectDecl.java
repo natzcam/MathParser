@@ -10,6 +10,7 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPBaseObj;
 import nac.mp.type.instance.MPObject;
 
@@ -17,7 +18,7 @@ import nac.mp.type.instance.MPObject;
  *
  * @author ladilads
  */
-public class ObjectDecl implements Expression {
+public class ObjectDecl extends TokenAwareExpression {
 
   private final String name;
   private final List<Expression> declarations = new ArrayList<>();

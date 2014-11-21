@@ -11,6 +11,7 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.BasicScope;
+import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
 import nac.mp.type.Type;
@@ -21,14 +22,14 @@ import nac.mp.type.Type;
  */
 public class QueryPredicate extends MPObject {
 
-  private final WhereBlock body;
+  private final Expression body;
 
-  public QueryPredicate(Scope parent, WhereBlock body) {
+  public QueryPredicate(Scope parent, Expression body) {
     super(parent, null);
     this.body = body;
   }
 
-  public WhereBlock getWhereBlock() {
+  public Expression getWhereBlock() {
     return body;
   }
 

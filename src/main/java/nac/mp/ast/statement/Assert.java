@@ -8,14 +8,15 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.Type;
+import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author nathaniel
  */
-public class Assert implements Expression {
+public class Assert extends TokenAwareExpression {
 
   private final Expression cond;
 

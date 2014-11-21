@@ -9,7 +9,7 @@ package nac.mp.ast;
  *
  * @author natz
  */
-public abstract class BinaryExpression implements Expression {
+public abstract class BinaryExpression extends TokenAwareExpression {
 
   protected Expression left;
   protected Expression right;

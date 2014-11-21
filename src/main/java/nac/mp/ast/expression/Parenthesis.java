@@ -9,13 +9,14 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author natz
  */
-public class Parenthesis implements Expression {
+public class Parenthesis extends TokenAwareExpression {
 
   private final Expression expression;
 

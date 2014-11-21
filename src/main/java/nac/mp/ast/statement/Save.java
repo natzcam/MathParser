@@ -8,6 +8,7 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPModelObj;
 import nac.mp.type.instance.MPObject;
 
@@ -15,7 +16,7 @@ import nac.mp.type.instance.MPObject;
  *
  * @author nathaniel
  */
-public class Save implements Expression {
+public class Save extends TokenAwareExpression {
 
   private final Expression expression;
 

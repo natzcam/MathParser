@@ -5,13 +5,13 @@
  */
 package nac.mp.ast.statement;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.MPModel;
 import nac.mp.type.instance.MPObject;
 
@@ -19,26 +19,26 @@ import nac.mp.type.instance.MPObject;
  *
  * @author camomon
  */
-public class ModelDecl implements Expression {
+public class ModelDecl extends TokenAwareExpression {
 
   private final String name;
-  private final Map<String, AttributeDecl> attrMap = new HashMap<>();
+  private final List<Expression> attributes = new ArrayList<>();
 
   public ModelDecl(String name) {
     this.name = name;
   }
 
-  public void addAttrDecl(AttributeDecl attr) {
-    attrMap.put(attr.getIdentifier(), attr);
+  public List<Expression> getAttributes() {
+    return attributes;
   }
 
-  public Collection<AttributeDecl> getAttrDecls() {
-    return attrMap.values();
-  }
-
-  public AttributeDecl getAttrDecl(String name) {
-    return attrMap.get(name);
-  }
+//  public Collection<AttributeDecl> getAttrDecls() {
+//    return attrMap.values();
+//  }
+//
+//  public AttributeDecl getAttrDecl(String name) {
+//    return attrMap.get(name);
+//  }
 
   public String getName() {
     return name;
@@ -48,7 +48,7 @@ public class ModelDecl implements Expression {
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
     MPModel model = new MPModel(scope, name);
     scope.declareLocalVar(name, model);
-    for (AttributeDecl attributeDecl : attrMap.values()) {
+    for (Expression attributeDecl : attributes) {
       attributeDecl.eval(model, store);
     }
     store.register(model);

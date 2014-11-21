@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPFunc;
 import nac.mp.type.instance.MPObject;
 
@@ -18,12 +18,12 @@ import nac.mp.type.instance.MPObject;
  *
  * @author ladilads
  */
-public class FunctionDeclExpr implements Expression {
+public class FunctionDeclExpr extends TokenAwareExpression {
 
   private final List<String> argNames = new ArrayList<>();
-  private Block body;
+  private Expression body;
 
-  public void setBody(Block body) {
+  public void setBody(Expression body) {
     this.body = body;
   }
 

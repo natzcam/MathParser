@@ -4,8 +4,8 @@
  */
 package nac.mp;
 
-import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.Expression;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class EvalException extends Exception {
 
   public EvalException(String message, Scope scope, Expression expression) {
-    super(message + ":" + System.lineSeparator() + scope + System.lineSeparator() + ToStringBuilder.reflectionToString(expression));
+    super(message + ":" + System.lineSeparator() + scope + System.lineSeparator() + expression);
   }
 
   public EvalException(String message, Scope scope) {

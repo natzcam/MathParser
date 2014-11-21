@@ -18,7 +18,7 @@ public class ParseException extends Exception {
 
   private static String printTokenVicinity(Tokenizer tokenizer, Token t) {
     String tv = tokenizer.getCurrentLine();
-    String ln = "[line " + t.line + "] ";
+    String ln = "[" + t.line + "] ";
     String line = tv.substring(t.start - vicinity < 0 ? 0 : t.start,
             t.end + vicinity > tv.length() - 1 ? tv.length() : t.end);
     StringBuilder buf = new StringBuilder(tv.length());

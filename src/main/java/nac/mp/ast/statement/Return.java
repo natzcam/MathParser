@@ -9,6 +9,7 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 import nac.mp.type.instance.MPVoid;
 
@@ -16,7 +17,7 @@ import nac.mp.type.instance.MPVoid;
  *
  * @author natz
  */
-public class Return implements Expression {
+public class Return extends TokenAwareExpression {
 
   private final Expression expression;
 

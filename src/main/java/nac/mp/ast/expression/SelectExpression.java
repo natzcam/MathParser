@@ -8,7 +8,7 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.ast.WhereBlock;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.MPModel;
 import nac.mp.type.instance.MPObject;
 import nac.mp.type.instance.QueryPredicate;
@@ -19,13 +19,13 @@ import org.apache.logging.log4j.Logger;
  *
  * @author nathaniel
  */
-public class SelectExpression implements Expression {
+public class SelectExpression extends TokenAwareExpression {
 
   private static final Logger log = LogManager.getLogger(SelectExpression.class);
   private final Expression modelName;
-  private final WhereBlock whereBlock;
+  private final Expression whereBlock;
 
-  public SelectExpression(Expression modelName, WhereBlock whereBlock) {
+  public SelectExpression(Expression modelName, Expression whereBlock) {
     this.modelName = modelName;
     this.whereBlock = whereBlock;
   }

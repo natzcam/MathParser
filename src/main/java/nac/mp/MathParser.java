@@ -5,17 +5,18 @@
  */
 package nac.mp;
 
+import nac.mp.ast.Scope;
+import nac.mp.ast.Expression;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import nac.mp.ast.BasicScope;
-import nac.mp.ast.Block;
-import nac.mp.ast.Expression;
-import nac.mp.ast.Scope;
+import nac.mp.ast.expression.Block;
 import nac.mp.ast.WhereBlock;
 import nac.mp.ast.expression.Assignment;
 import nac.mp.ast.expression.BooleanLiteral;
@@ -83,6 +84,7 @@ public class MathParser {
   private Token current = null;
   private Token next = null;
   private final ObjectStore objectStore = new FrostByte();
+  private final Deque<List<Token>> tokenStack = new ArrayDeque<>();
 
   public void model(String path) throws ParseException, EvalException {
     model(new File(path));
@@ -93,6 +95,7 @@ public class MathParser {
   }
 
   public void model(File path) throws ParseException, EvalException {
+    startRecord();
     log.info("Parsing model " + path);
     tokenizer.setCurrentFile(path);
     try {
@@ -114,7 +117,7 @@ public class MathParser {
     } catch (ClassCastException cce) {
       throw new ParseException("Expected type not found.", cce);
     }
-
+    endRecord(null);
     //eval
     fileBlock.eval(globalScope, objectStore);
   }
@@ -128,6 +131,7 @@ public class MathParser {
   }
 
   public void control(File path) throws ParseException, EvalException {
+    startRecord();
     log.info("Parsing control" + path);
     tokenizer.setCurrentFile(path);
 
@@ -145,7 +149,7 @@ public class MathParser {
     } catch (ClassCastException cce) {
       throw new ParseException("Expected type not found.", cce);
     }
-
+    endRecord(null);
     //eval
     fileBlock.eval(globalScope, objectStore);
   }
@@ -160,6 +164,8 @@ public class MathParser {
 
   private void consume() throws ParseException {
     current = tokenizer.consume();
+    List<Token> list = tokenStack.peekFirst();
+    list.add(current);
   }
 
   private void next() throws ParseException {
@@ -174,13 +180,15 @@ public class MathParser {
     Token e = tokenizer.lookahead(1);
     if (e.type == t) {
       current = tokenizer.consume();
+      List<Token> list = tokenStack.peekFirst();
+      list.add(current);
     } else {
       throw new ParseException("Unexpected token", tokenizer, t, e);
     }
   }
 
-  private Block block() throws ParseException {
-
+  private Expression block() throws ParseException {
+    startRecord();
     Block bl = new Block();
     next();
     if (next.type == TokenType.LBRACE) {
@@ -194,37 +202,44 @@ public class MathParser {
     } else {
       bl.addStatement(statement());
     }
-    return bl;
+    return endRecord(bl);
   }
 
   private Expression statement() throws ParseException {
+    startRecord();
+    Expression result = null;
     next();
     switch (next.type) {
       case KW_SAVE:
         consume();
         Expression sve = expression();
         consume(TokenType.SEMICOLON);
-        return new Save(sve);
+        result = new Save(sve);
+        break;
       case KW_PRINT:
         consume();
         Expression ex1 = expression();
         consume(TokenType.SEMICOLON);
-        return new Print(ex1);
+        result = new Print(ex1);
+        break;
       case KW_INPUT:
         consume();
         consume(TokenType.IDENTIFIER);
         Input input = new Input(current.text);
         consume(TokenType.SEMICOLON);
-        return input;
+        result = input;
+        break;
       case KW_EXIT:
         consume();
         consume(TokenType.SEMICOLON);
-        return new Exit();
+        result = new Exit();
+        break;
       case KW_ASSERT:
         consume();
         Expression ex2 = expression();
         consume(TokenType.SEMICOLON);
-        return new Assert(ex2);
+        result = new Assert(ex2);
+        break;
       case KW_RETURN:
         consume();
         Expression ex = null;
@@ -233,60 +248,76 @@ public class MathParser {
           ex = expression();
         }
         consume(TokenType.SEMICOLON);
-        return new Return(ex);
+        result = new Return(ex);
+        break;
       case KW_IF:
         consume();
         consume(TokenType.LPAREN);
         Expression ifCond = expression();
         consume(TokenType.RPAREN);
-        Block ifBody = block();
+        Expression ifBody = block();
         IfStatement ifs = new IfStatement(ifCond, ifBody);
         next();
         if (next.type == TokenType.KW_ELSE) {
           consume();
-          Block elseBody = block();
+          Expression elseBody = block();
           ifs.setElseBody(elseBody);
         }
-        return ifs;
+        result = ifs;
+        break;
       case KW_WHILE:
         consume();
         consume(TokenType.LPAREN);
         Expression cond = expression();
         consume(TokenType.RPAREN);
-        Block body = block();
-        return new WhileStatement(cond, body);
+        Expression body = block();
+        result = new WhileStatement(cond, body);
+        break;
       case KW_VAR:
-        return varDecl();
+        result = varDecl();
+        break;
       case KW_FUNC:
-        return funcDecl();
+        result = funcDecl();
+        break;
       case KW_OBJECT:
-        return objectDecl();
+        result = objectDecl();
+        break;
       case KW_TEMPLATE:
-        return classDecl();
+        result = classDecl();
+        break;
       default:
         Expression se = expression();
         consume(TokenType.SEMICOLON);
-        return se;
+        result = se;
     }
+    return endRecord(result);
   }
 
   private Expression declaration() throws ParseException {
+    startRecord();
+    Expression result = null;
     next();
     switch (next.type) {
       case KW_VAR:
-        return varDecl();
+        result = varDecl();
+        break;
       case KW_FUNC:
-        return funcDecl();
+        result = funcDecl();
+        break;
       case KW_OBJECT:
-        return objectDecl();
+        result = objectDecl();
+        break;
       case KW_TEMPLATE:
-        return classDecl();
+        result = classDecl();
+        break;
       default:
         throw new ParseException("Declaration expected", tokenizer, next);
     }
+    return endRecord(result);
   }
 
-  private AttributeDecl attributeDecl() throws ParseException {
+  private Expression attributeDecl() throws ParseException {
+    startRecord();
     consume(TokenType.IDENTIFIER);
     String t = current.text;
     String mt = null;
@@ -300,10 +331,11 @@ public class MathParser {
     String i = current.text;
     AttributeDecl typedDecl = new AttributeDecl(t, mt, i);
     consume(TokenType.SEMICOLON);
-    return typedDecl;
+    return endRecord(typedDecl);
   }
 
   private Expression varDecl() throws ParseException {
+    startRecord();
     consume(TokenType.KW_VAR);
     consume(TokenType.IDENTIFIER);
     VarDecl varDecl = new VarDecl(current.text);
@@ -313,10 +345,11 @@ public class MathParser {
       varDecl.setDefaultValue(expression());
     }
     consume(TokenType.SEMICOLON);
-    return varDecl;
+    return endRecord(varDecl);
   }
 
   private Expression funcDecl() throws ParseException {
+    startRecord();
     consume(TokenType.KW_FUNC);
     consume(TokenType.IDENTIFIER);
     FunctionDecl fd = new FunctionDecl(current.text);
@@ -333,12 +366,13 @@ public class MathParser {
       }
     }
     consume();
-    Block b = block();
+    Expression b = block();
     fd.setBody(b);
-    return fd;
+    return endRecord(fd);
   }
 
   private Expression objectDecl() throws ParseException {
+    startRecord();
     consume(TokenType.KW_OBJECT);
     consume(TokenType.IDENTIFIER);
     ObjectDecl od = new ObjectDecl(current.text);
@@ -349,10 +383,11 @@ public class MathParser {
       next();
     }
     consume();
-    return od;
+    return endRecord(od);
   }
 
   private Expression classDecl() throws ParseException {
+    startRecord();
     consume(TokenType.KW_TEMPLATE);
     consume(TokenType.IDENTIFIER);
     String cl = current.text;
@@ -370,10 +405,11 @@ public class MathParser {
       next();
     }
     consume();
-    return td;
+    return endRecord(td);
   }
 
   private Expression modelDecl() throws ParseException {
+    startRecord();
     consume(TokenType.KW_MODEL);
     consume(TokenType.IDENTIFIER);
     String m = current.text;
@@ -381,11 +417,11 @@ public class MathParser {
     consume(TokenType.LBRACE);
     next();
     while (next.type != TokenType.RBRACE) {
-      md.addAttrDecl(attributeDecl());
+      md.getAttributes().add(attributeDecl());
       next();
     }
     consume();
-    return md;
+    return endRecord(md);
   }
 
   private Expression relDecl() throws ParseException {
@@ -399,13 +435,15 @@ public class MathParser {
   }
 
   private Expression oneToMany(Expression left) throws ParseException {
+    startRecord();
     consume(TokenType.ONE_TO_MANY);
     OneToManyDecl otm = new OneToManyDecl(left, expression());
     consume(TokenType.SEMICOLON);
-    return otm;
+    return endRecord(otm);
   }
 
   private Expression expression() throws ParseException {
+    startRecord();
     Expression left = andor();
     while (true) {
       next();
@@ -418,12 +456,13 @@ public class MathParser {
           left = as;
           break;
         default:
-          return left;
+          return endRecord(left);
       }
     }
   }
 
   private Expression andor() throws ParseException {
+    startRecord();
     Expression left = comparison();
     while (true) {
       next();
@@ -443,12 +482,13 @@ public class MathParser {
           left = lo;
           break;
         default:
-          return left;
+          return endRecord(left);
       }
     }
   }
 
   private Expression comparison() throws ParseException {
+    startRecord();
     Expression left = additive();
     while (true) {
       next();
@@ -496,12 +536,13 @@ public class MathParser {
           left = neq;
           break;
         default:
-          return left;
+          return endRecord(left);
       }
     }
   }
 
   private Expression additive() throws ParseException {
+    startRecord();
     Expression left = multiplicative();
     while (true) {
       next();
@@ -521,12 +562,13 @@ public class MathParser {
           left = dsh;
           break;
         default:
-          return left;
+          return endRecord(left);
       }
     }
   }
 
   private Expression multiplicative() throws ParseException {
+    startRecord();
     Expression left = creation();
     while (true) {
       next();
@@ -546,12 +588,13 @@ public class MathParser {
           left = slt;
           break;
         default:
-          return left;
+          return endRecord(left);
       }
     }
   }
 
   private Expression creation() throws ParseException {
+    startRecord();
     next();
     if (next.type == TokenType.KW_NEW) {
       consume();
@@ -567,11 +610,11 @@ public class MathParser {
         NewOptsExpr nex1 = new NewOptsExpr(ex);
         nex1.getArgs().addAll(expList);
         nex1.getOpts().putAll(optsMap);
-        return nex1;
+        return endRecord(nex1);
       } else {
         NewExpr nex2 = new NewExpr(ex);
         nex2.getArgs().addAll(expList);
-        return nex2;
+        return endRecord(nex2);
       }
     } else {
       Expression left = access();
@@ -610,7 +653,7 @@ public class MathParser {
             }
             break;
           default:
-            return left;
+            return endRecord(left);
         }
       }
     }
@@ -651,6 +694,7 @@ public class MathParser {
   }
 
   private Expression access() throws ParseException {
+    startRecord();
     Expression left = factor();
     while (true) {
       next();
@@ -671,38 +715,47 @@ public class MathParser {
           left = lst;
           break;
         default:
-          return left;
+          return endRecord(left);
       }
     }
   }
 
   private Expression factor() throws ParseException {
+    startRecord();
+    Expression result = null;
     next();
     switch (next.type) {
       case FLOAT:
         consume();
-        return new FloatLiteral(Double.parseDouble(current.text));
+        result = new FloatLiteral(Double.parseDouble(current.text));
+        break;
       case INT:
         consume();
-        return new IntLiteral(Long.parseLong(current.text));
+        result = new IntLiteral(Long.parseLong(current.text));
+        break;
       case STRING:
         consume();
         String text = current.text.replaceAll("^\"|\"$", "");
-        return new StringLiteral(text);
+        result = new StringLiteral(text);
+        break;
       case KW_TRUE:
         consume();
-        return new BooleanLiteral(true);
+        result = new BooleanLiteral(true);
+        break;
       case KW_FALSE:
         consume();
-        return new BooleanLiteral(false);
+        result = new BooleanLiteral(false);
+        break;
       case LPAREN:
         consume();
         Expression exp = expression();
         consume(TokenType.RPAREN);
-        return new Parenthesis(exp);
+        result = new Parenthesis(exp);
+        break;
       case IDENTIFIER:
         consume();
-        return new VarExpr(current.text);
+        result = new VarExpr(current.text);
+        break;
       case KW_FUNC:
         consume();
         FunctionDeclExpr fdx = new FunctionDeclExpr();
@@ -719,9 +772,10 @@ public class MathParser {
           }
         }
         consume();
-        Block b = block();
+        Expression b = block();
         fdx.setBody(b);
-        return fdx;
+        result = fdx;
+        break;
       case KW_OBJECT:
         consume();
         ObjectDeclExpr od = new ObjectDeclExpr();
@@ -732,7 +786,8 @@ public class MathParser {
           next();
         }
         consume();
-        return od;
+        result = od;
+        break;
       case LBRACKET:
         consume();
         ListLiteralExpr le = new ListLiteralExpr();
@@ -754,20 +809,23 @@ public class MathParser {
           le.setInitSize(expression());
           consume(TokenType.RPAREN);
         }
-        return le;
+        result = le;
+        break;
       case KW_SELECT:
         consume(TokenType.KW_SELECT);
         Expression modelName = expression();
         consume(TokenType.KW_WHERE);
-        WhereBlock wb = whereBlock();
-        return new SelectExpression(modelName, wb);
+        Expression wb = whereBlock();
+        result = new SelectExpression(modelName, wb);
+        break;
       default:
         throw new ParseException("Expression expected", tokenizer, next);
     }
+    return endRecord(result);
   }
 
-  private WhereBlock whereBlock() throws ParseException {
-
+  private Expression whereBlock() throws ParseException {
+    startRecord();
     WhereBlock bl = new WhereBlock();
     next();
     if (next.type == TokenType.LBRACE) {
@@ -781,15 +839,27 @@ public class MathParser {
     } else {
       bl.addStatement(statement());
     }
-    return bl;
+    return endRecord(bl);
   }
 
   public void cleanup() {
     objectStore.close();
   }
-  
-  public void startRecord(){
-    
+
+  //debug why so many stack;
+  public void startRecord() {
+    tokenStack.addFirst(new ArrayList<Token>());
+  }
+
+  public Expression endRecord(Expression expression) {
+    List<Token> list = tokenStack.removeFirst();
+    System.out.println("tokenStack: " + tokenStack);
+    System.out.println("list: " + list);
+    if (expression != null) {
+      expression.relateTokens(list);
+    }
+
+    return expression;
   }
 
   public static void main(String[] args) {

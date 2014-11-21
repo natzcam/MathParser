@@ -15,7 +15,7 @@ import nac.mp.type.instance.MPObject;
  *
  * @author natz
  */
-public class WhereBlock implements Expression {
+public class WhereBlock extends TokenAwareExpression {
 
   private final List<Expression> statements = new ArrayList<>();
 

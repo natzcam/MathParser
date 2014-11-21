@@ -5,16 +5,16 @@
 package nac.mp.ast.expression;
 
 import nac.mp.ObjectStore;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPBoolean;
+import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author nathaniel
  */
-public class BooleanLiteral implements Expression {
+public class BooleanLiteral extends TokenAwareExpression {
 
   private final MPBoolean value;
 
