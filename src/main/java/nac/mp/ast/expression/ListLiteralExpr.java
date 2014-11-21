@@ -10,15 +10,16 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
+import nac.mp.type.instance.MPInteger;
 import nac.mp.type.instance.MPList;
 import nac.mp.type.instance.MPObject;
-import nac.mp.type.instance.MPInteger;
 
 /**
  *
  * @author ladilads
  */
-public class ListLiteralExpr implements Expression {
+public class ListLiteralExpr extends TokenAwareExpression {
 
   private Expression initSize;
   private final List<Expression> elems = new ArrayList<>();

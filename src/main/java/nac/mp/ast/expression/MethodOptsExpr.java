@@ -12,13 +12,14 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author ladilads
  */
-public class MethodOptsExpr implements Expression {
+public class MethodOptsExpr extends TokenAwareExpression {
 
   private final Expression expression;
   private final List<Expression> args = new ArrayList<>();

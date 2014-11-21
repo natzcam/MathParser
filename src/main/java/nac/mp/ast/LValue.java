@@ -13,7 +13,7 @@ import nac.mp.type.instance.MPObject;
  *
  * @author camomon
  */
-public abstract class LValue implements Expression {
+public abstract class LValue extends TokenAwareExpression {
 
   public abstract void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException;
 }

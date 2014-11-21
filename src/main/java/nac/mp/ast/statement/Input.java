@@ -7,8 +7,8 @@ package nac.mp.ast.statement;
 import java.util.Scanner;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 import nac.mp.type.instance.MPString;
 
@@ -16,7 +16,7 @@ import nac.mp.type.instance.MPString;
  *
  * @author nathaniel
  */
-public class Input implements Expression {
+public class Input extends TokenAwareExpression {
 
   private final Scanner scanner = new Scanner(System.in);
   private final String identifier;

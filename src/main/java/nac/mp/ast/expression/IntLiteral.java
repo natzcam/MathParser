@@ -5,16 +5,16 @@
 package nac.mp.ast.expression;
 
 import nac.mp.ObjectStore;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPInteger;
+import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author user
  */
-public class IntLiteral implements Expression {
+public class IntLiteral extends TokenAwareExpression {
 
   private final MPInteger value;
 

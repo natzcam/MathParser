@@ -19,6 +19,6 @@ import nac.mp.type.instance.MPObject;
 public interface Expression extends Serializable {
 
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException;
-//
-//  public void relateToken(List<Token> tokens);
+
+  public void relateTokens(List<Token> tokens);
 }

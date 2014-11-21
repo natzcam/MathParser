@@ -10,13 +10,14 @@ import nac.mp.ObjectStore;
 import nac.mp.ParseException;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author user
  */
-public class OneToManyDecl implements Expression {
+public class OneToManyDecl extends TokenAwareExpression {
 
   private final Expression left;
   private final Expression right;

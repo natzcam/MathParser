@@ -8,6 +8,7 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author nathaniel
  */
-public class Print implements Expression {
+public class Print extends TokenAwareExpression {
 
   private static final Logger log = LogManager.getLogger(Print.class);
   private final Expression expression;

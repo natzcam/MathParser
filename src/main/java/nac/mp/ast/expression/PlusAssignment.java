@@ -10,13 +10,14 @@ import nac.mp.ParseException;
 import nac.mp.ast.Expression;
 import nac.mp.ast.LValue;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author user
  */
-public class PlusAssignment implements Expression {
+public class PlusAssignment extends TokenAwareExpression {
 
   private LValue leftValue;
   private Expression rightValue;

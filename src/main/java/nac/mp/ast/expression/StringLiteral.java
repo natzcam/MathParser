@@ -5,8 +5,8 @@
 package nac.mp.ast.expression;
 
 import nac.mp.ObjectStore;
-import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.instance.MPObject;
 import nac.mp.type.instance.MPString;
 
@@ -14,7 +14,7 @@ import nac.mp.type.instance.MPString;
  *
  * @author nathaniel
  */
-public class StringLiteral  implements Expression {
+public class StringLiteral  extends TokenAwareExpression {
 
   private final MPString value;
 

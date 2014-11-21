@@ -8,28 +8,28 @@ package nac.mp.ast.statement;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.BasicScope;
-import nac.mp.ast.Block;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.Type;
+import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author natz
  */
-public class IfStatement implements Expression {
+public class IfStatement extends TokenAwareExpression {
 
   private final Expression cond;
-  private final Block ifBody;
-  private Block elseBody;
+  private final Expression ifBody;
+  private Expression elseBody;
 
-  public IfStatement(Expression cond, Block ifBody) {
+  public IfStatement(Expression cond, Expression ifBody) {
     this.cond = cond;
     this.ifBody = ifBody;
   }
 
-  public void setElseBody(Block elseBody) {
+  public void setElseBody(Expression elseBody) {
     this.elseBody = elseBody;
   }
 
@@ -47,7 +47,7 @@ public class IfStatement implements Expression {
         }
       }
     } else {
-      throw new EvalException("Condition not boolean.", scope, this);
+      throw new EvalException("Condition not boolean", scope, cond);
     }
     return null;
   }

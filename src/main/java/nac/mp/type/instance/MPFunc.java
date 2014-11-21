@@ -12,7 +12,8 @@ import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.BasicScope;
-import nac.mp.ast.Block;
+import nac.mp.ast.expression.Block;
+import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.type.Type;
 
@@ -22,15 +23,15 @@ import nac.mp.type.Type;
  */
 public class MPFunc extends MPObject {
 
-  protected final Block body;
+  protected final Expression body;
   protected final List<String> formalArgs = new ArrayList<>();
 
-  public MPFunc(Scope parent, Block body) {
+  public MPFunc(Scope parent, Expression body) {
     super(parent, null);
     this.body = body;
   }
 
-  public Block getBody() {
+  public Expression getBody() {
     return body;
   }
 
@@ -45,7 +46,7 @@ public class MPFunc extends MPObject {
 
   public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this, this);
+      throw new EvalException("Argument mismatch: " + formalArgs.size() + "!=" + argsValues.size(), this);
     }
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
@@ -57,7 +58,7 @@ public class MPFunc extends MPObject {
 
   public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this, this);
+      throw new EvalException("Argument mismatch: " + formalArgs.size() + "!=" + argsValues.size(), this);
     }
 
     Scope newScope = new BasicScope(parent);

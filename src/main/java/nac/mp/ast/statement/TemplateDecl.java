@@ -11,14 +11,15 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.MPTemplate;
+import nac.mp.type.instance.MPObject;
 
 /**
  *
  * @author camomon
  */
-public class TemplateDecl implements Expression {
+public class TemplateDecl extends TokenAwareExpression {
 
   private final Expression extnds;
   private final String name;

@@ -10,11 +10,11 @@ import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.LValue;
 import nac.mp.ast.Scope;
+import nac.mp.type.instance.MPInteger;
 import nac.mp.type.instance.MPList;
 import nac.mp.type.instance.MPModelObj;
 import nac.mp.type.instance.MPObject;
 import nac.mp.type.instance.MPRefList;
-import nac.mp.type.instance.MPInteger;
 
 /**
  *
@@ -53,5 +53,4 @@ public class ListExpr extends LValue {
       ((MPList) obj).set((MPInteger) index.eval(scope, store), value);
     }
   }
-
 }
