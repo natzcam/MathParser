@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -32,22 +32,44 @@ public class BasicScope implements Scope {
   }
 
   @Override
-  public void setLocalVar(String name, MPObject value) {
-    vars.put(name, value);
-  }
-
-  @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    vars.putAll(vars);
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
+  public MPObject getVar(String name, ObjectStore store) {
     if (vars.containsKey(name)) {
-      throw new EvalException("Duplicate var: " + name, this);
+      return vars.get(name);
+    } else if (parent != null) {
+      return parent.getVar(name, store);
+    } else {
+      throw new EvalException("Var not declared: " + name, this);
+    }
+  }
+
+  @Override
+  public boolean containsVar(String name, ObjectStore store) {
+    return vars.containsKey(name) ? true : parent != null && parent.containsVar(name, store);
+  }
+
+  @Override
+  public void declareVar(String name, MPObject defaultValue) {
+    if (vars.containsKey(name)) {
+      throw new EvalException("Duplicate var: " + name, defaultValue);
     } else {
       vars.put(name, defaultValue);
     }
+  }
+
+  @Override
+  public void setVar(String name, MPObject value, ObjectStore store) {
+    if (vars.containsKey(name)) {
+      vars.put(name, value);
+    } else if (parent != null) {
+      parent.setVar(name, value, store);
+    } else {
+      throw new EvalException("Var not declared: " + name, value);
+    }
+  }
+
+  @Override
+  public void setLocalVar(String name, MPObject value) {
+    vars.put(name, value);
   }
 
   @Override
@@ -61,36 +83,8 @@ public class BasicScope implements Scope {
   }
 
   @Override
-  public boolean containsVar(String name, ObjectStore store) {
-    if (vars.containsKey(name)) {
-      return true;
-    } else {
-      return parent != null && parent.containsVar(name, store);
-    }
-  }
-
-  @Override
-  public void setVar(String name, MPObject value, ObjectStore store) throws EvalException {
-    if (vars.containsKey(name)) {
-      vars.put(name, value);
-    } else if (parent != null) {
-      parent.setVar(name, value, store);
-    } else {
-      throw new EvalException("Var not declared: " + name, value);
-    }
-  }
-
-  @Override
   public String toString() {
     return "SCOPE: " + vars.toString();
   }
 
-  @Override
-  public MPObject getVar(String name, ObjectStore store) {
-    MPObject result = vars.get(name);
-    if (result == null && parent != null) {
-      result = parent.getVar(name, store);
-    }
-    return result;
-  }
 }

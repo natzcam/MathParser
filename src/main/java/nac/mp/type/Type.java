@@ -24,5 +24,6 @@ public enum Type {
   MODEL,
   ATTRIBUTE,
   REF,
-  REFLIST;
+  REFLIST,
+  PREDICATE;
 }

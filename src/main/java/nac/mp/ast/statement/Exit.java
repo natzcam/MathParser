@@ -7,7 +7,7 @@ package nac.mp.ast.statement;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 
 /**
  *

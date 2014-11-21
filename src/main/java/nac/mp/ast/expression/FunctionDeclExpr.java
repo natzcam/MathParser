@@ -6,13 +6,12 @@ package nac.mp.ast.expression;
 
 import java.util.ArrayList;
 import java.util.List;
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
+import nac.mp.type.MPObject;
 import nac.mp.type.instance.MPFunc;
-import nac.mp.type.instance.MPObject;
 
 /**
  *
@@ -32,7 +31,7 @@ public class FunctionDeclExpr extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     MPFunc func = new MPFunc(scope, body);
     func.getFormalArgs().addAll(argNames);
     return func;

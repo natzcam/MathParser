@@ -8,6 +8,7 @@ package nac.mp.type.instance;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPModel;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
 /**

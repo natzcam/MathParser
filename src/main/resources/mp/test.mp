@@ -1,43 +1,21 @@
-object zz{
-  func test(){
-    return func(w){
-      print w;
-    };
-  }
+//simple arithmetic
+var a = 0;
+a = 4 + 4;
+assert a == 8;
 
-}
+var b = 0;
+b = 8 - 4;
+assert b == 4;
 
+var c = 0;
+c = 2 * 2;
+assert c == 4;
 
+var d = 0;
+d = 12 / 2;
+assert d == 6;
 
-zz.test()("hello");
-
-var x = "11000";
-print x.toInt();
-
-var y = "122.00";
-print y.toFloat();
-
-template Subject{
-  var name;
-  var teacher;
-  var students;
-}
-
-template Teacher{
-  var name;
-  func __init__(name){
-    this.name = name;
-  }
-}
-
-template Student{
-  var subjects;
-}
-
-var t = new Teacher("test");
-print t.name;
-//persist t;
-
-//var t = get Teacher with id = 1;
-//print t.id;
-//print t.name;
+var y = 0;
+y = a + b - c * d / 2;
+//result should be 0;
+assert y == 0;

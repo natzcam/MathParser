@@ -6,12 +6,11 @@
 package nac.mp.type.instance;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.Creator;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
 /**
@@ -45,13 +44,11 @@ public class MPRef extends MPObject {
   }
 
   @Override
-  public void setLocalVar(String name, MPObject value) {
-    mpModelObj.setLocalVar(name, value);
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
-    mpModelObj.declareLocalVar(name, defaultValue);
+  public MPObject getVar(String name, ObjectStore store) {
+    if (mpModelObj == null) {
+      mpModelObj = store.dereference(this);
+    }
+    return mpModelObj.getVar(name, store);
   }
 
   @Override
@@ -63,11 +60,13 @@ public class MPRef extends MPObject {
   }
 
   @Override
-  public MPObject getVar(String name, ObjectStore store) {
-    if (mpModelObj == null) {
-      mpModelObj = store.dereference(this);
-    }
-    return mpModelObj.getVar(name, store);
+  public void declareVar(String name, MPObject defaultValue) {
+    mpModelObj.declareVar(name, defaultValue);
+  }
+
+  @Override
+  public void setLocalVar(String name, MPObject value) {
+    mpModelObj.setLocalVar(name, value);
   }
 
   @Override
@@ -81,12 +80,7 @@ public class MPRef extends MPObject {
   }
 
   @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    mpModelObj.setLocalVars(vars);
-  }
-
-  @Override
-  public void setVar(String name, MPObject value, ObjectStore store) throws EvalException {
+  public void setVar(String name, MPObject value, ObjectStore store) {
     if (mpModelObj == null) {
       mpModelObj = store.dereference(this);
     }

@@ -5,15 +5,14 @@
  */
 package nac.mp.ast.expression;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.LValue;
 import nac.mp.ast.Scope;
+import nac.mp.type.MPObject;
 import nac.mp.type.instance.MPInteger;
 import nac.mp.type.instance.MPList;
 import nac.mp.type.instance.MPModelObj;
-import nac.mp.type.instance.MPObject;
 import nac.mp.type.instance.MPRefList;
 
 /**
@@ -34,7 +33,7 @@ public class ListExpr extends LValue {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     MPObject obj = expression.eval(scope, store);
     if (obj instanceof MPRefList) {
       return ((MPRefList) obj).get((MPInteger) index.eval(scope, store), store);
@@ -45,7 +44,7 @@ public class ListExpr extends LValue {
   }
 
   @Override
-  public void setValue(Scope scope, MPObject value, ObjectStore store) throws EvalException {
+  public void setValue(Scope scope, MPObject value, ObjectStore store) {
     MPObject obj = expression.eval(scope, store);
     if (obj instanceof MPRefList) {
       ((MPRefList) obj).set((MPInteger) index.eval(scope, store), (MPModelObj) value);

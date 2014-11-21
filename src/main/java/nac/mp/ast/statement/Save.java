@@ -4,13 +4,12 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
+import nac.mp.type.MPObject;
 import nac.mp.type.instance.MPModelObj;
-import nac.mp.type.instance.MPObject;
 
 /**
  *
@@ -25,7 +24,7 @@ public class Save extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     MPModelObj obj = (MPModelObj) expression.eval(scope, store);
     store.save(obj);
     return null;

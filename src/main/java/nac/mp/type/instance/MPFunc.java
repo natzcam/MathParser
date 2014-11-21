@@ -5,16 +5,14 @@
 package nac.mp.type.instance;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.BasicScope;
-import nac.mp.ast.expression.Block;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
 /**
@@ -44,26 +42,26 @@ public class MPFunc extends MPObject {
     return Type.FUNCTION;
   }
 
-  public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) {
     if (formalArgs.size() != argsValues.size()) {
       throw new EvalException("Argument mismatch: " + formalArgs.size() + "!=" + argsValues.size(), this);
     }
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
+      newScope.declareVar(formalArgs.get(i), argsValues.get(i));
     }
     newScope.setLocalVar("this", thisRef);
     return body.eval(newScope, store);
   }
 
-  public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
+  public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) {
     if (formalArgs.size() != argsValues.size()) {
       throw new EvalException("Argument mismatch: " + formalArgs.size() + "!=" + argsValues.size(), this);
     }
 
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
-      newScope.declareLocalVar(formalArgs.get(i), argsValues.get(i));
+      newScope.declareVar(formalArgs.get(i), argsValues.get(i));
     }
 
     MPObject opts = new MPBaseObj(parent, null);
@@ -74,46 +72,6 @@ public class MPFunc extends MPObject {
     newScope.setLocalVar("opts", opts);
     newScope.setLocalVar("this", thisRef);
     return body.eval(newScope, store);
-  }
-
-  @Override
-  public void setLocalVar(String name, MPObject value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Set<String> getLocalVarKeys() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Collection<MPObject> getLocalVarValues() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean containsVar(String name, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public MPObject getVar(String name, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setVar(String name, MPObject value, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override

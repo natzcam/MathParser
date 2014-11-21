@@ -5,12 +5,11 @@
  */
 package nac.mp.ast.expression;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -25,7 +24,7 @@ public class Parenthesis extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     return expression.eval(scope, store);
   }
 }

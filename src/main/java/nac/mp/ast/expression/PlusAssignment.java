@@ -4,14 +4,13 @@
  */
 package nac.mp.ast.expression;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ParseException;
 import nac.mp.ast.Expression;
 import nac.mp.ast.LValue;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -31,7 +30,7 @@ public class PlusAssignment extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     leftValue.setValue(scope, rightValue.eval(scope, store), store);
     return null;
   }

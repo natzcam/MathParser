@@ -9,12 +9,12 @@ import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
-import nac.mp.type.instance.MPObject;
 
 /**
  *
- * @author nathaniel
+ *
  */
 public class Assert extends TokenAwareExpression {
 
@@ -25,7 +25,7 @@ public class Assert extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     MPObject result = cond.eval(scope, store);
     if (result.getType() == Type.BOOL) {
       if (!result.getBoolean()) {

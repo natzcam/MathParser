@@ -13,6 +13,7 @@ if(x == "hey"){
   testvar = 2;
 }
 
+print testvar;
 assert testvar == 1;
 
 x = "hello";

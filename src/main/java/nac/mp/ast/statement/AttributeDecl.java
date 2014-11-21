@@ -5,13 +5,12 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.MPAttribute;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
-import nac.mp.type.instance.MPObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,9 +44,9 @@ public class AttributeDecl extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     MPAttribute attr = new MPAttribute(scope, type, metaType, identifier);
-    scope.declareLocalVar(identifier, attr);
+    scope.declareVar(identifier, attr);
     return null;
   }
 }

@@ -11,12 +11,12 @@ import nac.mp.ast.BasicScope;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
-import nac.mp.type.instance.MPObject;
 
 /**
  *
- * @author natz
+ * @author natz import nac.mp.type.Type;
  */
 public class WhileStatement extends TokenAwareExpression {
 
@@ -29,7 +29,7 @@ public class WhileStatement extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     scope = new BasicScope(scope);
     MPObject condValue = cond.eval(scope, store);
     if (condValue.getType() != Type.BOOL) {

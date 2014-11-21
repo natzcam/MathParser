@@ -4,11 +4,10 @@
  */
 package nac.mp.ast.expression;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.BinaryExpression;
 import nac.mp.ast.Scope;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -17,7 +16,7 @@ import nac.mp.type.instance.MPObject;
 public class SlashExpression extends BinaryExpression {
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     MPObject leftValue = left.eval(scope, store);
     MPObject rightValue = right.eval(scope, store);
     return leftValue.slash(rightValue);

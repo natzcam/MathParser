@@ -5,9 +5,6 @@
  */
 package nac.mp;
 
-import nac.mp.ast.statement.ModelDecl;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 /**
  *
  * @author natz

@@ -4,13 +4,12 @@
  */
 package nac.mp.ast.expression;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.MPModel;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 import nac.mp.type.instance.QueryPredicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +30,7 @@ public class SelectExpression extends TokenAwareExpression {
   }
   
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     return store.select((MPModel) modelName.eval(scope, store), new QueryPredicate(scope, whereBlock));
   }
 }

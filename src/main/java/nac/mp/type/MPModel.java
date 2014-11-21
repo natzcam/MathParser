@@ -5,15 +5,11 @@
  */
 package nac.mp.type;
 
-import nac.mp.type.instance.MPObject;
-import nac.mp.type.instance.MPModelObj;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
+import nac.mp.type.instance.MPModelObj;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,52 +47,17 @@ public class MPModel extends MPObject implements Creator {
   }
 
   @Override
-  public MPObject newInstance(ObjectStore store) throws EvalException {
+  public MPObject newInstance(ObjectStore store) {
     MPModelObj obj = new MPModelObj(parent, this);
     for (String attrName : attributes.keySet()) {
       MPAttribute attr = attributes.get(attrName);
-      obj.declareLocalVar(attrName, attr.newInstance(obj));
+      obj.declareVar(attrName, attr.newInstance(obj));
     }
     return obj;
   }
 
   @Override
-  public void setLocalVar(String name, MPObject value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
+  public void declareVar(String name, MPObject defaultValue) {
     attributes.put(name, (MPAttribute) defaultValue);
-  }
-
-  @Override
-  public Set<String> getLocalVarKeys() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Collection<MPObject> getLocalVarValues() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean containsVar(String name, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public MPObject getVar(String name, ObjectStore store) {
-    return attributes.get(name);
-  }
-
-  @Override
-  public void setVar(String name, MPObject value, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

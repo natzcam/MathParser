@@ -10,7 +10,7 @@ import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.Token;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 
 /**
  *

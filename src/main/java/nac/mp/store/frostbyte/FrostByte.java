@@ -11,13 +11,13 @@ import java.util.Collection;
 import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.instance.MPList;
 import nac.mp.type.MPModel;
+import nac.mp.type.instance.MPInteger;
+import nac.mp.type.instance.MPList;
 import nac.mp.type.instance.MPModelObj;
 import nac.mp.type.instance.MPRef;
 import nac.mp.type.instance.MPRefList;
 import nac.mp.type.instance.QueryPredicate;
-import nac.mp.type.instance.MPInteger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mapdb.Atomic;
@@ -49,7 +49,7 @@ public class FrostByte implements ObjectStore {
   }
 
   @Override
-  public void register(MPModel model) throws EvalException {
+  public void register(MPModel model) {
     BTreeMap<String, MPModel> modelMap = modelDB.getTreeMap(APPEND_MODEL);
     for (String attrName : model.getAttributes().keySet()) {
       if (attrName.equals("id")) {
@@ -96,7 +96,7 @@ public class FrostByte implements ObjectStore {
   }
 
   @Override
-  public MPList select(MPModel model, QueryPredicate predicate) throws EvalException {
+  public MPList select(MPModel model, QueryPredicate predicate) {
     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(model);
     MPList result = new MPList();
     for (MPModelObj obj : objectMap.values()) {

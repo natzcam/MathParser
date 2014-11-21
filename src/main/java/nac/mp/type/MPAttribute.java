@@ -5,16 +5,10 @@
  */
 package nac.mp.type;
 
+import nac.mp.ast.Scope;
 import nac.mp.type.instance.MPList;
-import nac.mp.type.instance.MPObject;
 import nac.mp.type.instance.MPModelObj;
 import nac.mp.type.instance.MPRefList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import nac.mp.EvalException;
-import nac.mp.ObjectStore;
-import nac.mp.ast.Scope;
 import nac.mp.type.instance.MPVoid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,64 +53,24 @@ public class MPAttribute extends MPObject {
     return type;
   }
 
-  public MPObject newInstance(MPModelObj modObj) throws EvalException {
+  public MPObject newInstance(MPModelObj modObj) {
     switch (type) {
       case STRING:
-        return new MPVoid();
+        return MPVoid.VOID;
       case INT:
-        return new MPVoid();
+        return MPVoid.VOID;
       case BOOL:
-        return new MPVoid();
+        return MPVoid.VOID;
       case FLOAT:
-        return new MPVoid();
+        return MPVoid.VOID;
       case LIST:
         return new MPList();
       case REF:
-        return new MPVoid();
+        return MPVoid.VOID;
       case REFLIST:
         return new MPRefList(metaType);
       default:
-        return new MPVoid();
+        return MPVoid.VOID;
     }
-  }
-
-  @Override
-  public void setLocalVar(String name, MPObject value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Set<String> getLocalVarKeys() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Collection<MPObject> getLocalVarValues() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean containsVar(String name, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public MPObject getVar(String name, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setVar(String name, MPObject value, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

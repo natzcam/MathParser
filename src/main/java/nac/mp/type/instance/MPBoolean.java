@@ -4,25 +4,28 @@
  */
 package nac.mp.type.instance;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
 import nac.mp.EvalException;
-import nac.mp.ObjectStore;
+import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
 /**
- * TODO use 1 instance of True and False
+ *
  *
  * @author user
  */
 public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
 
+  public static final MPBoolean TRUE = new MPBoolean(true);
+  public static final MPBoolean FALSE = new MPBoolean(false);
   private final boolean value;
 
-  public MPBoolean(boolean value) {
+  private MPBoolean(boolean value) {
     super(null, null);
     this.value = value;
+  }
+
+  public static MPBoolean valueOf(boolean value) {
+    return value ? MPBoolean.TRUE : MPBoolean.FALSE;
   }
 
   @Override
@@ -41,88 +44,47 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
   }
 
   public MPBoolean inverse() {
-    return new MPBoolean(!value);
+    return MPBoolean.valueOf(!value);
   }
 
   @Override
   public MPObject isEqual(MPObject right) {
     switch (right.getType()) {
       case BOOL:
-        return new MPBoolean(value == right.getBoolean());
+        return MPBoolean.valueOf(value == right.getBoolean());
     }
-    return new MPBoolean(false);
+    return MPBoolean.FALSE;
   }
 
   @Override
   public MPObject notEqual(MPObject right) {
     switch (right.getType()) {
       case BOOL:
-        return new MPBoolean(value != right.getBoolean());
+        return MPBoolean.valueOf(value != right.getBoolean());
     }
-    return new MPBoolean(false);
+    return MPBoolean.FALSE;
   }
 
   @Override
   public MPObject lo(MPObject right) {
     switch (right.getType()) {
       case BOOL:
-        return new MPBoolean(value || right.getBoolean());
+        return MPBoolean.valueOf(value || right.getBoolean());
     }
-    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
+    throw new EvalException(getType() + " > " + right.getType() + " not supported");
   }
 
   @Override
   public MPObject la(MPObject right) {
     switch (right.getType()) {
       case BOOL:
-        return new MPBoolean(value && right.getBoolean());
+        return MPBoolean.valueOf(value && right.getBoolean());
     }
-    throw new UnsupportedOperationException(getType() + " > " + right.getType() + " not supported");
+    throw new EvalException(getType() + " > " + right.getType() + " not supported");
   }
 
   @Override
   public int compareTo(MPBoolean o) {
     return (this.value == o.value) ? 0 : (this.value ? 1 : -1);
   }
-
-  @Override
-  public void setLocalVar(String name, MPObject value) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setLocalVars(Map<String, MPObject> vars) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void declareLocalVar(String name, MPObject defaultValue) throws EvalException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Set<String> getLocalVarKeys() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public Collection<MPObject> getLocalVarValues() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean containsVar(String name, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public MPObject getVar(String name, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void setVar(String name, MPObject value, ObjectStore store) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
 }

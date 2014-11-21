@@ -4,14 +4,14 @@
  */
 package nac.mp;
 
-import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
+import nac.mp.ast.Scope;
 
 /**
  *
  * @author user
  */
-public class EvalException extends Exception {
+public class EvalException extends RuntimeException {
 
   public EvalException(String message, Scope scope, Expression expression) {
     super(message + ":" + System.lineSeparator() + scope + System.lineSeparator() + expression);
@@ -23,5 +23,9 @@ public class EvalException extends Exception {
 
   public EvalException(String message, Throwable cause) {
     super(message, cause);
+  }
+
+  public EvalException(String message) {
+    super(message);
   }
 }

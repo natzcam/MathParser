@@ -7,9 +7,8 @@ package nac.mp.ast;
 
 import java.util.ArrayList;
 import java.util.List;
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 
 /**
  *
@@ -24,7 +23,7 @@ public class WhereBlock extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     MPObject ret = null;
     
     if (statements.size() == 1) {

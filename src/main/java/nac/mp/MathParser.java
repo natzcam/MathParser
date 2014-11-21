@@ -5,8 +5,6 @@
  */
 package nac.mp;
 
-import nac.mp.ast.Scope;
-import nac.mp.ast.Expression;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayDeque;
@@ -16,9 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import nac.mp.ast.BasicScope;
-import nac.mp.ast.expression.Block;
+import nac.mp.ast.Expression;
+import nac.mp.ast.Scope;
 import nac.mp.ast.WhereBlock;
 import nac.mp.ast.expression.Assignment;
+import nac.mp.ast.expression.Block;
 import nac.mp.ast.expression.BooleanLiteral;
 import nac.mp.ast.expression.EqualExpr;
 import nac.mp.ast.expression.FloatLiteral;
@@ -66,7 +66,7 @@ import nac.mp.ast.statement.VarDecl;
 import nac.mp.ast.statement.WhileStatement;
 import nac.mp.store.frostbyte.FrostByte;
 import nac.mp.type.MPModel;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -133,7 +133,7 @@ public class MathParser {
     tokenizer.setCurrentFile(path);
 
     for (MPModel model : objectStore.getModels()) {
-      globalScope.declareLocalVar(model.getName(), model);
+      globalScope.declareVar(model.getName(), model);
     }
 
     next();

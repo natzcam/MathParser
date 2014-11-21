@@ -5,11 +5,10 @@
 package nac.mp.ast.statement;
 
 import java.util.Scanner;
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 import nac.mp.type.instance.MPString;
 
 /**
@@ -26,11 +25,11 @@ public class Input extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     if (scope.containsVar(identifier, store)) {
       scope.setVar(identifier, new MPString(scanner.nextLine()), store);
     } else {
-      scope.declareLocalVar(identifier, new MPString(scanner.nextLine()));
+      scope.declareVar(identifier, new MPString(scanner.nextLine()));
     }
     return null;
   }

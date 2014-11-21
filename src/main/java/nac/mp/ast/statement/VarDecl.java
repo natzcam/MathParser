@@ -5,12 +5,11 @@
  */
 package nac.mp.ast.statement;
 
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
-import nac.mp.type.instance.MPObject;
+import nac.mp.type.MPObject;
 import nac.mp.type.instance.MPVoid;
 
 /**
@@ -35,11 +34,11 @@ public class VarDecl extends TokenAwareExpression {
   }
 
   @Override
-  public MPObject eval(Scope scope, ObjectStore store) throws EvalException {
+  public MPObject eval(Scope scope, ObjectStore store) {
     if (defaultValue != null) {
-      scope.declareLocalVar(identifier, defaultValue.eval(scope, store));
+      scope.declareVar(identifier, defaultValue.eval(scope, store));
     } else {
-      scope.declareLocalVar(identifier, new MPVoid());
+      scope.declareVar(identifier, MPVoid.VOID);
     }
     return null;
   }
