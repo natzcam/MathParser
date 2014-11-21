@@ -51,8 +51,8 @@ public class ParseException extends Exception {
             + printTokenVicinity(tokenizer, found));
   }
 
-  public ParseException(String message, Throwable cause) {
-    super(message, cause);
+  public ParseException(String message, Throwable cause, Tokenizer tokenizer) {
+    super(message + ": " + tokenizer.getCurrentFile(), cause);
   }
 
 }

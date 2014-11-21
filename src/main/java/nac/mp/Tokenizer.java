@@ -46,7 +46,7 @@ public class Tokenizer {
     try {
       reader = new LineNumberReader(new FileReader(this.currentFile));
     } catch (FileNotFoundException ex) {
-      throw new ParseException("Source file not found.", ex);
+      throw new ParseException("Source file not found.", ex, this);
     }
     currentLine = null;
     matcher = null;
@@ -86,7 +86,7 @@ public class Tokenizer {
         currentLine = reader.readLine();
       } catch (IOException ex) {
         Util.closeQuietly(reader);
-        throw new ParseException("Error reading file.", ex);
+        throw new ParseException("Error reading file.", ex, this);
       }
       if (currentLine == null) {
         Util.closeQuietly(reader);

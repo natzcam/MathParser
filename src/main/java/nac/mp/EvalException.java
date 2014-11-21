@@ -6,7 +6,6 @@ package nac.mp;
 
 import nac.mp.ast.Scope;
 import nac.mp.ast.Expression;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  *
@@ -20,5 +19,9 @@ public class EvalException extends Exception {
 
   public EvalException(String message, Scope scope) {
     super(message + ":" + System.lineSeparator() + scope);
+  }
+
+  public EvalException(String message, Throwable cause) {
+    super(message, cause);
   }
 }

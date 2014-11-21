@@ -98,24 +98,21 @@ public class MathParser {
     startRecord();
     log.info("Parsing model " + path);
     tokenizer.setCurrentFile(path);
-    try {
-      next();
-      while (next.type != TokenType.EOF) {
-        switch (next.type) {
-          case KW_MODEL:
-            fileBlock.addStatement(modelDecl());
-            break;
-          case KW_REL:
-            fileBlock.addStatement(relDecl());
-            break;
-          default:
-            consume(TokenType.EOF);
-            break;
-        }
-        next();
+
+    next();
+    while (next.type != TokenType.EOF) {
+      switch (next.type) {
+        case KW_MODEL:
+          fileBlock.addStatement(modelDecl());
+          break;
+        case KW_REL:
+          fileBlock.addStatement(relDecl());
+          break;
+        default:
+          consume(TokenType.EOF);
+          break;
       }
-    } catch (ClassCastException cce) {
-      throw new ParseException("Expected type not found.", cce);
+      next();
     }
     endRecord(null);
     //eval
@@ -139,16 +136,13 @@ public class MathParser {
       globalScope.declareLocalVar(model.getName(), model);
     }
 
-    try {
+    next();
+    while (next.type != TokenType.EOF) {
+      fileBlock.addStatement(statement());
       next();
-      while (next.type != TokenType.EOF) {
-        fileBlock.addStatement(statement());
-        next();
-      }
-      consume(TokenType.EOF);
-    } catch (ClassCastException cce) {
-      throw new ParseException("Expected type not found.", cce);
     }
+    consume(TokenType.EOF);
+
     endRecord(null);
     //eval
     fileBlock.eval(globalScope, objectStore);
@@ -854,7 +848,7 @@ public class MathParser {
   public Expression endRecord(Expression expression) {
     List<Token> list = tokenStack.removeFirst();
 
-    if (expression != null) {
+    if (expression != null && !list.isEmpty()) {
       expression.relateTokens(list);
     }
 
