@@ -6,8 +6,10 @@
 package nac.mp.ast;
 
 import java.io.Serializable;
+import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
+import nac.mp.Token;
 import nac.mp.type.instance.MPObject;
 
 /**
@@ -17,5 +19,6 @@ import nac.mp.type.instance.MPObject;
 public interface Expression extends Serializable {
 
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException;
-
+//
+//  public void relateToken(List<Token> tokens);
 }

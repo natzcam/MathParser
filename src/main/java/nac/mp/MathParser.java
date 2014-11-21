@@ -787,6 +787,10 @@ public class MathParser {
   public void cleanup() {
     objectStore.close();
   }
+  
+  public void startRecord(){
+    
+  }
 
   public static void main(String[] args) {
     MathParser mp = new MathParser();
