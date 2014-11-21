@@ -82,7 +82,7 @@ public class BasicScope implements Scope {
 
   @Override
   public String toString() {
-    return vars.toString();
+    return "SCOPE: " + vars.toString();
   }
 
   @Override

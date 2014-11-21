@@ -46,7 +46,7 @@ public class MPFunc extends MPObject {
 
   public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this, this);
+      throw new EvalException("Argument mismatch: " + formalArgs.size() + "!=" + argsValues.size(), this);
     }
     Scope newScope = new BasicScope(parent);
     for (int i = 0; i < formalArgs.size(); i++) {
@@ -58,7 +58,7 @@ public class MPFunc extends MPObject {
 
   public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) throws EvalException {
     if (formalArgs.size() != argsValues.size()) {
-      throw new EvalException("Argument mismatch: " + this, this);
+      throw new EvalException("Argument mismatch: " + formalArgs.size() + "!=" + argsValues.size(), this);
     }
 
     Scope newScope = new BasicScope(parent);

@@ -853,8 +853,7 @@ public class MathParser {
 
   public Expression endRecord(Expression expression) {
     List<Token> list = tokenStack.removeFirst();
-    System.out.println("tokenStack: " + tokenStack);
-    System.out.println("list: " + list);
+
     if (expression != null) {
       expression.relateTokens(list);
     }

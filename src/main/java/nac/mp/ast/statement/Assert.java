@@ -29,7 +29,7 @@ public class Assert extends TokenAwareExpression {
     MPObject result = cond.eval(scope, store);
     if (result.getType() == Type.BOOL) {
       if (!result.getBoolean()) {
-        throw new EvalException("Assertion failed.", scope, cond);
+        throw new EvalException("Assertion failed", scope, this);
       }
     }
     return null;

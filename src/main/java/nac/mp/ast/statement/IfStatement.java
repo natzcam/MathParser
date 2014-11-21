@@ -47,7 +47,7 @@ public class IfStatement extends TokenAwareExpression {
         }
       }
     } else {
-      throw new EvalException("Condition not boolean.", scope, this);
+      throw new EvalException("Condition not boolean", scope, cond);
     }
     return null;
   }

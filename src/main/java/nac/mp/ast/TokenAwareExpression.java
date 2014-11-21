@@ -18,6 +18,9 @@ public abstract class TokenAwareExpression implements Expression {
 
   @Override
   public void relateTokens(List<Token> tokens) {
+    if (tokens.isEmpty()) {
+      return;
+    }
     this.tokens = tokens;
   }
 
