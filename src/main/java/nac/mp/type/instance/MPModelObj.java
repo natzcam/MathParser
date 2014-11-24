@@ -5,6 +5,7 @@
  */
 package nac.mp.type.instance;
 
+import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.MPModel;
@@ -46,11 +47,16 @@ public class MPModelObj extends MPBaseObj {
 
   @Override
   public void setVar(String name, MPObject value, ObjectStore store) {
-    if (value instanceof MPModelObj) {
-      vars.put(name, ((MPModelObj) value).getReference());
+    if (vars.containsKey(name)) {
+      if (value instanceof MPModelObj) {
+        vars.put(name, ((MPModelObj) value).getReference());
+      } else {
+        vars.put(name, value);
+      }
     } else {
-      vars.put(name, value);
+      throw new EvalException("Member not declared for ModeledObj: " + name, this);
     }
+
   }
 
   @Override

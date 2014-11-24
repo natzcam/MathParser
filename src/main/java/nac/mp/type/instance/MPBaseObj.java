@@ -52,7 +52,7 @@ public class MPBaseObj extends MPObject implements Scope {
   @Override
   public void declareVar(String name, MPObject defaultValue) {
     if (vars.containsKey(name)) {
-      throw new EvalException("Duplicate member: " + name, defaultValue);
+      throw new EvalException("Duplicate member: " + name, this);
     } else {
       vars.put(name, defaultValue);
     }

@@ -50,7 +50,7 @@ public class BasicScope implements Scope {
   @Override
   public void declareVar(String name, MPObject defaultValue) {
     if (vars.containsKey(name)) {
-      throw new EvalException("Duplicate var: " + name, defaultValue);
+      throw new EvalException("Duplicate var: " + name, this);
     } else {
       vars.put(name, defaultValue);
     }
@@ -63,7 +63,7 @@ public class BasicScope implements Scope {
     } else if (parent != null) {
       parent.setVar(name, value, store);
     } else {
-      throw new EvalException("Var not declared: " + name, value);
+      throw new EvalException("Var not declared: " + name, this);
     }
   }
 
