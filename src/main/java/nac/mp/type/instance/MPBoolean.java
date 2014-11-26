@@ -71,7 +71,7 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
       case BOOL:
         return MPBoolean.valueOf(value || right.getBoolean());
     }
-    throw new EvalException(getType() + " > " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " || ", right.getType());
   }
 
   @Override
@@ -80,7 +80,7 @@ public class MPBoolean extends MPObject implements Comparable<MPBoolean> {
       case BOOL:
         return MPBoolean.valueOf(value && right.getBoolean());
     }
-    throw new EvalException(getType() + " > " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " && ", right.getType());
   }
 
   @Override

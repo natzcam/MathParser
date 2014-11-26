@@ -44,7 +44,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return new MPFloat(getFloat() + right.getInt());
     }
-    throw new EvalException(getType() + " * " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " + ", right.getType());
   }
 
   @Override
@@ -55,7 +55,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return new MPFloat(getFloat() - right.getInt());
     }
-    throw new EvalException(getType() + " * " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " - ", right.getType());
   }
 
   @Override
@@ -66,7 +66,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return new MPFloat(getFloat() * right.getInt());
     }
-    throw new EvalException(getType() + " * " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " * ", right.getType());
   }
 
   @Override
@@ -77,7 +77,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return new MPFloat(getFloat() / right.getInt());
     }
-    throw new EvalException(getType() + " * " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " / ", right.getType());
   }
 
   @Override
@@ -88,7 +88,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return MPBoolean.valueOf(getFloat() < right.getInt());
     }
-    throw new EvalException(getType() + " * " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " < ", right.getType());
   }
 
   @Override
@@ -99,7 +99,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return MPBoolean.valueOf(getFloat() <= right.getInt());
     }
-    throw new EvalException(getType() + " <= " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " <= ", right.getType());
   }
 
   @Override
@@ -110,7 +110,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return MPBoolean.valueOf(getFloat() >= right.getInt());
     }
-    throw new EvalException(getType() + " >= " + right.getType() + " not supported");
+   throw new EvalException("Not supported", getType(), " >= ", right.getType());
   }
 
   @Override
@@ -121,7 +121,7 @@ public class MPFloat extends MPObject implements Comparable<MPFloat> {
       case INT:
         return MPBoolean.valueOf(getFloat() > right.getInt());
     }
-    throw new EvalException(getType() + " > " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " > ", right.getType());
   }
 
   @Override

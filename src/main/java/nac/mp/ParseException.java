@@ -37,19 +37,19 @@ public class ParseException extends Exception {
   }
 
   public ParseException(String message, Tokenizer tokenizer, Token found) {
-    super(message + ": " + tokenizer.getCurrentFile() + System.lineSeparator()
+    super(message + " at " + tokenizer.getCurrentFile() + System.lineSeparator()
             + found + " found:" + System.lineSeparator()
             + printTokenVicinity(tokenizer, found));
   }
 
   public ParseException(String message, Tokenizer tokenizer, TokenType expected, Token found) {
-    super(message + ": " + tokenizer.getCurrentFile() + System.lineSeparator()
-            + expected + " expected: " + found + " found:" + System.lineSeparator()
+    super(message + " at " + tokenizer.getCurrentFile() + System.lineSeparator()
+            + expected + " expected, " + found + " found:" + System.lineSeparator()
             + printTokenVicinity(tokenizer, found));
   }
 
-  public ParseException(String message, Throwable cause, Tokenizer tokenizer) {
-    super(message + ": " + tokenizer.getCurrentFile(), cause);
+  public ParseException(String message, Tokenizer tokenizer, Throwable cause) {
+    super(message + " at " + tokenizer.getCurrentFile(), cause);
   }
 
 }

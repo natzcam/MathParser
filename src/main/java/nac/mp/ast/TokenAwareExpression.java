@@ -22,6 +22,11 @@ public abstract class TokenAwareExpression implements Expression {
   }
 
   @Override
+  public List<Token> getTokens() {
+    return tokens;
+  }
+
+  @Override
   public String toString() {
     return "EXP:" + tokens;
   }

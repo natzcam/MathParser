@@ -38,23 +38,23 @@ public abstract class MPObject implements Scope {
   public abstract Type getType();
 
   public boolean getBoolean() {
-    throw new EvalException("No boolean representation: " + getType());
+    throw new EvalException("No boolean representation", getType());
   }
 
   public long getInt() {
-    throw new EvalException("No int representation: " + getType());
+    throw new EvalException("No int representation", getType());
   }
 
   public double getFloat() {
-    throw new EvalException("No float representation: " + getType());
+    throw new EvalException("No float representation", getType());
   }
 
   public String getString() {
-    throw new EvalException("No string representation: " + getType());
+    throw new EvalException("No string representation", getType());
   }
 
   public boolean isVoid() {
-    throw new EvalException("No isVoid representation: " + getType());
+    throw new EvalException("No isVoid representation", getType());
   }
 
   public MPObject notEqual(MPObject right) {
@@ -66,81 +66,81 @@ public abstract class MPObject implements Scope {
   }
 
   public MPObject plus(MPObject right) {
-    throw new EvalException(getType() + " + " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " + ", right.getType());
   }
 
   public MPObject dash(MPObject right) {
-    throw new EvalException(getType() + " - " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " - ", right.getType());
   }
 
   public MPObject star(MPObject right) {
-    throw new EvalException(getType() + " * " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " * ", right.getType());
   }
 
   public MPObject slash(MPObject right) {
-    throw new EvalException(getType() + " / " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " / ", right.getType());
   }
 
   public MPObject lte(MPObject right) {
-    throw new EvalException(getType() + " <= " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " <= ", right.getType());
   }
 
   public MPObject lt(MPObject right) {
-    throw new EvalException(getType() + " < " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " < ", right.getType());
   }
 
   public MPObject mte(MPObject right) {
-    throw new EvalException(getType() + " >= " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " >= ", right.getType());
   }
 
   public MPObject mt(MPObject right) {
-    throw new EvalException(getType() + " > " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " > ", right.getType());
   }
 
   public MPObject la(MPObject right) {
-    throw new EvalException(getType() + " && " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " && ", right.getType());
   }
 
   public MPObject lo(MPObject right) {
-    throw new EvalException(getType() + " || " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " || ", right.getType());
   }
 
   public MPObject pa(MPObject right) {
-    throw new EvalException(getType() + " += " + right.getType() + " not supported");
+    throw new EvalException("Not supported", getType(), " += ", right.getType());
   }
 
   @Override
   public MPObject getVar(String name, ObjectStore store) {
-    throw new EvalException("getVar not supported"); //To change body of generated methods, choose Tools | Templates.
+    throw new EvalException("getVar not supported", this); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public boolean containsVar(String name, ObjectStore store) {
-    throw new EvalException("containsVar not supported"); //To change body of generated methods, choose Tools | Templates.
+    throw new EvalException("containsVar not supported", this); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void declareVar(String name, MPObject defaultValue) {
-    throw new EvalException("declarVar not supported"); //To change body of generated methods, choose Tools | Templates.
+    throw new EvalException("declarVar not supported", this); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void setVar(String name, MPObject value, ObjectStore store) {
-    throw new EvalException("setVar not supported"); //To change body of generated methods, choose Tools | Templates.
+    throw new EvalException("setVar not supported", this); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public Set<String> getLocalVarKeys() {
-    throw new EvalException("getLocalVarKeys not supported"); //To change body of generated methods, choose Tools | Templates.
+    throw new EvalException("getLocalVarKeys not supported", this); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public Collection<MPObject> getLocalVarValues() {
-    throw new EvalException("getLocalVarValues not supported"); //To change body of generated methods, choose Tools | Templates.
+    throw new EvalException("getLocalVarValues not supported", this); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void setLocalVar(String name, MPObject value) {
-    throw new EvalException("setLocalVar not supported"); //To change body of generated methods, choose Tools | Templates.
+    throw new EvalException("setLocalVar not supported", this); //To change body of generated methods, choose Tools | Templates.
   }
 }

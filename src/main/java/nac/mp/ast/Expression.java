@@ -21,4 +21,6 @@ public interface Expression extends Serializable {
   public MPObject eval(Scope scope, ObjectStore store) throws EvalException;
 
   public void relateTokens(List<Token> tokens);
+  
+  public List<Token> getTokens();
 }

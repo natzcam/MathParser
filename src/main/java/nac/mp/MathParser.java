@@ -116,7 +116,13 @@ public class MathParser {
     }
     endRecord(null);
     //eval
-    fileBlock.eval(globalScope, objectStore);
+    try {
+      fileBlock.eval(globalScope, objectStore);
+    } catch (EvalException ee) {
+      ee.setTokenizer(tokenizer);
+      throw ee;
+    }
+
   }
 
   public void control(String path) throws ParseException, EvalException {
@@ -129,7 +135,7 @@ public class MathParser {
 
   public void control(File path) throws ParseException, EvalException {
     startRecord();
-    log.info("Parsing control" + path);
+    log.info("Parsing control " + path);
     tokenizer.setCurrentFile(path);
 
     for (MPModel model : objectStore.getModels()) {
@@ -145,7 +151,12 @@ public class MathParser {
 
     endRecord(null);
     //eval
-    fileBlock.eval(globalScope, objectStore);
+    try {
+      fileBlock.eval(globalScope, objectStore);
+    } catch (EvalException ee) {
+      ee.setTokenizer(tokenizer);
+      throw ee;
+    }
   }
 
   public MPObject getGlobal(String key) {
