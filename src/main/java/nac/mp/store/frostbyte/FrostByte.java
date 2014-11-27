@@ -75,6 +75,10 @@ public class FrostByte implements ObjectStore {
     MPModel model = obj.getModel();
     MPInteger id = obj.getId();
 
+    if (obj.getObjectStore() == null && id != null) {
+      throw new EvalException("Id is managed by the object store for new objects", obj);
+    }
+
     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(model);
 
     if (id == null) {
@@ -96,6 +100,7 @@ public class FrostByte implements ObjectStore {
     MPList result = new MPList();
     for (MPModelObj obj : objectMap.values()) {
       if (predicate.call(obj, this)) {
+        obj.setObjectStore(this);
         result.add(obj);
       }
     }
@@ -114,15 +119,19 @@ public class FrostByte implements ObjectStore {
     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(refList.getModel());
     List<MPModelObj> result = new ArrayList<>();
     for (Long id : refList.getRefList()) {
-      result.add(objectMap.get(id));
+      MPModelObj obj = objectMap.get(id);
+      obj.setObjectStore(this);
+      result.add(obj);
     }
     return result;
   }
 
   @Override
   public MPModelObj dereference(MPRef ref) {
-     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(ref.getModelName());
-     return objectMap.get(ref.getId());
+    BTreeMap<Long, MPModelObj> objectMap = getObjectMap(ref.getModelName());
+    MPModelObj obj = objectMap.get(ref.getId());
+    obj.setObjectStore(this);
+    return obj;
   }
 
 }

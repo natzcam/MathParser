@@ -19,6 +19,7 @@ import nac.mp.type.Type;
 public class MPModelObj extends MPBaseObj {
 
   private final MPModel model;
+  transient private ObjectStore objectStore = null;
 
   public MPModelObj(Scope parent, MPModel creator) {
     super(parent, creator);
@@ -43,6 +44,14 @@ public class MPModelObj extends MPBaseObj {
 
   public MPRef getReference() {
     return new MPRef(parent, creator, this);
+  }
+
+  public ObjectStore getObjectStore() {
+    return objectStore;
+  }
+
+  public void setObjectStore(ObjectStore objectStore) {
+    this.objectStore = objectStore;
   }
 
   @Override
