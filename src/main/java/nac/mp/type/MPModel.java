@@ -7,6 +7,7 @@ package nac.mp.type;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.instance.MPModelObj;
@@ -57,7 +58,25 @@ public class MPModel extends MPObject implements Creator {
   }
 
   @Override
+  public MPObject getVar(String name, ObjectStore store) {
+    if (attributes.containsKey(name)) {
+      return attributes.get(name);
+    } else {
+      throw new EvalException("Member not declared: " + name, this);
+    }
+  }
+
+  @Override
+  public boolean containsVar(String name, ObjectStore store) {
+    return attributes.containsKey(name);
+  }
+
+  @Override
   public void declareVar(String name, MPObject defaultValue) {
-    attributes.put(name, (MPAttribute) defaultValue);
+    if (attributes.containsKey(name)) {
+      throw new EvalException("Duplicate member: " + name, this);
+    } else {
+      attributes.put(name, (MPAttribute) defaultValue);
+    }
   }
 }

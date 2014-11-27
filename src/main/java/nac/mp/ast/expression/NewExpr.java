@@ -42,10 +42,10 @@ public class NewExpr extends TokenAwareExpression {
     }
 
     MPObject c = creator.newInstance(store);
-    MPFunc ctor = (MPFunc) c.getVar("__init__", store);
 
-    if (ctor != null) {
-      ctor.call(c, argValues,store);
+    if (c.containsVar("__init__", store)) {
+      MPFunc ctor = (MPFunc) c.getVar("__init__", store);
+      ctor.call(c, argValues, store);
     }
 
     return c;

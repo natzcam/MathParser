@@ -71,9 +71,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * TODO: assoc Token to AST nodes to improve debug TODO: TODO: review use of
- * expression(); TODO: separate expression per type TODO: escape quotes TODO:
- * file name in exceptions
+ * TODO: escape quotes
  */
 public class MathParser {
 

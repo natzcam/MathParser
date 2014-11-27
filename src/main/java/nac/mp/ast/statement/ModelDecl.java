@@ -25,19 +25,12 @@ public class ModelDecl extends TokenAwareExpression {
 
   public ModelDecl(String name) {
     this.name = name;
+    attributes.add(new AttributeDecl("int", null, "id"));
   }
 
   public List<Expression> getAttributes() {
     return attributes;
   }
-
-//  public Collection<AttributeDecl> getAttrDecls() {
-//    return attrMap.values();
-//  }
-//
-//  public AttributeDecl getAttrDecl(String name) {
-//    return attrMap.get(name);
-//  }
 
   public String getName() {
     return name;
@@ -47,6 +40,7 @@ public class ModelDecl extends TokenAwareExpression {
   public MPObject eval(Scope scope, ObjectStore store) {
     MPModel model = new MPModel(scope, name);
     scope.declareVar(name, model);
+
     for (Expression attributeDecl : attributes) {
       attributeDecl.eval(model, store);
     }

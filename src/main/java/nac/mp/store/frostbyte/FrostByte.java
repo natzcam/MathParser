@@ -51,11 +51,6 @@ public class FrostByte implements ObjectStore {
   @Override
   public void register(MPModel model) {
     BTreeMap<String, MPModel> modelMap = modelDB.getTreeMap(APPEND_MODEL);
-    for (String attrName : model.getAttributes().keySet()) {
-      if (attrName.equals("id")) {
-        throw new EvalException("Can't define custom id property", model);
-      }
-    }
     modelMap.put(model.getName(), model);
     modelDB.commit();
   }
