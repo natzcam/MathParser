@@ -6,6 +6,7 @@ package nac.mp.type.instance;
 
 import java.util.List;
 import java.util.Map;
+import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.type.Type;
@@ -99,7 +100,7 @@ public class MPString extends MPObject implements Comparable<MPString> {
       case "toFloat":
         return TO_FLOAT;
     }
-    return null;
+    return super.getVar(name, store);
   }
 
 }

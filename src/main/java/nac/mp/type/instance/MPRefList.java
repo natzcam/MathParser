@@ -48,7 +48,7 @@ public class MPRefList extends MPObject {
       case "add":
         return ADD;
     }
-    return null;
+    return super.getVar(name, store);
   }
 
   public String getModel() {

@@ -1,21 +1,22 @@
-print Child;
-var c = new Child();
-c.name = "natz";
-c.id = 1;
-save c;
+var p1list = select Parent where {
+  this.name == "P1";
+};
 
-print Child.parent;
+if(p1list.length() == 0){
 
-var p1 = new Parent();
-p1.id = 1;
-p1.name = "P1";
-p1.children.add(c);
-save p1;
+  print p1list.length();
 
-c.parent = p1;
-save c;
+  var c = new Child();
+  c.name = "natz";
 
-var p2 = new Parent();
-p2.id = 2;
-p2.name = "P2";
-save p2;
+  print Child.parent;
+
+  var p1 = new Parent();
+  p1.id = 1;
+  p1.name = "P1";
+  p1.children.add(c);
+  save p1;
+}else{
+  print "0 length";
+}
+

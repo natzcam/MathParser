@@ -23,8 +23,22 @@ public class MPList extends MPObject {
     @Override
     public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) {
       MPList thisList = (MPList) thisRef;
-      thisList.add(argsValues.get(0));
+      thisList.list.add(argsValues.get(0));
       return null;
+    }
+
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, Map<String, MPObject> optsValues, ObjectStore store) {
+      return call(thisRef, argsValues, store);
+    }
+  };
+
+  private static final MPFunc LENGTH = new MPFunc(null, null) {
+
+    @Override
+    public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) {
+      MPList thisList = (MPList) thisRef;
+      return new MPInteger(thisList.list.size());
     }
 
     @Override
@@ -61,8 +75,10 @@ public class MPList extends MPObject {
     switch (name) {
       case "add":
         return ADD;
+      case "length":
+        return LENGTH;
     }
-    return null;
+     return super.getVar(name, store);
   }
 
   public MPObject get(MPInteger index) {
