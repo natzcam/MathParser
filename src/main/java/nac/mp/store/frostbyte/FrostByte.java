@@ -12,6 +12,7 @@ import java.util.List;
 import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.type.MPModel;
+import nac.mp.type.MPObject;
 import nac.mp.type.instance.MPInteger;
 import nac.mp.type.instance.MPList;
 import nac.mp.type.instance.MPModelObj;
@@ -69,15 +70,22 @@ public class FrostByte implements ObjectStore {
     return objectDB.getTreeMap(name + APPEND_MODEL);
   }
 
+  private Atomic.Long getSequence(MPModel model) {
+    Atomic.Long keyinc = objectDB.getAtomicLong(model.getName() + APPEND_SEQUENCE);
+    return keyinc;
+  }
+
   @Override
   public void save(MPModelObj obj) {
 
     MPModel model = obj.getModel();
-    MPInteger id = obj.getId();
-
+    MPObject id = obj.getId();
+    System.out.println("mpobject: " + id);
     if (obj.getObjectStore() == null && id != null) {
       throw new EvalException("Id is managed by the object store for new objects", obj);
     }
+
+    obj.setObjectStore(this);
 
     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(model);
 
@@ -108,18 +116,11 @@ public class FrostByte implements ObjectStore {
   }
 
   @Override
-  public void close() {
-    modelDB.close();
-    objectDB.close();
-    indexDB.close();
-  }
-
-  @Override
   public List<MPModelObj> select(MPRefList refList) {
     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(refList.getModel());
     List<MPModelObj> result = new ArrayList<>();
-    for (Long id : refList.getRefList()) {
-      MPModelObj obj = objectMap.get(id);
+    for (MPObject id : refList.getRefList()) {
+      MPModelObj obj = objectMap.get(id.getInt());
       obj.setObjectStore(this);
       result.add(obj);
     }
@@ -129,9 +130,16 @@ public class FrostByte implements ObjectStore {
   @Override
   public MPModelObj dereference(MPRef ref) {
     BTreeMap<Long, MPModelObj> objectMap = getObjectMap(ref.getModelName());
-    MPModelObj obj = objectMap.get(ref.getId());
+    MPModelObj obj = objectMap.get(ref.getId().getInt());
     obj.setObjectStore(this);
     return obj;
+  }
+
+  @Override
+  public void close() {
+    modelDB.close();
+    objectDB.close();
+    indexDB.close();
   }
 
 }

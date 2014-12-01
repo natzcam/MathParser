@@ -11,6 +11,7 @@ import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.ast.Scope;
 import nac.mp.type.instance.MPBoolean;
+import nac.mp.type.instance.MPRef;
 
 /**
  *
@@ -54,7 +55,15 @@ public abstract class MPObject implements Scope {
   }
 
   public boolean isVoid() {
-    throw new EvalException("No isVoid representation", getType());
+    return getType() == Type.VOID;
+  }
+
+  public MPRef getReference() {
+    throw new EvalException("No reference", getType());
+  }
+  
+  public boolean canBeRef(){
+    return false;
   }
 
   public MPObject notEqual(MPObject right) {

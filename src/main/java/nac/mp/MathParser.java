@@ -630,10 +630,10 @@ public class MathParser {
             Map<String, Expression> optsMap = new HashMap<>();
 
             argsProc(expList, optsMap);
-
+            //TODO implement interface
             if (optsMap.size() > 0) {
               if (left instanceof MemberExpr) {
-                MethodOptsExpr mex1 = new MethodOptsExpr((Expression) left);
+                MethodOptsExpr mex1 = new MethodOptsExpr(left);
                 mex1.getArgs().addAll(expList);
                 mex1.getOpts().putAll(optsMap);
                 left = mex1;

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import nac.mp.ObjectStore;
+import nac.mp.type.ListBase;
 import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
@@ -16,14 +17,14 @@ import nac.mp.type.Type;
  *
  * @author camomon
  */
-public class MPRefList extends MPObject {
+public class MPRefList extends MPObject implements ListBase {
 
   private static final MPFunc ADD = new MPFunc(null, null) {
 
     @Override
     public MPObject call(MPObject thisRef, List<MPObject> argsValues, ObjectStore store) {
       MPRefList thisList = (MPRefList) thisRef;
-      thisList.add((MPModelObj) argsValues.get(0));
+      thisList.add(argsValues.get(0));
       return null;
     }
 
@@ -35,7 +36,7 @@ public class MPRefList extends MPObject {
 
   private final String model;
   transient private List<MPModelObj> list = new ArrayList<>();
-  private final List<Long> refList = new ArrayList<>();
+  private final List<MPObject> refList = new ArrayList<>();
 
   public MPRefList(String model) {
     super(null, null);
@@ -64,24 +65,29 @@ public class MPRefList extends MPObject {
     list = store.select(this);
   }
 
-  public MPModelObj get(MPInteger index, ObjectStore store) {
+  @Override
+  public MPModelObj get(MPObject index, ObjectStore store) {
     if (list == null || list.size() < refList.size()) {
       fetch(store);
     }
     return list.get((int) index.getInt());
   }
 
-  public void set(MPInteger index, MPModelObj elem) {
-    list.set((int) index.getInt(), elem);
-    refList.set((int) index.getInt(), elem.getIdLong());
+  @Override
+  public void set(MPObject index, MPObject elem) {
+    MPModelObj moElem = (MPModelObj) elem;
+    list.set((int) index.getInt(), moElem);
+    refList.set((int) index.getInt(), moElem.getId());
   }
 
-  public void add(MPModelObj obj) {
-    list.add(obj);
-    refList.add(obj.getIdLong());
+  @Override
+  public void add(MPObject elem) {
+    MPModelObj moElem = (MPModelObj) elem;
+    list.add(moElem);
+    refList.add(moElem.getId());
   }
 
-  public List<Long> getRefList() {
+  public List<MPObject> getRefList() {
     return refList;
   }
 

@@ -19,18 +19,19 @@ import nac.mp.type.Type;
  */
 public class MPRef extends MPObject {
 
+  public static final int NO_ID = -1;
   transient private MPModelObj mpModelObj;
-  private final Long id;
+  private final MPObject id;
   private final String modelName;
 
   public MPRef(Scope parent, Creator creator, MPModelObj obj) {
     super(parent, creator);
     this.mpModelObj = obj;
-    this.id = obj.getIdLong();
+    this.id = obj.getId();
     this.modelName = obj.getModel().getName();
   }
 
-  public Long getId() {
+  public MPObject getId() {
     return id;
   }
 

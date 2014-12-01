@@ -11,7 +11,6 @@ import nac.mp.ast.Expression;
 import nac.mp.ast.Scope;
 import nac.mp.ast.TokenAwareExpression;
 import nac.mp.type.MPObject;
-import nac.mp.type.instance.MPInteger;
 import nac.mp.type.instance.MPList;
 
 /**
@@ -39,7 +38,7 @@ public class ListLiteralExpr extends TokenAwareExpression {
       initValues.add(elemExpr.eval(scope, store));
     }
     if (initSize != null) {
-      MPInteger initS = (MPInteger) initSize.eval(scope, store);
+      MPObject initS = initSize.eval(scope, store);
       return new MPList((int) initS.getInt(), initValues);
     } else {
       return new MPList(initValues.size(), initValues);

@@ -6,7 +6,6 @@ package nac.mp.type.instance;
 
 import java.util.List;
 import java.util.Map;
-import nac.mp.EvalException;
 import nac.mp.ObjectStore;
 import nac.mp.type.MPObject;
 import nac.mp.type.Type;

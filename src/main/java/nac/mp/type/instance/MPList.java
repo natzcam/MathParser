@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import nac.mp.ObjectStore;
+import nac.mp.type.ListBase;
 import nac.mp.type.MPObject;
 import nac.mp.type.Type;
 
@@ -16,7 +17,7 @@ import nac.mp.type.Type;
  *
  * @author camomon
  */
-public class MPList extends MPObject {
+public class MPList extends MPObject implements ListBase {
 
   private static final MPFunc ADD = new MPFunc(null, null) {
 
@@ -78,17 +79,20 @@ public class MPList extends MPObject {
       case "length":
         return LENGTH;
     }
-     return super.getVar(name, store);
+    return super.getVar(name, store);
   }
 
-  public MPObject get(MPInteger index) {
+  @Override
+  public MPObject get(MPObject index, ObjectStore store) {
     return list.get((int) index.getInt());
   }
 
-  public void set(MPInteger index, MPObject elem) {
+  @Override
+  public void set(MPObject index, MPObject elem) {
     list.set((int) index.getInt(), elem);
   }
 
+  @Override
   public void add(MPObject obj) {
     list.add(obj);
   }

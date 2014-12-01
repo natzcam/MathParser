@@ -30,20 +30,18 @@ public class MPModelObj extends MPBaseObj {
     return model;
   }
 
-  public MPInteger getId() {
-    return (MPInteger) vars.get("id");
+  public MPObject getId() {
+    return vars.get("id");
   }
 
-  public Long getIdLong() {
-    return vars.get("id").getInt();
-  }
-
-  public void setId(MPInteger id) {
-    vars.put("id", id);
-  }
-
+  @Override
   public MPRef getReference() {
     return new MPRef(parent, creator, this);
+  }
+
+  @Override
+  public boolean canBeRef() {
+    return true;
   }
 
   public ObjectStore getObjectStore() {
@@ -57,8 +55,8 @@ public class MPModelObj extends MPBaseObj {
   @Override
   public void setVar(String name, MPObject value, ObjectStore store) {
     if (vars.containsKey(name)) {
-      if (value instanceof MPModelObj) {
-        vars.put(name, ((MPModelObj) value).getReference());
+      if (value.canBeRef()) {
+        vars.put(name, value.getReference());
       } else {
         vars.put(name, value);
       }

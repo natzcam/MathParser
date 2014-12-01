@@ -12,11 +12,11 @@ if(p1list.length() == 0){
   print Child.parent;
 
   var p1 = new Parent();
-  p1.id = 1;
   p1.name = "P1";
   p1.children.add(c);
   save p1;
 }else{
-  print "0 length";
+  print "contains someting";
+  print p1list[0].children[0];
 }
 
